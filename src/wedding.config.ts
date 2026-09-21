@@ -187,12 +187,12 @@ the union of two hearts`,
   rsvp: {
     enabled: true,
     // Supabase project credentials (paste your client-specific Supabase credentials here)
-    supabaseUrl: 'https://lyukxpzpcjedvrkwrcur.supabase.co',
-    supabaseAnonKey: 'sb_publishable_7USKYo1sBAT7p3_kqWdrqg_RCxNm3yd',
+    supabaseUrl: 'https://drafdjfejejajhglxtyt.supabase.co',
+    supabaseAnonKey: 'sb_publishable_0ycGa8kBOxyP8swHUwKzRw_EcxE9jWz',
     supabaseTable: 'rsvps',
 
     // Google Sheets Webhook URL (paste your deployed Google Apps Script URL here)
-    googleSheetWebhookUrl: 'https://script.google.com/macros/s/AKfycbwLV_52cSrJPWpsMfFJrY4xZ-3iCV8WPR5612i-v9qB_koaaX1u6QfOU3tq5fDLq1b-Mg/exec',
+    googleSheetWebhookUrl: 'https://script.google.com/macros/s/AKfycbxF6ZEHGppc77on-yjnT3uhVpqcocentmtfip2L0ArM6Br47xAtRnB0DPH88DkdqJXo/exec',
   },
 };
 
