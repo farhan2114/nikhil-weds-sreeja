@@ -1,13 +1,18 @@
 import React from 'react';
 import { MapPin } from 'lucide-react';
 import { assets } from '../data/assets';
-import { weddingData } from '../data/weddingData';
+import { weddingConfig, weddingData } from '../wedding.config';
 import { RevealOnScroll } from './RevealOnScroll';
 
 export const VenueSection: React.FC = () => {
-  const query = `${weddingData.venue} ${weddingData.city}`;
-  const mapsSearchUrl = `https://www.google.com/maps/search/${encodeURIComponent(query)}`;
-  const mapsEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+  const query = `${weddingConfig.venue.name} ${weddingConfig.venue.city}`;
+  const mapsSearchUrl =
+    weddingConfig.venue.mapsSearchUrl ||
+    `https://www.google.com/maps/search/${encodeURIComponent(query)}`;
+  const mapsEmbedUrl =
+    weddingConfig.venue.mapsEmbedUrl ||
+    `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+  const cityName = weddingConfig.venue.cityName || weddingConfig.venue.city;
 
   return (
     <section id="venue" className="relative overflow-hidden bg-maroon px-5 py-24 text-paper sm:py-36">
@@ -25,9 +30,9 @@ export const VenueSection: React.FC = () => {
       <div className="relative mx-auto grid max-w-6xl gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <RevealOnScroll>
           <p className="eyebrow text-gold">The way to the wedding</p>
-          <h2 className="mt-4 font-display text-5xl leading-none sm:text-6xl">Join us in Madurai</h2>
+          <h2 className="mt-4 font-display text-5xl leading-none sm:text-6xl">Join us in {cityName}</h2>
           <p className="mt-6 max-w-md text-sm leading-relaxed text-paper/75">
-            Follow the golden path to {weddingData.venue}, where our families will be waiting to welcome you.
+            {weddingConfig.venue.description || `Follow the golden path to ${weddingData.venue}, where our families will be waiting to welcome you.`}
           </p>
           <div className="mt-8 border-l border-gold/50 pl-5">
             <p className="font-title text-lg">{weddingData.venue}</p>

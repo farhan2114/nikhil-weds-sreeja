@@ -1,5 +1,5 @@
 import React from 'react';
-import { weddingData } from '../data/weddingData';
+import { weddingConfig, weddingData } from '../wedding.config';
 import { Ornament, SpinningMandala } from './Ornaments';
 import { RevealOnScroll } from './RevealOnScroll';
 
@@ -11,7 +11,7 @@ export const IntroSection: React.FC = () => {
       <Ornament variant="gold" className="-right-6 bottom-8 w-32 -rotate-12 sm:w-44" />
 
       <RevealOnScroll>
-        <p className="eyebrow">Om Sri Ganeshaya Namaha</p>
+        <p className="eyebrow">{weddingConfig.invitation.sanskritMantra || 'Om Sri Ganeshaya Namaha'}</p>
         <p className="mx-auto mt-8 max-w-2xl whitespace-pre-line font-display text-3xl leading-snug sm:text-5xl">
           {weddingData.familyLine}
         </p>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { assets } from '../data/assets';
+import { weddingConfig } from '../wedding.config';
 
 let globalAudio: HTMLAudioElement | null = null;
 const listeners = new Set<(playing: boolean) => void>();
@@ -11,7 +12,7 @@ function notify() {
 
 export function getAudio(): HTMLAudioElement {
   if (!globalAudio) {
-    globalAudio = new Audio(assets.music);
+    globalAudio = new Audio(weddingConfig.music?.audioUrl || assets.music);
     globalAudio.loop = true;
     globalAudio.volume = 0.45;
     globalAudio.addEventListener('play', notify);

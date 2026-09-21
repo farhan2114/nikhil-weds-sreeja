@@ -1,5 +1,6 @@
 import React from 'react';
 import { assets } from '../data/assets';
+import { weddingConfig } from '../wedding.config';
 import { Ornament, SpinningMandala } from './Ornaments';
 import { RevealOnScroll } from './RevealOnScroll';
 
@@ -22,8 +23,8 @@ export const GallerySection: React.FC = () => {
           <div className="sm:row-span-2">
             <figure className="group relative h-full overflow-hidden border border-gold/30 bg-muted">
               <img
-                src={assets.gallery1}
-                alt="The couple walking through a temple corridor"
+                src={weddingConfig.gallery[0]?.image || assets.gallery1}
+                alt={weddingConfig.gallery[0]?.alt || "Gallery image 1"}
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
               />
@@ -33,8 +34,8 @@ export const GallerySection: React.FC = () => {
           <div>
             <figure className="group relative h-full overflow-hidden border border-gold/30 bg-muted">
               <img
-                src={assets.gallery2}
-                alt="The couple laughing together"
+                src={weddingConfig.gallery[1]?.image || assets.gallery2}
+                alt={weddingConfig.gallery[1]?.alt || "Gallery image 2"}
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
               />
@@ -44,8 +45,8 @@ export const GallerySection: React.FC = () => {
           <div>
             <figure className="group relative h-full overflow-hidden border border-gold/30 bg-muted">
               <img
-                src={assets.gallery3}
-                alt="Hands with mehndi holding a jasmine garland"
+                src={weddingConfig.gallery[2]?.image || assets.gallery3}
+                alt={weddingConfig.gallery[2]?.alt || "Gallery image 3"}
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
               />
@@ -55,8 +56,8 @@ export const GallerySection: React.FC = () => {
           <div className="sm:col-span-2">
             <figure className="group relative h-full overflow-hidden border border-gold/30 bg-muted">
               <img
-                src={assets.gallery4}
-                alt="The couple under a flower-decorated mandapam at dusk"
+                src={weddingConfig.gallery[3]?.image || assets.gallery4}
+                alt={weddingConfig.gallery[3]?.alt || "Gallery image 4"}
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
               />

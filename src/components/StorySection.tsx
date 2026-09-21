@@ -41,8 +41,8 @@ export const StorySection: React.FC = () => {
                     <div className="absolute -inset-3 border border-gold/25" />
                     <div className="relative aspect-[4/3] overflow-hidden bg-muted">
                       <img
-                        src={storyImages[idx]}
-                        alt={storyAlts[idx]}
+                        src={(item as any).image || storyImages[idx]}
+                        alt={(item as any).alt || storyAlts[idx]}
                         loading="lazy"
                         width={900}
                         height={1100}

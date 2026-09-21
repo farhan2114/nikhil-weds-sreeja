@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { assets } from '../data/assets';
+import { weddingConfig } from '../wedding.config';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -33,11 +34,13 @@ export const ParallaxSection: React.FC = () => {
     return () => ctx.revert();
   }, []);
 
+  const { banner } = weddingConfig;
+
   return (
     <div ref={containerRef} className="relative h-[58vh] overflow-hidden sm:h-[75vh]">
       <img
-        src={assets.hands}
-        alt="The couple exchanging jasmine flowers"
+        src={banner.image || assets.hands}
+        alt={banner.alt || 'Wedding ceremony quote banner'}
         loading="lazy"
         width={1200}
         height={1500}
@@ -46,7 +49,7 @@ export const ParallaxSection: React.FC = () => {
       <div className="absolute inset-0 bg-[color-mix(in_oklab,var(--maroon)_28%,transparent)]" />
       <div className="absolute inset-0 flex items-center justify-center px-6">
         <p className="max-w-2xl text-center font-display text-3xl leading-snug text-paper sm:text-5xl">
-          Two families, one thread, and a morning we’ll remember for the rest of our lives.
+          {banner.quote}
         </p>
       </div>
     </div>

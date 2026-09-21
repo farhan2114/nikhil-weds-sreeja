@@ -1,6 +1,6 @@
 import React from 'react';
 import { assets } from '../data/assets';
-import { weddingData } from '../data/weddingData';
+import { weddingConfig } from '../wedding.config';
 import { Ornament, SpinningMandala } from './Ornaments';
 import { RevealOnScroll } from './RevealOnScroll';
 
@@ -48,19 +48,19 @@ export const MeetCoupleSection: React.FC = () => {
 
         <div className="mt-16 grid gap-14 sm:grid-cols-2 sm:gap-10">
           <PersonCard
-            name={weddingData.bride}
-            role="The bride"
-            note="Daughter of Mr. & Mrs. Raghavan, Madurai."
-            src={assets.bride}
-            alt="Aarthi, the bride, in a red and gold silk saree"
+            name={weddingConfig.couple.bride}
+            role={weddingConfig.couple.brideRole}
+            note={weddingConfig.couple.brideParentsNote}
+            src={weddingConfig.couple.bridePhoto || assets.bride}
+            alt={weddingConfig.couple.bridePhotoAlt || `${weddingConfig.couple.bride}, the bride`}
             delay={0.1}
           />
           <PersonCard
-            name={weddingData.groom}
-            role="The groom"
-            note="Son of Mr. & Mrs. Sundaram, Chennai."
-            src={assets.groom}
-            alt="Nikhil, the groom, in a cream silk kurta"
+            name={weddingConfig.couple.groom}
+            role={weddingConfig.couple.groomRole}
+            note={weddingConfig.couple.groomParentsNote}
+            src={weddingConfig.couple.groomPhoto || assets.groom}
+            alt={weddingConfig.couple.groomPhotoAlt || `${weddingConfig.couple.groom}, the groom`}
             delay={0.2}
           />
         </div>

@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { assets } from '../data/assets';
-import { weddingData } from '../data/weddingData';
+import { weddingConfig, weddingData } from '../wedding.config';
 import { playAudio } from '../lib/audio';
 
 const paperCards = [
@@ -153,9 +153,9 @@ export const HeroSection: React.FC = () => {
               className="pointer-events-none absolute -top-16 left-1/2 w-28 -translate-x-1/2 opacity-60 sm:-top-20 sm:w-36"
             />
             <p className="invite-line eyebrow mt-6">{weddingData.dateShort}</p>
-            <h1 className="invite-line mt-6 font-display text-5xl leading-[0.95] sm:text-7xl">
+            <h1 className="invite-line mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-display text-4xl min-[380px]:text-5xl sm:text-6xl md:text-7xl leading-[1.05] break-words">
               <span className="text-gold-foil animate-foil">{weddingData.bride}</span>
-              <span className="mx-3 font-title text-2xl align-middle text-maroon sm:text-3xl">&amp;</span>
+              <span className="mx-2 font-title text-xl align-middle text-maroon sm:text-3xl">&amp;</span>
               <span className="text-gold-foil animate-foil">{weddingData.groom}</span>
             </h1>
             <div className="invite-line rule-gold mx-auto mt-8 w-2/3" />
@@ -176,7 +176,7 @@ export const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Double Doors & Door Overlay */}
+      {/* ── Temple Doors ── */}
       {!opened && (
         <div className="absolute inset-0 z-30 flex [perspective:1600px]">
           <div
@@ -199,10 +199,10 @@ export const HeroSection: React.FC = () => {
             className="absolute inset-0 flex flex-col items-center justify-end gap-3 pb-24 focus:outline-none"
           >
             <span className="rounded-full border border-gold/70 bg-black/35 px-8 py-4 font-title text-[0.7rem] uppercase tracking-[0.32em] text-paper backdrop-blur-sm transition-colors hover:bg-black/55">
-              Tap to open the doors
+              {weddingConfig.invitation.doorsButtonText || 'Tap to open the doors'}
             </span>
             <span className="text-[0.65rem] uppercase tracking-[0.24em] text-paper/70">
-              Music will play softly
+              {weddingConfig.invitation.doorsSubText || 'Music will play softly'}
             </span>
           </button>
         </div>
