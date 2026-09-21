@@ -167,10 +167,10 @@ export const HeroSection: React.FC = () => {
               {weddingData.muhurtham} · {weddingData.venue}, {weddingData.city}
             </p>
             <a
-              href="#blessings"
+              href="#rsvp"
               className="invite-line mt-9 inline-flex items-center gap-2 border border-gold/60 bg-transparent px-6 py-3 text-[0.7rem] uppercase tracking-[0.3em] text-gold-deep transition-colors hover:bg-gold/10"
             >
-              Send your blessing
+              RSVP Now
             </a>
           </div>
         </div>

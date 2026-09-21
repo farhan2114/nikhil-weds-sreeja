@@ -26,12 +26,12 @@ export const weddingConfig = {
     hashtag: '#NikhilWedsSreeja',
 
     brideRole: 'The bride',
-    brideParentsNote: 'Daughter of loving parents.',
+    brideParentsNote: 'Daughter of Ms. Janga Sunitha & Mr. Manohar Reddy, Karimnagar.',
     bridePhoto: '/client-images/bride.jpg',
     bridePhotoAlt: 'Sreeja, the bride',
 
     groomRole: 'The groom',
-    groomParentsNote: 'Son of loving parents.',
+    groomParentsNote: 'Son of Ms. Sreedevi & Mr. Ramesh Reddy, Thallapenta.',
     groomPhoto: '/client-images/groom.jpg',
     groomPhotoAlt: 'Nikhil, the groom',
   },
@@ -40,9 +40,9 @@ export const weddingConfig = {
   // 2. DATES & CEREMONY TIME
   // -------------------------------------------------------------
   date: {
-    label: 'Sunday, 14 February 2027',
-    short: '14 . 02 . 2027',
-    muhurtham: 'Muhurtham at 9:45 AM',
+    label: 'Sunday, 22 November 2026',
+    short: '22 . 11 . 2026',
+    muhurtham: 'Muhurtham at 10:54 AM',
   },
 
   // -------------------------------------------------------------
@@ -62,16 +62,16 @@ the union of two hearts`,
   // 4. VENUE & GOOGLE MAPS LOCATION
   // -------------------------------------------------------------
   venue: {
-    name: 'Sri Kalyana Mandapam',
-    city: 'Madurai, Tamil Nadu',
-    cityName: 'Madurai', // Shows in "Join us in [City]"
-    description: 'Follow the golden path to Sri Kalyana Mandapam, where our families will be waiting to welcome you.',
+    name: 'Frisco Hall Event Center',
+    city: '5353 Independence Pkwy, Ste-1, Frisco, Texas-75035, U.S.A.',
+    cityName: 'Frisco', // Shows in "Join us in [City]"
+    description: 'Follow the golden path to Frisco Hall Event Center, where our families will be waiting to welcome you.',
     
     // Direct link when clicking "Open in maps" (leave empty to auto-generate from venue + city)
-    mapsSearchUrl: 'https://www.google.com/maps/search/Sri%20Kalyana%20Mandapam%20Madurai%2C%20Tamil%20Nadu',
+    mapsSearchUrl: 'https://maps.app.goo.gl/nurVigToR7DMZYpE7',
     
     // Interactive Google Maps iframe URL
-    mapsEmbedUrl: 'https://www.google.com/maps?q=Sri%20Kalyana%20Mandapam%20Madurai%2C%20Tamil%20Nadu&output=embed',
+    mapsEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3341.5105149944666!2d-96.75438752360868!3d33.12195017352138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x864c3d8030a4f16f%3A0x8d603a9a175fc0e0!2sFrisco%20Hall%20Event%20Center!5e0!3m2!1sen!2sin!4v1789999750503!5m2!1sen!2sin',
   },
 
   // -------------------------------------------------------------
@@ -145,30 +145,30 @@ the union of two hearts`,
   events: [
     {
       name: 'Nichayathartham',
-      day: 'Friday, 12 Feb',
+      day: 'Friday, 12 Nov',
       time: '6:00 PM',
       place: 'Family Home, Madurai',
       note: 'Engagement, followed by dinner',
     },
     {
-      name: 'Mehndi & Sangeet',
-      day: 'Saturday, 13 Feb',
+      name: 'Sangeet & Cocktails',
+      day: 'Saturday, 13 Nov',
       time: '4:00 PM',
       place: 'Mandapam Lawns',
       note: 'Henna, music and a lot of dancing',
     },
     {
       name: 'Muhurtham',
-      day: 'Sunday, 14 Feb',
-      time: '9:45 AM',
-      place: 'Sri Kalyana Mandapam',
+      day: 'Sunday, 22 Nov',
+      time: '10:54 AM',
+      place: 'Frisco Hall Event Center',
       note: 'The wedding ceremony',
     },
     {
       name: 'Reception',
       day: 'Sunday, 14 Feb',
       time: '7:00 PM',
-      place: 'Mandapam Hall',
+      place: 'Frisco Hall Event Center',
       note: 'Dinner and celebrations',
     },
   ],
