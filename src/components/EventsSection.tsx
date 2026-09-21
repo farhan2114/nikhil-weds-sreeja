@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { assets } from '../data/assets';
-import { weddingData } from '../data/weddingData';
+import { weddingConfig } from '../wedding.config';
 import { SpinningMandala } from './Ornaments';
 import { RevealOnScroll } from './RevealOnScroll';
 
@@ -58,7 +58,7 @@ export const EventsSection: React.FC = () => {
         </RevealOnScroll>
 
         <div className="relative mt-14 pb-[2vh]">
-          {weddingData.events.map((event, idx) => (
+          {weddingConfig.events.map((event, idx) => (
             <div
               key={event.name}
               className="event-card sticky top-[14vh] mb-[8vh] origin-top will-change-transform"
