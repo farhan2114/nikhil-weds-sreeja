@@ -82,13 +82,27 @@ export const RsvpSection: React.FC = () => {
       submittedAt: new Date().toISOString(),
     };
 
-    const sangeetStatus = attendance["Sangeet"] === "attending" ? "Yes" : "No";
-    const haldiStatus = attendance["Haldi"] === "attending" ? "Yes" : "No";
-    const pellikodukuStatus = attendance["Pellikoduku & Pellikuthuru"] === "attending" ? "Yes" : "No";
-    const weddingStatus = attendance["Wedding Ceremony"] === "attending" ? "Yes" : "No";
+    const checkStatus = (keyword: string): "Yes" | "No" => {
+      const match = Object.keys(attendance).find((k) =>
+        k.toLowerCase().includes(keyword.toLowerCase())
+      );
+      if (!match) return "No";
+      return attendance[match] === "attending" ? "Yes" : "No";
+    };
+
+    const sangeetStatus = checkStatus("sangeet");
+    const haldiStatus = checkStatus("haldi");
+    const pellikodukuStatus =
+      checkStatus("pelli") !== "No" ? checkStatus("pelli") : checkStatus("nichay");
+    const weddingStatus =
+      checkStatus("wedding") !== "No"
+        ? checkStatus("wedding")
+        : checkStatus("muhurtham") !== "No"
+        ? checkStatus("muhurtham")
+        : checkStatus("ceremony");
 
     setIsSubmitting(true);
-    await saveRsvp({
+    const result = await saveRsvp({
       name: data.name,
       email: data.contact,
       guest_count: data.guestCount,
@@ -101,6 +115,11 @@ export const RsvpSection: React.FC = () => {
       note: data.note || "",
     });
     setIsSubmitting(false);
+
+    if (!result.success) {
+      setError(result.error || "Could not save your RSVP. Please check your connection and try again.");
+      return;
+    }
 
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));

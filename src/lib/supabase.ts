@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { weddingConfig } from '../wedding.config';
 
 export interface BlessingItem {
   id: string;
@@ -8,12 +9,14 @@ export interface BlessingItem {
   created_at?: string;
 }
 
-const SUPABASE_URL = 'https://lyukxpzpcjedvrkwrcur.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_7USKYo1sBAT7p3_kqWdrqg_RCxNm3yd';
+const SUPABASE_URL = weddingConfig.rsvp?.supabaseUrl || 'https://lyukxpzpcjedvrkwrcur.supabase.co';
+const SUPABASE_KEY = weddingConfig.rsvp?.supabaseAnonKey || 'sb_publishable_7USKYo1sBAT7p3_kqWdrqg_RCxNm3yd';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-export const GOOGLE_SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwLV_52cSrJPWpsMfFJrY4xZ-3iCV8WPR5612i-v9qB_koaaX1u6QfOU3tq5fDLq1b-Mg/exec';
+export const GOOGLE_SHEET_WEBHOOK_URL =
+  weddingConfig.rsvp?.googleSheetWebhookUrl ||
+  'https://script.google.com/macros/s/AKfycbwLV_52cSrJPWpsMfFJrY4xZ-3iCV8WPR5612i-v9qB_koaaX1u6QfOU3tq5fDLq1b-Mg/exec';
 
 export interface RsvpPayload {
   name: string;
@@ -74,13 +77,17 @@ export async function saveRsvpToGoogleSheet(payload: RsvpPayload): Promise<void>
 }
 
 export async function saveRsvp(payload: RsvpPayload): Promise<{ success: boolean; error?: string }> {
-  const [supabaseRes] = await Promise.allSettled([
+  const [supabaseRes, sheetRes] = await Promise.allSettled([
     saveRsvpToSupabase(payload),
     saveRsvpToGoogleSheet(payload),
   ]);
 
-  if (supabaseRes.status === 'fulfilled' && !supabaseRes.value.success) {
-    return { success: false, error: supabaseRes.value.error };
+  const supabaseOk = supabaseRes.status === 'fulfilled' && supabaseRes.value.success;
+  const sheetOk = sheetRes.status === 'fulfilled';
+
+  if (!supabaseOk && !sheetOk) {
+    const errorMsg = supabaseRes.status === 'fulfilled' ? supabaseRes.value.error : 'Network error';
+    return { success: false, error: errorMsg };
   }
   return { success: true };
 }

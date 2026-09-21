@@ -64,8 +64,10 @@ export const HeroSection: React.FC = () => {
         onComplete: () => setOpened(true),
       });
 
-      tl.to('.door-l', { rotateY: -104, duration: prefersReduced ? 0.3 : 2.1, ease: 'power3.inOut' }, 'open')
+      tl.to('.doors-button', { autoAlpha: 0, duration: 0.25, pointerEvents: 'none', ease: 'power2.out' }, 'open')
+        .to('.door-l', { rotateY: -104, duration: prefersReduced ? 0.3 : 2.1, ease: 'power3.inOut' }, 'open')
         .to('.door-r', { rotateY: 104, duration: prefersReduced ? 0.3 : 2.1, ease: 'power3.inOut' }, 'open')
+        .to('.doors-container', { autoAlpha: 0, duration: 0.4, pointerEvents: 'none', ease: 'power2.out', onComplete: () => setOpened(true) }, 'open+=1.9')
         .to('.door-shadow', { autoAlpha: 0, duration: 1.4 }, 'open')
         .fromTo('.temple', { scale: 1.18, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 2.2, ease: 'power2.out' }, 'open+=0.2')
         .fromTo(
@@ -178,7 +180,7 @@ export const HeroSection: React.FC = () => {
 
       {/* ── Temple Doors ── */}
       {!opened && (
-        <div className="absolute inset-0 z-30 flex [perspective:1600px]">
+        <div className="doors-container absolute inset-0 z-30 flex [perspective:1600px]">
           <div
             className="door-l relative h-full w-1/2 origin-left bg-cover bg-right"
             style={{ backgroundImage: `url(${assets.templeDoor})`, transformStyle: 'preserve-3d' }}
@@ -192,19 +194,21 @@ export const HeroSection: React.FC = () => {
             <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black/50 to-transparent" />
           </div>
 
-          <button
-            type="button"
-            onClick={handleOpen}
-            aria-label="Open the temple doors and enter the invitation"
-            className="absolute inset-0 flex flex-col items-center justify-end gap-3 pb-24 focus:outline-none"
-          >
-            <span className="rounded-full border border-gold/70 bg-black/35 px-8 py-4 font-title text-[0.7rem] uppercase tracking-[0.32em] text-paper backdrop-blur-sm transition-colors hover:bg-black/55">
-              {weddingConfig.invitation.doorsButtonText || 'Tap to open the doors'}
-            </span>
-            <span className="text-[0.65rem] uppercase tracking-[0.24em] text-paper/70">
-              {weddingConfig.invitation.doorsSubText || 'Music will play softly'}
-            </span>
-          </button>
+          {!clicked && (
+            <button
+              type="button"
+              onClick={handleOpen}
+              aria-label="Open the temple doors and enter the invitation"
+              className="doors-button absolute inset-0 flex flex-col items-center justify-end gap-3 pb-24 focus:outline-none cursor-pointer"
+            >
+              <span className="rounded-full border border-gold/70 bg-black/35 px-8 py-4 font-title text-[0.7rem] uppercase tracking-[0.32em] text-paper backdrop-blur-sm transition-colors hover:bg-black/55">
+                {weddingConfig.invitation.doorsButtonText || 'Tap to open the doors'}
+              </span>
+              <span className="text-[0.65rem] uppercase tracking-[0.24em] text-paper/70">
+                {weddingConfig.invitation.doorsSubText || 'Music will play softly'}
+              </span>
+            </button>
+          )}
         </div>
       )}
 

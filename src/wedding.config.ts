@@ -180,6 +180,20 @@ the union of two hearts`,
   music: {
     audioUrl: '/client-images/music.mp3',
   },
+
+  // -------------------------------------------------------------
+  // 10. RSVP & DATABASE (SUPABASE & GOOGLE SHEETS)
+  // -------------------------------------------------------------
+  rsvp: {
+    enabled: true,
+    // Supabase project credentials (paste your client-specific Supabase credentials here)
+    supabaseUrl: 'https://lyukxpzpcjedvrkwrcur.supabase.co',
+    supabaseAnonKey: 'sb_publishable_7USKYo1sBAT7p3_kqWdrqg_RCxNm3yd',
+    supabaseTable: 'rsvps',
+
+    // Google Sheets Webhook URL (paste your deployed Google Apps Script URL here)
+    googleSheetWebhookUrl: 'https://script.google.com/macros/s/AKfycbwLV_52cSrJPWpsMfFJrY4xZ-3iCV8WPR5612i-v9qB_koaaX1u6QfOU3tq5fDLq1b-Mg/exec',
+  },
 };
 
 // Backwards-compatible export for existing components
