@@ -13,6 +13,9 @@ export const VenueSection: React.FC = () => {
     weddingConfig.venue.mapsEmbedUrl ||
     `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
   const cityName = weddingConfig.venue.cityName || weddingConfig.venue.city;
+  const locationUnderMap =
+    weddingConfig.venue.locationUnderMap ||
+    `${cityName} · ${weddingConfig.date.short || weddingData.dateShort}`;
 
   return (
     <section id="venue" className="relative overflow-hidden bg-maroon px-5 py-24 text-paper sm:py-36">
@@ -63,7 +66,7 @@ export const VenueSection: React.FC = () => {
             <span className="pointer-events-none absolute inset-3 border border-gold/30" />
           </div>
           <p className="mt-4 text-center text-xs uppercase tracking-[0.2em] text-paper/60">
-            Madurai · Tamil Nadu · {weddingData.dateShort}
+            {locationUnderMap}
           </p>
         </RevealOnScroll>
       </div>

@@ -143,7 +143,7 @@ export const HeroSection: React.FC = () => {
       {/* Main Invitation Card */}
       <div className="relative z-20 w-full px-5 [perspective:1400px]">
         <div className="invite-card mx-auto max-w-xl opacity-0">
-          <div className="paper-card arch-top relative px-6 py-12 text-center sm:px-12 sm:py-16">
+          <div className="paper-card arch-top relative px-4 py-10 text-center sm:px-12 sm:py-16">
             <img
               src={assets.mandalaGold}
               alt=""
@@ -153,9 +153,9 @@ export const HeroSection: React.FC = () => {
               className="pointer-events-none absolute -top-16 left-1/2 w-28 -translate-x-1/2 opacity-60 sm:-top-20 sm:w-36"
             />
             <p className="invite-line eyebrow mt-6">{weddingData.dateShort}</p>
-            <h1 className="invite-line mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-display text-4xl min-[380px]:text-5xl sm:text-6xl md:text-7xl leading-[1.05] break-words">
+            <h1 className="invite-line mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-display text-2xl min-[360px]:text-3xl min-[480px]:text-5xl sm:text-6xl md:text-7xl leading-[1.08] break-words">
               <span className="text-gold-foil animate-foil">{weddingData.bride}</span>
-              <span className="mx-2 font-title text-xl align-middle text-maroon sm:text-3xl">&amp;</span>
+              <span className="mx-1.5 font-title text-base sm:text-2xl md:text-3xl align-middle text-maroon">&amp;</span>
               <span className="text-gold-foil animate-foil">{weddingData.groom}</span>
             </h1>
             <div className="invite-line rule-gold mx-auto mt-8 w-2/3" />

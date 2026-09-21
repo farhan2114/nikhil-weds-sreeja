@@ -23,7 +23,7 @@ const PersonCard: React.FC<PersonCardProps> = ({ name, role, note, src, alt, del
         </div>
         <figcaption>
           <p className="mt-7 font-title text-[0.68rem] uppercase tracking-[0.3em] text-gold-deep">{role}</p>
-          <h3 className="mt-3 font-display text-4xl">{name}</h3>
+          <h3 className="mt-3 font-display text-2xl min-[360px]:text-3xl sm:text-4xl break-words px-2">{name}</h3>
           <div className="rule-gold mx-auto mt-5 w-20" />
           <p className="mx-auto mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">{note}</p>
         </figcaption>
