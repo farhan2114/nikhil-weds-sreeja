@@ -37,7 +37,7 @@ export const ParallaxSection: React.FC = () => {
   const { banner } = weddingConfig;
 
   return (
-    <div ref={containerRef} className="relative h-[62vh] min-h-[440px] overflow-hidden bg-[#24080e] sm:h-[75vh]">
+    <div ref={containerRef} className="relative h-[45vh] min-h-[340px] overflow-hidden bg-[#24080e] sm:h-[54vh]">
       <img
         src={banner.image || assets.hands}
         alt={banner.alt || 'Wedding ceremony quote banner'}

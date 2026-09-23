@@ -9,7 +9,7 @@ export const GallerySection: React.FC = () => {
   const singleAlt = weddingConfig.gallery[0]?.alt || "Sreeja and Nikhil - A cherished moment";
 
   return (
-    <section id="gallery" className="relative overflow-hidden px-5 py-24 sm:py-32">
+    <section id="gallery" className="relative overflow-hidden px-5 py-12 sm:py-16">
       <SpinningMandala reverse className="-right-20 top-1/4 w-48 sm:w-64" />
       <Ornament className="-left-10 top-16 w-40 rotate-12 sm:w-56" />
       <Ornament variant="small" className="-right-6 bottom-10 w-28 -rotate-12 sm:w-40" />
@@ -20,13 +20,13 @@ export const GallerySection: React.FC = () => {
           <p className="eyebrow">A Sacred Bond</p>
           <h2 className="mt-4 font-display text-4xl sm:text-6xl">A moment of forever</h2>
           <div className="rule-gold mx-auto mt-6 w-32" />
-          <p className="mx-auto mt-5 max-w-lg text-sm sm:text-base leading-relaxed text-muted-foreground">
+          <p className="mx-auto mt-4 max-w-lg text-sm sm:text-base leading-relaxed text-muted-foreground">
             A fleeting glance, an eternal promise — celebrating the love and togetherness that will guide our lives forward.
           </p>
         </RevealOnScroll>
 
         {/* ── Single Centerpiece Framed Portrait ── */}
-        <RevealOnScroll delay={0.15} className="mt-12 sm:mt-16">
+        <RevealOnScroll delay={0.15} className="mt-8 sm:mt-10">
           <div className="mx-auto max-w-md sm:max-w-xl">
             <div className="relative overflow-hidden border-2 border-gold/40 bg-paper/10 p-3 sm:p-4 shadow-2xl backdrop-blur-sm group">
               <figure className="relative aspect-[4/5] sm:aspect-[3/4] overflow-hidden bg-muted">

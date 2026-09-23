@@ -39,7 +39,7 @@ export const EventsSection: React.FC = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} id="events" className="relative overflow-clip px-5 py-24 sm:py-28">
+    <section ref={sectionRef} id="events" className="relative overflow-clip px-5 py-12 sm:py-16">
       <SpinningMandala className="-left-24 bottom-8 w-52 sm:w-72" />
       <img
         src={assets.mandalaGold}

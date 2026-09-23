@@ -9,45 +9,49 @@ interface TimeLeft {
   seconds: number;
 }
 
-// Smooth vertical rolling number transition
+// Smooth downward rolling number transition
 const RollingNumber: React.FC<{ value: number }> = ({ value }) => {
-  const [currentVal, setCurrentVal] = useState(value);
-  const [prevVal, setPrevVal] = useState(value);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [displayVal, setDisplayVal] = useState(value);
+  const [prevVal, setPrevVal] = useState<number | null>(null);
 
   useEffect(() => {
-    if (value !== currentVal) {
-      setPrevVal(currentVal);
-      setCurrentVal(value);
-      setIsAnimating(true);
+    if (value !== displayVal) {
+      setPrevVal(displayVal);
+      setDisplayVal(value);
       const timer = setTimeout(() => {
-        setIsAnimating(false);
-      }, 420);
+        setPrevVal(null);
+      }, 350);
       return () => clearTimeout(timer);
     }
-  }, [value, currentVal]);
+  }, [value, displayVal]);
 
   return (
-    <div className="relative h-12 sm:h-20 md:h-24 overflow-hidden flex items-center justify-center">
-      {isAnimating ? (
-        <div
-          className="flex flex-col items-center justify-center"
+    <div className="relative h-12 sm:h-18 md:h-20 w-full flex items-center justify-center overflow-hidden">
+      {/* Previous outgoing number: slides downward and fades out */}
+      {prevVal !== null && (
+        <span
+          className="absolute inset-0 flex items-center justify-center font-serif italic text-4xl sm:text-6xl md:text-7xl text-[#3E3832] font-normal leading-none select-none pointer-events-none"
           style={{
-            animation: 'timerRollUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            animation: 'timerSlideDownOut 0.32s cubic-bezier(0.4, 0, 1, 1) forwards',
           }}
         >
-          <span className="h-12 sm:h-20 md:h-24 flex items-center justify-center font-serif italic text-4xl sm:text-6xl md:text-7xl text-[#3E3832] font-normal leading-none select-none">
-            {prevVal}
-          </span>
-          <span className="h-12 sm:h-20 md:h-24 flex items-center justify-center font-serif italic text-4xl sm:text-6xl md:text-7xl text-[#3E3832] font-normal leading-none select-none">
-            {currentVal}
-          </span>
-        </div>
-      ) : (
-        <span className="h-12 sm:h-20 md:h-24 flex items-center justify-center font-serif italic text-4xl sm:text-6xl md:text-7xl text-[#3E3832] font-normal leading-none select-none">
-          {currentVal}
+          {prevVal}
         </span>
       )}
+
+      {/* Current incoming number: slides downward from top into exact center */}
+      <span
+        key={displayVal}
+        className="absolute inset-0 flex items-center justify-center font-serif italic text-4xl sm:text-6xl md:text-7xl text-[#3E3832] font-normal leading-none select-none"
+        style={{
+          animation:
+            prevVal !== null
+              ? 'timerSlideDownIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+              : 'none',
+        }}
+      >
+        {displayVal}
+      </span>
     </div>
   );
 };
@@ -83,16 +87,26 @@ export const CountdownSection: React.FC = () => {
   }, [targetDateStr]);
 
   return (
-    <section className="relative overflow-hidden py-14 sm:py-20 px-4">
-      {/* Keyframe for smooth vertical slide */}
+    <section className="relative overflow-hidden py-6 sm:py-10 px-4">
+      {/* Downward slide keyframes for countdown ticking */}
       <style>{`
-        @keyframes timerRollUp {
+        @keyframes timerSlideDownOut {
           0% {
             transform: translateY(0%);
-            opacity: 0.95;
+            opacity: 1;
           }
           100% {
+            transform: translateY(50%);
+            opacity: 0;
+          }
+        }
+        @keyframes timerSlideDownIn {
+          0% {
             transform: translateY(-50%);
+            opacity: 0;
+          }
+          100% {
+            transform: translateY(0%);
             opacity: 1;
           }
         }
@@ -100,17 +114,17 @@ export const CountdownSection: React.FC = () => {
 
       <RevealOnScroll className="mx-auto max-w-4xl text-center">
         {/* Title & Subtitle */}
-        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-foreground font-normal tracking-wide">
+        <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl text-foreground font-normal tracking-wide">
           Counting the days
         </h2>
-        <p className="mt-2 sm:mt-3 text-[0.68rem] sm:text-xs uppercase tracking-[0.32em] text-gold-deep font-title font-medium">
+        <p className="mt-1.5 sm:mt-2 text-[0.65rem] sm:text-xs uppercase tracking-[0.32em] text-gold-deep font-title font-medium">
           Until We Say Yes
         </p>
 
-        {/* ── Recessed Soft-Shadow Pill Tray (Matches media_1790167432685.png) ── */}
-        <div className="mt-8 sm:mt-12 mx-auto max-w-xs sm:max-w-xl md:max-w-2xl">
+        {/* ── Recessed Soft-Shadow Pill Tray ── */}
+        <div className="mt-6 sm:mt-8 mx-auto max-w-xs sm:max-w-xl md:max-w-2xl">
           <div
-            className="rounded-[2rem] sm:rounded-[2.75rem] bg-[#F7F2EB] border border-[#E5DDD2] px-4 py-5 sm:px-10 sm:py-8"
+            className="rounded-[2rem] sm:rounded-[2.75rem] bg-[#F7F2EB] border border-[#E5DDD2] px-3 py-4 sm:px-10 sm:py-7"
             style={{
               boxShadow:
                 'inset 4px 4px 10px rgba(0, 0, 0, 0.12), inset -4px -4px 10px rgba(255, 255, 255, 0.9), 0 2px 8px rgba(0, 0, 0, 0.03)',
@@ -120,7 +134,7 @@ export const CountdownSection: React.FC = () => {
               {/* 1. Days */}
               <div className="flex flex-col items-center">
                 <RollingNumber value={timeLeft.days} />
-                <span className="font-serif text-xs sm:text-base md:text-lg text-[#8A8174] font-normal tracking-wide mt-1">
+                <span className="font-serif text-xs sm:text-base text-[#8A8174] font-normal tracking-wide mt-1">
                   Days
                 </span>
               </div>
@@ -128,7 +142,7 @@ export const CountdownSection: React.FC = () => {
               {/* 2. Hours */}
               <div className="flex flex-col items-center">
                 <RollingNumber value={timeLeft.hours} />
-                <span className="font-serif text-xs sm:text-base md:text-lg text-[#8A8174] font-normal tracking-wide mt-1">
+                <span className="font-serif text-xs sm:text-base text-[#8A8174] font-normal tracking-wide mt-1">
                   HRS
                 </span>
               </div>
@@ -136,7 +150,7 @@ export const CountdownSection: React.FC = () => {
               {/* 3. Minutes */}
               <div className="flex flex-col items-center">
                 <RollingNumber value={timeLeft.minutes} />
-                <span className="font-serif text-xs sm:text-base md:text-lg text-[#8A8174] font-normal tracking-wide mt-1">
+                <span className="font-serif text-xs sm:text-base text-[#8A8174] font-normal tracking-wide mt-1">
                   MIN
                 </span>
               </div>
@@ -144,7 +158,7 @@ export const CountdownSection: React.FC = () => {
               {/* 4. Seconds */}
               <div className="flex flex-col items-center">
                 <RollingNumber value={timeLeft.seconds} />
-                <span className="font-serif text-xs sm:text-base md:text-lg text-[#8A8174] font-normal tracking-wide mt-1">
+                <span className="font-serif text-xs sm:text-base text-[#8A8174] font-normal tracking-wide mt-1">
                   SEC
                 </span>
               </div>

@@ -90,7 +90,7 @@ export const VenueSection: React.FC = () => {
   const daysInMonth = Array.from({ length: 30 }, (_, i) => i + 1);
 
   return (
-    <section id="venue" className="relative overflow-hidden bg-maroon px-5 py-24 text-paper sm:py-32">
+    <section id="venue" className="relative overflow-hidden bg-maroon px-5 py-14 text-paper sm:py-20">
       <div className="pointer-events-none absolute -right-20 -top-20 w-80 select-none">
         <img
           src={assets.mandalaMaroon}
@@ -119,7 +119,7 @@ export const VenueSection: React.FC = () => {
         </RevealOnScroll>
 
         {/* ── Side by Side Cards (Desktop) & Stacked (Mobile) ── */}
-        <div className="mt-14 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch max-w-5xl mx-auto">
+        <div className="mt-8 sm:mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch max-w-5xl mx-auto">
           
           {/* ── 1. Real November 2026 Monthly Calendar Sheet ── */}
           <RevealOnScroll delay={0.08} className="h-full">
@@ -355,7 +355,7 @@ export const VenueSection: React.FC = () => {
         alt=""
         aria-hidden="true"
         loading="lazy"
-        className="pointer-events-none mx-auto mt-20 w-full max-w-xl opacity-80"
+        className="pointer-events-none mx-auto mt-12 w-full max-w-xl opacity-80 sm:mt-14"
       />
     </section>
   );

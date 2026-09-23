@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { Phone, Mail, MessageCircle, Check, Users, Utensils, HeartHandshake } from "lucide-react";
 import { weddingConfig } from "../wedding.config";
 import { Ornament, SpinningMandala } from "./Ornaments";
@@ -173,7 +173,7 @@ export const RsvpSection: React.FC = () => {
   };
 
   return (
-    <section id="rsvp" className="relative overflow-hidden px-5 py-24 sm:py-32">
+    <section id="rsvp" className="relative overflow-hidden px-5 py-14 sm:py-20">
       <SpinningMandala className="-left-24 bottom-10 w-56 sm:w-72" />
       <Ornament className="-right-8 top-12 w-36 sm:w-48" />
 
