@@ -32,7 +32,7 @@ export const weddingConfig = {
     bridePhotoAlt: 'Sreeja, the bride',
 
     groomRole: 'The groom',
-    groomParentsNote: 'Son of Mrs. Latha & Mr. Pulla Reddy, Khammam.',
+    groomParentsNote: 'Son of Mrs. Baireddy Latha & Mr. Pulla Reddy, Khammam.',
     groomPhoto: '/client-images/groom.jpg',
     groomPhotoAlt: 'Nikhil, the groom',
   },
