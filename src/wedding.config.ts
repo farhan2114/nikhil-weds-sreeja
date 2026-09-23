@@ -21,18 +21,18 @@ export const weddingConfig = {
   // 1. COUPLE & PARENTS INFORMATION
   // -------------------------------------------------------------
   couple: {
-    bride: 'Sreeja',
-    groom: 'Nikhil',
+    bride: 'Sreeja Reddy',
+    groom: 'Nikhil Reddy',
     hashtag: '#SREEJAWEDSNIKHIL',
     secondaryHashtag: '#SREENI',
 
     brideRole: 'The bride',
-    brideParentsNote: 'Daughter of Ms. Janga Sunitha & Mr. Manohar Reddy, Karimnagar.',
+    brideParentsNote: 'Daughter of Mrs. Janga Sunitha & Mr. Manohar Reddy, Karimnagar.',
     bridePhoto: '/client-images/bride.jpg',
     bridePhotoAlt: 'Sreeja, the bride',
 
     groomRole: 'The groom',
-    groomParentsNote: 'Son of Ms. Sreedevi & Mr. Ramesh Reddy, Thallapenta.',
+    groomParentsNote: 'Son of Mrs. Latha & Mr. Pulla Reddy, Khammam.',
     groomPhoto: '/client-images/groom.jpg',
     groomPhotoAlt: 'Nikhil, the groom',
   },
