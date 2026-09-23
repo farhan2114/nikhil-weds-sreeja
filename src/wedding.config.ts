@@ -23,6 +23,7 @@ export const weddingConfig = {
   couple: {
     bride: 'Sreeja Reddy',
     groom: 'Nikhil Reddy',
+    navName: 'Sreeja & Nikhil',
     hashtag: '#SREEJAWEDSNIKHIL',
     secondaryHashtag: '#SREENI',
 

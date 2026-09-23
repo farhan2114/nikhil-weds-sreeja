@@ -90,7 +90,7 @@ export const Navbar: React.FC = () => {
             className="flex items-center gap-2 sm:gap-3 text-left group shrink-0"
           >
             <span className="font-display text-lg sm:text-2xl text-maroon-dark tracking-wide group-hover:text-gold transition-colors font-medium">
-              {weddingConfig.couple.bride} &amp; {weddingConfig.couple.groom}
+              Sreeja &amp; Nikhil
             </span>
             <span className="hidden sm:inline-block text-[0.62rem] uppercase tracking-[0.25em] text-gold font-title font-semibold pl-2 border-l border-gold/40">
               22 . 11 . 2026
