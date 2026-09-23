@@ -1,11 +1,19 @@
-import React from 'react';
-import { CalendarCheck, CalendarPlus, Clock, MapPin } from 'lucide-react';
+import React, { useRef, useEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { CalendarCheck, CalendarPlus, Clock } from 'lucide-react';
 import { assets } from '../data/assets';
-import { weddingConfig, weddingData } from '../wedding.config';
+import { weddingConfig } from '../wedding.config';
 import { SpinningMandala } from './Ornaments';
 import { RevealOnScroll } from './RevealOnScroll';
 
+gsap.registerPlugin(ScrollTrigger);
+
 export const EventsSection: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+
   const event = weddingConfig.events[0] || {
     name: 'Wedding Ceremony',
     day: 'Sunday, 22 Nov',
@@ -28,8 +36,97 @@ export const EventsSection: React.FC = () => {
     return url.toString();
   };
 
+  useEffect(() => {
+    const section = sectionRef.current;
+    const card = cardRef.current;
+    const img = imgRef.current;
+    if (!section || !card || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const ctx = gsap.context(() => {
+      // 1. 3D Unfold & Float Up Scroll Animation for the Wedding Card
+      gsap.fromTo(
+        card,
+        {
+          y: 60,
+          scale: 0.94,
+          rotateX: 8,
+          opacity: 0.85,
+          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.08)',
+        },
+        {
+          y: 0,
+          scale: 1,
+          rotateX: 0,
+          opacity: 1,
+          boxShadow: '0 25px 50px -12px rgba(218, 165, 32, 0.22), 0 15px 35px rgba(0, 0, 0, 0.1)',
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+            end: 'top 35%',
+            scrub: 1.2,
+          },
+        }
+      );
+
+      // 2. Parallax Depth on Mandapam Image inside card
+      if (img) {
+        gsap.fromTo(
+          img,
+          {
+            yPercent: -7,
+            scale: 1.1,
+          },
+          {
+            yPercent: 7,
+            scale: 1.02,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
+          }
+        );
+      }
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
+  // Subtle interactive 3D tilt on mouse hover (desktop only)
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card || window.innerWidth < 768) return;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    const rotateX = (-y / (rect.height / 2)) * 3;
+    const rotateY = (x / (rect.width / 2)) * 3;
+
+    gsap.to(card, {
+      rotateX,
+      rotateY,
+      duration: 0.4,
+      ease: 'power1.out',
+      transformPerspective: 1200,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    const card = cardRef.current;
+    if (!card || window.innerWidth < 768) return;
+    gsap.to(card, {
+      rotateX: 0,
+      rotateY: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+    });
+  };
+
   return (
-    <section id="events" className="relative overflow-clip px-5 py-12 sm:py-16">
+    <section ref={sectionRef} id="events" className="relative overflow-clip px-5 py-12 sm:py-16">
       <SpinningMandala className="-left-24 bottom-8 w-52 sm:w-72" />
       <img
         src={assets.mandalaGold}
@@ -48,23 +145,31 @@ export const EventsSection: React.FC = () => {
           <div className="rule-gold mx-auto mt-6 w-32" />
         </RevealOnScroll>
 
-        {/* ── Single Large Wedding Ceremony Card with Mandapam Image ── */}
-        <RevealOnScroll delay={0.12} className="mt-10 sm:mt-12">
-          <article className="paper-card relative mx-auto max-w-4xl overflow-hidden rounded-2xl border-2 border-gold/45 bg-[#FAF7F0] p-0 shadow-2xl transition-all duration-500 hover:border-gold/70 group">
-            
-            {/* 1. Outdoor Wedding Mandapam Header Image */}
+        {/* ── Single Large Wedding Card with 3D Scroll Perspective & Image Parallax ── */}
+        <div
+          className="mt-10 sm:mt-12"
+          style={{ perspective: '1200px' }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          <article
+            ref={cardRef}
+            className="paper-card relative mx-auto max-w-4xl overflow-hidden rounded-2xl border-2 border-gold/45 bg-[#FAF7F0] p-0 shadow-2xl transition-colors duration-500 hover:border-gold/75 group will-change-transform"
+          >
+            {/* 1. Outdoor Wedding Mandapam Header Image with Parallax */}
             <div className="relative aspect-[16/10] sm:aspect-[21/9] w-full overflow-hidden border-b-2 border-gold/35">
               <img
+                ref={imgRef}
                 src={event.image || '/client-images/wedding-mandapam.jpg'}
                 alt="Sacred Wedding Mandapam decorated with flowers and bells"
                 loading="lazy"
-                className="h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-105"
+                className="h-[120%] -top-[10%] w-full object-cover object-center will-change-transform relative"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent pointer-events-none" />
-              <span className="pointer-events-none absolute inset-3 sm:inset-4 border border-paper/35 rounded-xl" />
+              <span className="pointer-events-none absolute inset-3 sm:inset-4 border border-paper/35 rounded-xl z-10" />
 
               {/* Floating Date Badge on Image */}
-              <div className="absolute bottom-4 left-5 sm:bottom-6 sm:left-8 bg-black/60 backdrop-blur-md px-4 py-1.5 rounded-full border border-gold/60 text-gold text-xs sm:text-sm font-title uppercase tracking-widest font-semibold">
+              <div className="absolute bottom-4 left-5 sm:bottom-6 sm:left-8 bg-black/60 backdrop-blur-md px-4 py-1.5 rounded-full border border-gold/60 text-gold text-xs sm:text-sm font-title uppercase tracking-widest font-semibold z-10">
                 Sunday, 22 November 2026
               </div>
             </div>
@@ -102,7 +207,7 @@ export const EventsSection: React.FC = () => {
                 {event.note}
               </p>
 
-              {/* Action Buttons: Add to Calendar, RSVP, and Open Maps */}
+              {/* Action Buttons: Add to Calendar, RSVP */}
               <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md mx-auto">
                 {/* Add to Calendar */}
                 <a
@@ -130,7 +235,7 @@ export const EventsSection: React.FC = () => {
               </div>
             </div>
           </article>
-        </RevealOnScroll>
+        </div>
       </div>
     </section>
   );
