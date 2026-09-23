@@ -12,11 +12,19 @@ export const Footer: React.FC = () => {
         <span className="font-title text-base sm:text-2xl text-maroon">&amp;</span>
         <span>{weddingData.groom}</span>
       </p>
-      <p className="mt-4 text-sm text-muted-foreground">
+      <p className="mx-auto mt-4 max-w-md font-serif italic text-sm sm:text-base text-maroon font-medium">
+        “We cannot imagine our celebration without you.”
+      </p>
+      <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3 text-xs font-title uppercase tracking-[0.25em] text-gold-deep font-semibold">
+        <span>{weddingData.hashtag}</span>
+        <span className="hidden sm:inline text-gold/40">·</span>
+        <span>{weddingData.secondaryHashtag || '#SREENI'}</span>
+      </div>
+      <p className="mt-4 text-xs text-muted-foreground">
         {weddingData.dateLabel} · {weddingData.venue}, {weddingData.city}
       </p>
       <a
-        className="mt-8 inline-block border border-gold/60 px-7 py-3 text-[0.7rem] uppercase tracking-[0.3em] text-gold-deep transition-colors hover:bg-gold/10"
+        className="mt-6 inline-block border border-gold/60 px-7 py-2.5 text-[0.7rem] uppercase tracking-[0.3em] text-gold-deep transition-colors hover:bg-gold/10"
         href={mapsSearchUrl}
         target="_blank"
         rel="noreferrer"

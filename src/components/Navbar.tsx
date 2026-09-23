@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, CalendarCheck, Heart } from 'lucide-react';
+import { Menu, X, CalendarCheck } from 'lucide-react';
 import { weddingConfig } from '../wedding.config';
 
 interface NavItem {
@@ -50,7 +50,6 @@ export const Navbar: React.FC = () => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    // Also listen for doors opening via mutation observer or interval
     const interval = setInterval(handleScroll, 400);
 
     return () => {
@@ -81,23 +80,25 @@ export const Navbar: React.FC = () => {
       }`}
     >
       <nav className="border-b border-gold/30 bg-[#FBF8F3]/90 backdrop-blur-md shadow-sm transition-all">
-        <div className="mx-auto max-w-6xl px-4 sm:px-8 py-3 flex items-center justify-between">
-          {/* Couple Names / Logo on Left */}
+        {/* Full-width container: left items at left end, right items at right end */}
+        <div className="w-full px-4 sm:px-8 lg:px-12 py-3 flex items-center justify-between">
+          
+          {/* Couple Names / Logo on Far Left */}
           <button
             type="button"
             onClick={scrollToTop}
-            className="flex items-center gap-2 text-left group"
+            className="flex items-center gap-2 sm:gap-3 text-left group shrink-0"
           >
             <span className="font-display text-lg sm:text-2xl text-maroon-dark tracking-wide group-hover:text-gold transition-colors font-medium">
-              {weddingConfig.couple.bride} & {weddingConfig.couple.groom}
+              {weddingConfig.couple.bride} &amp; {weddingConfig.couple.groom}
             </span>
-            <span className="hidden sm:inline-block text-[0.62rem] uppercase tracking-[0.25em] text-gold font-title font-semibold pl-1.5 border-l border-gold/30">
+            <span className="hidden sm:inline-block text-[0.62rem] uppercase tracking-[0.25em] text-gold font-title font-semibold pl-2 border-l border-gold/40">
               22 . 11 . 2026
             </span>
           </button>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-7">
+          {/* Desktop Navigation Links on Far Right */}
+          <div className="hidden md:flex items-center gap-6 lg:gap-8 shrink-0">
             {navItems.map((item) => {
               const isActive = activeSection === item.href;
               return (
@@ -130,8 +131,8 @@ export const Navbar: React.FC = () => {
             </button>
           </div>
 
-          {/* Mobile Right Controls */}
-          <div className="flex md:hidden items-center gap-2.5">
+          {/* Mobile Right Controls on Far Right */}
+          <div className="flex md:hidden items-center gap-2 shrink-0">
             {/* Quick RSVP Button */}
             <button
               type="button"

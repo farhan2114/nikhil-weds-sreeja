@@ -23,7 +23,8 @@ export const weddingConfig = {
   couple: {
     bride: 'Sreeja',
     groom: 'Nikhil',
-    hashtag: '#NikhilWedsSreeja',
+    hashtag: '#SREEJAWEDSNIKHIL',
+    secondaryHashtag: '#SREENI',
 
     brideRole: 'The bride',
     brideParentsNote: 'Daughter of Ms. Janga Sunitha & Mr. Manohar Reddy, Karimnagar.',

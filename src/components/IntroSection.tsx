@@ -15,10 +15,15 @@ export const IntroSection: React.FC = () => {
         <p className="mx-auto mt-8 max-w-2xl whitespace-pre-line font-display text-3xl leading-snug sm:text-5xl">
           {weddingData.familyLine}
         </p>
-        <div className="rule-gold mx-auto mt-10 w-40" />
-        <p className="mt-6 font-title tracking-[0.25em] uppercase text-sm text-gold-deep">
-          {weddingData.hashtag}
-        </p>
+        <div className="rule-gold mx-auto mt-8 w-40" />
+        <div className="mt-5 space-y-1">
+          <p className="font-title tracking-[0.25em] uppercase text-xs sm:text-sm text-gold-deep font-semibold">
+            {weddingData.hashtag}
+          </p>
+          <p className="font-title tracking-[0.28em] uppercase text-[0.72rem] sm:text-xs text-gold-deep/80 font-medium">
+            {weddingData.secondaryHashtag || '#SREENI'}
+          </p>
+        </div>
       </RevealOnScroll>
     </section>
   );
