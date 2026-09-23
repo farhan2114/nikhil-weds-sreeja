@@ -13,6 +13,7 @@ import { GratitudeSection } from './components/GratitudeSection';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { MusicButton } from './components/MusicButton';
+import { FloralSectionDivider } from './components/Ornaments';
 
 export const App: React.FC = () => {
   // Smooth scroll initialization with Lenis
@@ -44,7 +45,9 @@ export const App: React.FC = () => {
       <HeroSection />
       <IntroSection />
       <CountdownSection />
+      <FloralSectionDivider />
       <MeetCoupleSection />
+      <FloralSectionDivider />
       <GallerySection />
       <ParallaxSection />
       <EventsSection />

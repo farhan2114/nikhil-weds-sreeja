@@ -30,7 +30,7 @@ const RollingNumber: React.FC<{ value: number }> = ({ value }) => {
       {/* Previous outgoing number: slides downward and fades out */}
       {prevVal !== null && (
         <span
-          className="absolute inset-0 flex items-center justify-center font-serif italic text-4xl sm:text-6xl md:text-7xl text-[#3E3832] font-normal leading-none select-none pointer-events-none"
+          className="absolute inset-0 flex items-center justify-center font-title text-4xl sm:text-6xl md:text-7xl text-[#2B2118] font-medium leading-none select-none pointer-events-none tracking-tight"
           style={{
             animation: 'timerSlideDownOut 0.32s cubic-bezier(0.4, 0, 1, 1) forwards',
           }}
@@ -42,7 +42,7 @@ const RollingNumber: React.FC<{ value: number }> = ({ value }) => {
       {/* Current incoming number: slides downward from top into exact center */}
       <span
         key={displayVal}
-        className="absolute inset-0 flex items-center justify-center font-serif italic text-4xl sm:text-6xl md:text-7xl text-[#3E3832] font-normal leading-none select-none"
+        className="absolute inset-0 flex items-center justify-center font-title text-4xl sm:text-6xl md:text-7xl text-[#2B2118] font-medium leading-none select-none tracking-tight"
         style={{
           animation:
             prevVal !== null
@@ -134,32 +134,32 @@ export const CountdownSection: React.FC = () => {
               {/* 1. Days */}
               <div className="flex flex-col items-center">
                 <RollingNumber value={timeLeft.days} />
-                <span className="font-serif text-xs sm:text-base text-[#8A8174] font-normal tracking-wide mt-1">
-                  Days
+                <span className="font-title text-[0.65rem] sm:text-xs uppercase tracking-[0.24em] text-[#7A6C5D] font-bold mt-1 sm:mt-1.5">
+                  DAYS
                 </span>
               </div>
 
               {/* 2. Hours */}
               <div className="flex flex-col items-center">
                 <RollingNumber value={timeLeft.hours} />
-                <span className="font-serif text-xs sm:text-base text-[#8A8174] font-normal tracking-wide mt-1">
-                  HRS
+                <span className="font-title text-[0.65rem] sm:text-xs uppercase tracking-[0.24em] text-[#7A6C5D] font-bold mt-1 sm:mt-1.5">
+                  HOURS
                 </span>
               </div>
 
               {/* 3. Minutes */}
               <div className="flex flex-col items-center">
                 <RollingNumber value={timeLeft.minutes} />
-                <span className="font-serif text-xs sm:text-base text-[#8A8174] font-normal tracking-wide mt-1">
-                  MIN
+                <span className="font-title text-[0.65rem] sm:text-xs uppercase tracking-[0.24em] text-[#7A6C5D] font-bold mt-1 sm:mt-1.5">
+                  MINUTES
                 </span>
               </div>
 
               {/* 4. Seconds */}
               <div className="flex flex-col items-center">
                 <RollingNumber value={timeLeft.seconds} />
-                <span className="font-serif text-xs sm:text-base text-[#8A8174] font-normal tracking-wide mt-1">
-                  SEC
+                <span className="font-title text-[0.65rem] sm:text-xs uppercase tracking-[0.24em] text-[#7A6C5D] font-bold mt-1 sm:mt-1.5">
+                  SECONDS
                 </span>
               </div>
             </div>

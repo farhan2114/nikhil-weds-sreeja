@@ -15,7 +15,6 @@ interface RsvpData {
   childrenCount: number;
   guestCount: number;
   dietary: string;
-  dietaryNotes: string;
   attendance: AttendanceMap;
   note: string;
   submittedAt: string;
@@ -26,9 +25,6 @@ const STORAGE_KEY = "rsvp_submission_nikhil_sreeja";
 const DIETARY_OPTIONS = [
   { id: "veg", label: "Vegetarian" },
   { id: "non-veg", label: "Non-Vegetarian" },
-  { id: "jain", label: "Jain Vegetarian" },
-  { id: "vegan", label: "Vegan" },
-  { id: "none", label: "No Restrictions" },
 ];
 
 export const RsvpSection: React.FC = () => {
@@ -40,7 +36,6 @@ export const RsvpSection: React.FC = () => {
   const [adultsCount, setAdultsCount] = useState(1);
   const [childrenCount, setChildrenCount] = useState(0);
   const [dietary, setDietary] = useState("Vegetarian");
-  const [dietaryNotes, setDietaryNotes] = useState("");
   const [attendance, setAttendance] = useState<AttendanceMap>(
     Object.fromEntries(events.map((e) => [e.name, null]))
   );
@@ -93,10 +88,6 @@ export const RsvpSection: React.FC = () => {
       .map((ev) => ev.name)
       .join(", ");
 
-    const fullDietary = dietaryNotes.trim()
-      ? `${dietary} (${dietaryNotes.trim()})`
-      : dietary;
-
     const data: RsvpData = {
       name: name.trim(),
       phone: phone.trim(),
@@ -105,7 +96,6 @@ export const RsvpSection: React.FC = () => {
       childrenCount,
       guestCount: totalGuests,
       dietary,
-      dietaryNotes: dietaryNotes.trim(),
       attendance,
       note: note.trim(),
       submittedAt: new Date().toISOString(),
@@ -135,7 +125,7 @@ export const RsvpSection: React.FC = () => {
       adults_count: data.adultsCount,
       children_count: data.childrenCount,
       guest_count: data.guestCount,
-      dietary: fullDietary,
+      dietary: data.dietary,
       attending_events: attendingList || "None",
       declined_events: declinedList || "None",
       sangeet: sangeetStatus,
@@ -166,7 +156,6 @@ export const RsvpSection: React.FC = () => {
     setAdultsCount(submitted.adultsCount || 1);
     setChildrenCount(submitted.childrenCount || 0);
     setDietary(submitted.dietary || "Vegetarian");
-    setDietaryNotes(submitted.dietaryNotes || "");
     setAttendance(submitted.attendance);
     setNote(submitted.note);
     setSubmitted(null);
@@ -265,7 +254,6 @@ export const RsvpSection: React.FC = () => {
                   </p>
                   <p>
                     <span className="font-semibold text-foreground">Dietary:</span> {submitted.dietary}
-                    {submitted.dietaryNotes ? ` (${submitted.dietaryNotes})` : ''}
                   </p>
                   {submitted.note && (
                     <p className="pt-1 italic text-foreground/80">
@@ -476,39 +464,31 @@ export const RsvpSection: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Dietary Restrictions */}
+                {/* Dietary Preference (Vegetarian / Non-Vegetarian only) */}
                 <div>
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-2.5">
                     <Utensils className="size-3.5 text-gold-deep" />
                     <label className="text-xs font-title uppercase tracking-[0.22em] text-foreground">
-                      Dietary Preferences
+                      Dietary Preference
                     </label>
                   </div>
 
-                  <div className="flex flex-wrap gap-2">
+                  <div className="grid grid-cols-2 gap-3 max-w-sm">
                     {DIETARY_OPTIONS.map((opt) => (
                       <button
                         key={opt.id}
                         type="button"
                         onClick={() => setDietary(opt.label)}
-                        className={`rounded-full px-3.5 py-1.5 text-xs transition-all ${
+                        className={`rounded-full py-2.5 px-4 text-xs font-title tracking-wider transition-all text-center ${
                           dietary === opt.label
-                            ? "bg-gold text-maroon font-semibold shadow-sm"
-                            : "border border-gold/40 bg-background/60 text-foreground/80 hover:border-gold hover:bg-gold/10"
+                            ? "bg-gold text-maroon font-bold shadow-md ring-2 ring-gold/50"
+                            : "border border-gold/40 bg-background text-foreground/80 hover:border-gold hover:bg-gold/10"
                         }`}
                       >
                         {opt.label}
                       </button>
                     ))}
                   </div>
-
-                  <input
-                    type="text"
-                    value={dietaryNotes}
-                    onChange={(e) => setDietaryNotes(e.target.value)}
-                    placeholder="Any specific allergies or food preferences? (Optional)"
-                    className="mt-3 w-full rounded border border-gold/30 bg-background/60 px-4 py-2.5 text-xs text-foreground placeholder:text-muted-foreground/60 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
-                  />
                 </div>
 
                 {/* Special Wishes / Note */}
@@ -550,10 +530,10 @@ export const RsvpSection: React.FC = () => {
           </RevealOnScroll>
         )}
 
-        {/* ── Contact the Family Section ── */}
+        {/* ── Contact the Family Section (Opaque card so spinning mandala is completely hidden behind) ── */}
         {familyContacts && familyContacts.length > 0 && (
-          <RevealOnScroll delay={0.15} className="mt-14">
-            <div className="rounded-xl border border-gold/30 bg-card/60 p-6 sm:p-8 backdrop-blur-sm text-center">
+          <RevealOnScroll delay={0.15} className="mt-14 relative z-10">
+            <div className="rounded-xl border border-gold/45 bg-[#FAF7F0] p-6 sm:p-8 shadow-2xl text-center relative z-10">
               <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-gold/15 text-gold-deep border border-gold/30">
                 <HeartHandshake className="size-5" />
               </div>
@@ -572,7 +552,7 @@ export const RsvpSection: React.FC = () => {
                   return (
                     <div
                       key={idx}
-                      className="flex flex-col items-center justify-center rounded-lg border border-gold/25 bg-background/60 p-4 transition-all hover:border-gold/50"
+                      className="flex flex-col items-center justify-center rounded-lg border border-gold/35 bg-[#FFFFFF] p-4.5 transition-all hover:border-gold/60 shadow-md relative z-10"
                     >
                       <p className="font-title text-sm font-semibold text-foreground">{contact.name}</p>
                       <p className="text-[0.68rem] uppercase tracking-wider text-gold-deep font-title mt-0.5">

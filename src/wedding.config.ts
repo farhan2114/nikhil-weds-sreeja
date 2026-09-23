@@ -66,7 +66,7 @@ the union of two hearts`,
   // -------------------------------------------------------------
   venue: {
     name: 'Frisco Hall Event Center',
-    city: '5353 Independence Pkwy, Ste-1, Frisco, Texas-75035, U.S.A.',
+    city: '5353 Independence Pkwy, Ste 1, Frisco, TX 75035',
     cityName: 'Frisco', // Shows in "Join us in [City]"
     locationUnderMap: 'Frisco · Texas · 22 . 11 . 2026', // Text displayed directly under the map frame
     description: 'Follow the golden path to Frisco Hall Event Center, where our families will be waiting to welcome you.',

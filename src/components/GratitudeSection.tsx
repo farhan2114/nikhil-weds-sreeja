@@ -127,12 +127,9 @@ export const GratitudeSection: React.FC = () => {
               <span className="h-[1px] w-12 sm:w-20 bg-gold/35" />
             </div>
 
-            {/* Gratitude Paragraph with Strong Closing Line */}
-            <div className="mx-auto max-w-lg space-y-2">
-              <p className="text-xs sm:text-sm sm:leading-relaxed text-[#5A524A] font-serif sm:font-sans">
-                Your presence, prayers, and affection mean the world to us.
-              </p>
-              <p className="font-serif italic text-sm sm:text-base md:text-lg text-maroon font-semibold">
+            {/* Heartfelt Closing Statement */}
+            <div className="mx-auto max-w-xl my-4 sm:my-5 px-3">
+              <p className="font-display italic text-xl sm:text-3xl text-maroon font-normal tracking-wide leading-relaxed drop-shadow-sm">
                 “We cannot imagine our celebration without you.”
               </p>
             </div>

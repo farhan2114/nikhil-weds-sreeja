@@ -11,7 +11,7 @@ export const GallerySection: React.FC = () => {
   return (
     <section id="gallery" className="relative overflow-hidden px-5 py-12 sm:py-16">
       <SpinningMandala reverse className="-right-20 top-1/4 w-48 sm:w-64" />
-      <Ornament className="-left-10 top-16 w-40 rotate-12 sm:w-56" />
+      <Ornament className="hidden sm:block -left-10 top-16 w-40 rotate-12 sm:w-56" />
       <Ornament variant="small" className="-right-6 bottom-10 w-28 -rotate-12 sm:w-40" />
       <Ornament variant="gold" className="right-4 top-6 w-24 rotate-6 sm:w-36" />
 

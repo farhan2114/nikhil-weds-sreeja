@@ -12,9 +12,6 @@ export const Footer: React.FC = () => {
         <span className="font-title text-base sm:text-2xl text-maroon">&amp;</span>
         <span>{weddingData.groom}</span>
       </p>
-      <p className="mx-auto mt-4 max-w-md font-serif italic text-sm sm:text-base text-maroon font-medium">
-        “We cannot imagine our celebration without you.”
-      </p>
       <div className="mt-4 flex flex-col items-center justify-center gap-1">
         <span className="font-title uppercase tracking-[0.26em] text-xs text-gold-deep font-semibold">
           {weddingData.hashtag}

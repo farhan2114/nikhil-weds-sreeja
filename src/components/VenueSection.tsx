@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Calendar, CalendarPlus, Download, Sparkles } from 'lucide-react';
+import { MapPin, Calendar, CalendarPlus } from 'lucide-react';
 import { assets } from '../data/assets';
 import { weddingConfig, weddingData } from '../wedding.config';
 import { RevealOnScroll } from './RevealOnScroll';
@@ -35,34 +35,6 @@ export const VenueSection: React.FC = () => {
     );
     url.searchParams.set('location', location);
     return url.toString();
-  };
-
-  // Helper to generate and download universal .ics calendar file
-  const downloadIcs = (title: string, startIso: string, endIso: string, desc: string, loc: string) => {
-    const icsContent = [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//Sreeja & Nikhil Wedding//EN',
-      'CALSCALE:GREGORIAN',
-      'METHOD:PUBLISH',
-      'BEGIN:VEVENT',
-      `SUMMARY:Sreeja & Nikhil — ${title}`,
-      `DESCRIPTION:${desc.replace(/\n/g, '\\n')}`,
-      `LOCATION:${loc}`,
-      `DTSTART:${startIso}`,
-      `DTEND:${endIso}`,
-      'STATUS:CONFIRMED',
-      'END:VEVENT',
-      'END:VCALENDAR',
-    ].join('\r\n');
-
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.setAttribute('download', `${title.replace(/[^a-zA-Z0-9]/g, '_')}.ics`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   const weddingEvent = weddingConfig.events[0] || {
@@ -196,53 +168,33 @@ export const VenueSection: React.FC = () => {
                   ))}
                 </div>
 
-                {/* Single Event Schedule Legend: Wedding */}
+                {/* Single Event Schedule Legend: Wedding (Star icon removed) */}
                 <div className="mt-3 border-t border-gold/20 pt-3">
-                  <div className="flex items-center justify-between text-xs rounded bg-gold/15 px-3 py-2 border border-gold/40">
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="size-3.5 text-gold" />
-                      <div>
-                        <span className="font-bold text-gold">22 Nov (Sun):</span>{' '}
-                        <span className="text-paper font-medium">{weddingEvent?.name || 'Wedding Muhurtham'}</span>
-                      </div>
+                  <div className="flex items-center justify-between text-xs rounded bg-gold/15 px-3.5 py-2 border border-gold/40">
+                    <div>
+                      <span className="font-bold text-gold">22 Nov (Sun):</span>{' '}
+                      <span className="text-paper font-medium">{weddingEvent?.name || 'Wedding Ceremony'}</span>
                     </div>
                     <span className="text-gold font-bold text-xs font-title">10:54 AM CST</span>
                   </div>
                 </div>
               </div>
 
-              {/* Add to Calendar Action Button (with ample spacing, no clipping) */}
+              {/* Add to Calendar Action Button (Full width matching calendar card square) */}
               <div className="mt-5 pt-3.5 border-t border-gold/20 space-y-2.5">
                 <p className="text-[0.65rem] uppercase tracking-[0.2em] text-paper/70 font-title text-center">
                   Add wedding to your calendar
                 </p>
-                <div className="flex items-center gap-2.5 max-w-sm mx-auto">
+                <div className="w-full">
                   <a
                     href={weddingGCalUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-gold bg-gold text-maroon-dark px-4 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-gold/90 transition-all shadow-md hover:scale-105 active:scale-95"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-full border border-gold bg-gold text-maroon-dark px-5 py-3 text-xs sm:text-sm font-title font-bold uppercase tracking-wider hover:bg-gold/90 transition-all shadow-md hover:scale-[1.02] active:scale-95"
                   >
                     <CalendarPlus className="size-4" />
-                    Google Calendar
+                    <span>Add to Google Calendar</span>
                   </a>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      downloadIcs(
-                        weddingEvent?.name || 'Wedding Ceremony',
-                        weddingEvent?.startDate || '20261122T100000',
-                        weddingEvent?.endDate || '20261122T150000',
-                        weddingEvent?.note || 'Wedding Ceremony and celebrations',
-                        `${weddingConfig.venue.name}, ${weddingConfig.venue.city}`
-                      )
-                    }
-                    title="Download Apple / Outlook iCal for Wedding"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-gold/50 bg-gold/15 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-gold hover:bg-gold/25 transition-all shadow"
-                  >
-                    <Download className="size-3.5" />
-                    .ics
-                  </button>
                 </div>
               </div>
             </div>
