@@ -9,108 +9,45 @@ interface TimeLeft {
   seconds: number;
 }
 
-// Single flip card digit with authentic 3D split-flap folding animation
-const FlipDigit: React.FC<{ digit: string }> = ({ digit }) => {
-  const [currentDigit, setCurrentDigit] = useState(digit);
-  const [previousDigit, setPreviousDigit] = useState(digit);
-  const [isFlipping, setIsFlipping] = useState(false);
+// Smooth vertical rolling number transition
+const RollingNumber: React.FC<{ value: number }> = ({ value }) => {
+  const [currentVal, setCurrentVal] = useState(value);
+  const [prevVal, setPrevVal] = useState(value);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    if (digit !== currentDigit) {
-      setPreviousDigit(currentDigit);
-      setCurrentDigit(digit);
-      setIsFlipping(true);
+    if (value !== currentVal) {
+      setPrevVal(currentVal);
+      setCurrentVal(value);
+      setIsAnimating(true);
       const timer = setTimeout(() => {
-        setIsFlipping(false);
-      }, 550);
+        setIsAnimating(false);
+      }, 420);
       return () => clearTimeout(timer);
     }
-  }, [digit, currentDigit]);
+  }, [value, currentVal]);
 
   return (
-    <div
-      className="relative flex h-14 w-9 sm:h-20 sm:w-13 md:h-22 md:w-14 items-center justify-center rounded-lg bg-[#161313] shadow-lg shadow-black/40 border border-gold/30 select-none overflow-hidden"
-      style={{ perspective: '450px' }}
-    >
-      {/* ── 1. STATIC BACKGROUND TOP HALF (Revealed as top flap flips down) ── */}
-      <div className="absolute inset-x-0 top-0 h-1/2 overflow-hidden bg-[#1a1515] border-b border-black/90">
-        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 top-0 h-[200%] flex items-center justify-center font-mono sm:font-display text-2xl sm:text-4xl md:text-5xl font-bold text-paper">
-          {currentDigit}
-        </div>
-      </div>
-
-      {/* ── 2. STATIC BACKGROUND BOTTOM HALF (Visible until bottom flap unfolds) ── */}
-      <div className="absolute inset-x-0 bottom-0 h-1/2 overflow-hidden bg-[#141010]">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-[200%] flex items-center justify-center font-mono sm:font-display text-2xl sm:text-4xl md:text-5xl font-bold text-paper">
-          {isFlipping ? previousDigit : currentDigit}
-        </div>
-      </div>
-
-      {/* ── 3. ANIMATED FLIPPING TOP FLAP (Folds forward and down) ── */}
-      {isFlipping && (
+    <div className="relative h-12 sm:h-20 md:h-24 overflow-hidden flex items-center justify-center">
+      {isAnimating ? (
         <div
-          className="absolute inset-x-0 top-0 h-1/2 overflow-hidden bg-[#1a1515] border-b border-black/90 z-20"
+          className="flex flex-col items-center justify-center"
           style={{
-            transformOrigin: 'bottom center',
-            backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden',
-            animation: 'splitFlapTop 0.28s cubic-bezier(0.4, 0, 1, 1) forwards',
+            animation: 'timerRollUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards',
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
-          <div className="absolute inset-0 bg-black/25 pointer-events-none" />
-          <div className="absolute inset-x-0 top-0 h-[200%] flex items-center justify-center font-mono sm:font-display text-2xl sm:text-4xl md:text-5xl font-bold text-paper">
-            {previousDigit}
-          </div>
+          <span className="h-12 sm:h-20 md:h-24 flex items-center justify-center font-serif italic text-4xl sm:text-6xl md:text-7xl text-[#3E3832] font-normal leading-none select-none">
+            {prevVal}
+          </span>
+          <span className="h-12 sm:h-20 md:h-24 flex items-center justify-center font-serif italic text-4xl sm:text-6xl md:text-7xl text-[#3E3832] font-normal leading-none select-none">
+            {currentVal}
+          </span>
         </div>
+      ) : (
+        <span className="h-12 sm:h-20 md:h-24 flex items-center justify-center font-serif italic text-4xl sm:text-6xl md:text-7xl text-[#3E3832] font-normal leading-none select-none">
+          {currentVal}
+        </span>
       )}
-
-      {/* ── 4. ANIMATED FLIPPING BOTTOM FLAP (Unfolds downward) ── */}
-      {isFlipping && (
-        <div
-          className="absolute inset-x-0 bottom-0 h-1/2 overflow-hidden bg-[#141010] z-20"
-          style={{
-            transformOrigin: 'top center',
-            backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden',
-            animation: 'splitFlapBottom 0.28s cubic-bezier(0, 0, 0.2, 1) 0.27s both',
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-[200%] flex items-center justify-center font-mono sm:font-display text-2xl sm:text-4xl md:text-5xl font-bold text-paper">
-            {currentDigit}
-          </div>
-        </div>
-      )}
-
-      {/* ── CENTRAL SPLIT LINE (Crisp divider, no side notches) ── */}
-      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-black/90 z-30 pointer-events-none" />
-      <div className="absolute inset-x-0 top-1/2 h-[1px] bg-white/[0.06] z-30 pointer-events-none" />
-    </div>
-  );
-};
-
-// Group of 2 digits (e.g. "08") with label
-const FlipGroup: React.FC<{ value: number; label: string; padLength?: number }> = ({
-  value,
-  label,
-  padLength = 2,
-}) => {
-  const formatted = String(Math.max(0, value)).padStart(padLength, '0');
-  const digits = formatted.split('');
-
-  return (
-    <div className="flex flex-col items-center">
-      <div className="flex items-center gap-1.5 sm:gap-2">
-        {digits.map((d, i) => (
-          <FlipDigit key={i} digit={d} />
-        ))}
-      </div>
-      <span className="mt-3 text-[0.62rem] sm:text-[0.72rem] font-title uppercase tracking-[0.26em] text-gold-deep font-semibold">
-        {label}
-      </span>
     </div>
   );
 };
@@ -147,28 +84,22 @@ export const CountdownSection: React.FC = () => {
 
   return (
     <section className="relative overflow-hidden py-14 sm:py-20 px-4">
-      {/* Split flap keyframes injection */}
+      {/* Keyframe for smooth vertical slide */}
       <style>{`
-        @keyframes splitFlapTop {
+        @keyframes timerRollUp {
           0% {
-            transform: rotateX(0deg);
+            transform: translateY(0%);
+            opacity: 0.95;
           }
           100% {
-            transform: rotateX(-90deg);
-          }
-        }
-        @keyframes splitFlapBottom {
-          0% {
-            transform: rotateX(90deg);
-          }
-          100% {
-            transform: rotateX(0deg);
+            transform: translateY(-50%);
+            opacity: 1;
           }
         }
       `}</style>
 
       <RevealOnScroll className="mx-auto max-w-4xl text-center">
-        {/* Title & Subtitle exactly matching screenshot */}
+        {/* Title & Subtitle */}
         <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-foreground font-normal tracking-wide">
           Counting the days
         </h2>
@@ -176,12 +107,49 @@ export const CountdownSection: React.FC = () => {
           Until We Say Yes
         </p>
 
-        {/* Flip Cards Container */}
-        <div className="mt-8 sm:mt-12 flex items-center justify-center gap-3 sm:gap-6 md:gap-8 flex-wrap">
-          <FlipGroup value={timeLeft.days} label="Days" />
-          <FlipGroup value={timeLeft.hours} label="Hours" />
-          <FlipGroup value={timeLeft.minutes} label="Minutes" />
-          <FlipGroup value={timeLeft.seconds} label="Seconds" />
+        {/* ── Recessed Soft-Shadow Pill Tray (Matches media_1790167432685.png) ── */}
+        <div className="mt-8 sm:mt-12 mx-auto max-w-xs sm:max-w-xl md:max-w-2xl">
+          <div
+            className="rounded-[2rem] sm:rounded-[2.75rem] bg-[#F7F2EB] border border-[#E5DDD2] px-4 py-5 sm:px-10 sm:py-8"
+            style={{
+              boxShadow:
+                'inset 4px 4px 10px rgba(0, 0, 0, 0.12), inset -4px -4px 10px rgba(255, 255, 255, 0.9), 0 2px 8px rgba(0, 0, 0, 0.03)',
+            }}
+          >
+            <div className="grid grid-cols-4 items-center justify-center text-center">
+              {/* 1. Days */}
+              <div className="flex flex-col items-center">
+                <RollingNumber value={timeLeft.days} />
+                <span className="font-serif text-xs sm:text-base md:text-lg text-[#8A8174] font-normal tracking-wide mt-1">
+                  Days
+                </span>
+              </div>
+
+              {/* 2. Hours */}
+              <div className="flex flex-col items-center">
+                <RollingNumber value={timeLeft.hours} />
+                <span className="font-serif text-xs sm:text-base md:text-lg text-[#8A8174] font-normal tracking-wide mt-1">
+                  HRS
+                </span>
+              </div>
+
+              {/* 3. Minutes */}
+              <div className="flex flex-col items-center">
+                <RollingNumber value={timeLeft.minutes} />
+                <span className="font-serif text-xs sm:text-base md:text-lg text-[#8A8174] font-normal tracking-wide mt-1">
+                  MIN
+                </span>
+              </div>
+
+              {/* 4. Seconds */}
+              <div className="flex flex-col items-center">
+                <RollingNumber value={timeLeft.seconds} />
+                <span className="font-serif text-xs sm:text-base md:text-lg text-[#8A8174] font-normal tracking-wide mt-1">
+                  SEC
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </RevealOnScroll>
     </section>

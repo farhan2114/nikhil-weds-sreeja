@@ -10,6 +10,7 @@ import { EventsSection } from './components/EventsSection';
 import { VenueSection } from './components/VenueSection';
 import { RsvpSection } from './components/RsvpSection';
 import { GratitudeSection } from './components/GratitudeSection';
+import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { MusicButton } from './components/MusicButton';
 
@@ -39,6 +40,7 @@ export const App: React.FC = () => {
 
   return (
     <main>
+      <Navbar />
       <HeroSection />
       <IntroSection />
       <CountdownSection />

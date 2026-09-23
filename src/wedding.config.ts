@@ -87,24 +87,12 @@ the union of two hearts`,
   },
 
   // -------------------------------------------------------------
-  // 6. PHOTO GALLERY
+  // 6. PHOTO PORTRAIT (A MOMENT OF FOREVER)
   // -------------------------------------------------------------
   gallery: [
     {
       image: '/client-images/gallery-1.jpg',
-      alt: 'The couple walking through a temple corridor',
-    },
-    {
-      image: '/client-images/gallery-2.jpg',
-      alt: 'The couple laughing together',
-    },
-    {
-      image: '/client-images/gallery-3.jpg',
-      alt: 'Hands with mehndi holding a jasmine garland',
-    },
-    {
-      image: '/client-images/gallery-4.jpg',
-      alt: 'The couple under a flower-decorated mandapam at dusk',
+      alt: 'Sreeja and Nikhil - A cherished moment of togetherness',
     },
   ],
 
