@@ -545,37 +545,41 @@ export const RsvpSection: React.FC = () => {
                 If you have questions regarding RSVP, directions, or accommodations, please feel free to reach out to the family:
               </p>
 
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="mt-7 grid gap-5 sm:gap-6 sm:grid-cols-2">
                 {familyContacts.map((contact, idx) => {
                   const cleanPhone = contact.phone.replace(/[^0-9+]/g, '');
                   const waPhone = contact.phone.replace(/[^0-9]/g, '');
                   return (
                     <div
                       key={idx}
-                      className="flex flex-col items-center justify-center rounded-lg border border-gold/35 bg-[#FFFFFF] p-4.5 transition-all hover:border-gold/60 shadow-md relative z-10"
+                      className="flex flex-col items-center justify-center rounded-xl border border-gold/40 bg-[#FFFFFF] px-6 py-7 sm:px-8 sm:py-8 transition-all hover:border-gold/70 shadow-lg relative z-10 min-h-[180px]"
                     >
-                      <p className="font-title text-sm font-semibold text-foreground">{contact.name}</p>
-                      <p className="text-[0.68rem] uppercase tracking-wider text-gold-deep font-title mt-0.5">
+                      <p className="font-title text-base sm:text-lg font-bold text-foreground tracking-wide">
+                        {contact.name}
+                      </p>
+                      <p className="text-[0.72rem] sm:text-xs uppercase tracking-[0.22em] text-gold-deep font-title font-medium mt-1">
                         {contact.relation}
                       </p>
-                      <p className="mt-2 text-xs font-mono text-muted-foreground">{contact.phone}</p>
+                      <p className="mt-2.5 text-xs sm:text-sm font-mono text-muted-foreground tracking-wide">
+                        {contact.phone}
+                      </p>
 
-                      <div className="mt-3 flex items-center gap-2.5">
+                      <div className="mt-5 flex items-center justify-center gap-3 w-full">
                         <a
                           href={`tel:${cleanPhone}`}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-gold/50 bg-gold/10 px-3.5 py-1 text-[0.68rem] uppercase tracking-wider text-gold-deep hover:bg-gold/20 transition-colors"
+                          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-gold/60 bg-gold/15 px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold-deep hover:bg-gold/25 transition-all shadow-sm hover:scale-105 active:scale-95"
                         >
-                          <Phone className="size-3" />
-                          Call
+                          <Phone className="size-3.5" />
+                          <span>Call</span>
                         </a>
                         <a
                           href={`https://wa.me/${waPhone}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3.5 py-1 text-[0.68rem] uppercase tracking-wider text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+                          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-emerald-500/50 bg-emerald-500/15 px-4 py-2 text-xs uppercase tracking-wider font-semibold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-500/25 transition-all shadow-sm hover:scale-105 active:scale-95"
                         >
-                          <MessageCircle className="size-3" />
-                          WhatsApp
+                          <MessageCircle className="size-3.5" />
+                          <span>WhatsApp</span>
                         </a>
                       </div>
                     </div>
