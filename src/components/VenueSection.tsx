@@ -119,9 +119,7 @@ export const VenueSection: React.FC = () => {
           
           {/* ── 1. November 2026 Monthly Calendar Sheet (Wedding Day Highlighted) ── */}
           <RevealOnScroll delay={0.08} className="h-full">
-            <div className="relative h-full flex flex-col justify-between border border-gold/35 bg-black/35 p-5 sm:p-7 backdrop-blur-sm shadow-2xl">
-              <span className="pointer-events-none absolute inset-2.5 sm:inset-3 border border-gold/25" />
-
+            <div className="relative h-full min-h-[460px] flex flex-col justify-between rounded-xl border border-gold/40 bg-black/40 p-5 sm:p-7 pb-6 sm:pb-7 backdrop-blur-sm shadow-2xl">
               <div>
                 {/* Header bar */}
                 <div className="flex items-center justify-between pb-3 border-b border-gold/30">
@@ -213,19 +211,19 @@ export const VenueSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Add to Calendar Action Button */}
-              <div className="mt-4 pt-3 border-t border-gold/20 space-y-2">
-                <p className="text-[0.62rem] uppercase tracking-[0.2em] text-paper/60 font-title text-center">
+              {/* Add to Calendar Action Button (with ample spacing, no clipping) */}
+              <div className="mt-5 pt-3.5 border-t border-gold/20 space-y-2.5">
+                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-paper/70 font-title text-center">
                   Add wedding to your calendar
                 </p>
-                <div className="flex items-center gap-2 max-w-sm mx-auto">
+                <div className="flex items-center gap-2.5 max-w-sm mx-auto">
                   <a
                     href={weddingGCalUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-gold bg-gold text-maroon-dark px-4 py-2 text-xs font-bold uppercase tracking-wider hover:bg-gold/90 transition-all shadow-md hover:scale-105 active:scale-95"
+                    className="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-gold bg-gold text-maroon-dark px-4 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-gold/90 transition-all shadow-md hover:scale-105 active:scale-95"
                   >
-                    <CalendarPlus className="size-3.5" />
+                    <CalendarPlus className="size-4" />
                     Google Calendar
                   </a>
                   <button
@@ -240,9 +238,9 @@ export const VenueSection: React.FC = () => {
                       )
                     }
                     title="Download Apple / Outlook iCal for Wedding"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-gold/50 bg-gold/10 px-3.5 py-2 text-xs uppercase tracking-wider text-gold hover:bg-gold/25 transition-all"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-gold/50 bg-gold/15 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-gold hover:bg-gold/25 transition-all shadow"
                   >
-                    <Download className="size-3" />
+                    <Download className="size-3.5" />
                     .ics
                   </button>
                 </div>
@@ -250,33 +248,32 @@ export const VenueSection: React.FC = () => {
             </div>
           </RevealOnScroll>
 
-          {/* ── 2. Google Maps Square Card ── */}
+          {/* ── 2. Google Maps Card (No inner border, enlarged Open Maps button, no clipping) ── */}
           <RevealOnScroll delay={0.16} className="h-full flex flex-col">
-            <div className="relative aspect-square sm:aspect-auto sm:min-h-[460px] h-full overflow-hidden border border-gold/35 bg-paper/5 shadow-xl flex flex-col">
+            <div className="relative min-h-[460px] h-full overflow-hidden rounded-xl border border-gold/40 bg-paper/5 shadow-2xl flex flex-col">
               <iframe
                 title={`Map to ${query}`}
                 src={mapsEmbedUrl}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="w-full flex-1 min-h-[300px]"
+                className="w-full flex-1 min-h-[320px] sm:min-h-[360px]"
                 style={{ border: 0 }}
                 allowFullScreen
               />
-              <span className="pointer-events-none absolute inset-3 border border-gold/30" />
 
-              {/* Floating Open in Maps action bar */}
-              <div className="relative z-10 bg-black/40 border-t border-gold/30 p-3 sm:p-4 flex items-center justify-between backdrop-blur-md">
-                <span className="text-[0.68rem] uppercase tracking-[0.2em] text-paper/80 font-title truncate pr-2">
+              {/* Floating Open in Maps action bar with enlarged button */}
+              <div className="relative z-10 bg-black/70 border-t border-gold/30 px-4 py-3.5 sm:px-5 sm:py-4 flex items-center justify-between gap-3 backdrop-blur-md">
+                <span className="text-[0.72rem] sm:text-xs uppercase tracking-[0.2em] text-paper/85 font-title font-medium truncate pr-2">
                   {locationUnderMap}
                 </span>
                 <a
                   href={mapsSearchUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-gold/70 bg-gold/15 px-3.5 py-1.5 text-[0.68rem] uppercase tracking-wider text-gold hover:bg-gold/30 transition-all"
+                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-gold bg-gold/25 hover:bg-gold/40 text-gold font-title font-bold text-xs uppercase tracking-wider px-5 py-2.5 shadow-md transition-all hover:scale-105 active:scale-95"
                 >
-                  <MapPin className="size-3" />
-                  Open Maps
+                  <MapPin className="size-3.5 text-gold" />
+                  <span>Open in Maps</span>
                 </a>
               </div>
             </div>
