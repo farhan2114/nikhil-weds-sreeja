@@ -43,6 +43,7 @@ export const weddingConfig = {
     label: 'Sunday, 22 November 2026',
     short: '22 . 11 . 2026',
     muhurtham: 'Muhurtham at 10:54 AM',
+    targetIso: '2026-11-22T10:54:00-06:00', // CST time for countdown timer
   },
 
   // -------------------------------------------------------------
@@ -150,6 +151,8 @@ the union of two hearts`,
       time: '6:30 PM CST',
       place: 'Frisco Hall Event Center',
       note: 'Henna, cocktails, dinner and a night of dancing',
+      startDate: '20261121T183000',
+      endDate: '20261121T233000',
     },
     {
       name: 'Wedding Ceremony',
@@ -157,18 +160,36 @@ the union of two hearts`,
       time: '10:54 AM CST',
       place: 'Frisco Hall Event Center',
       note: 'The sacred muhurtham ceremony followed by lunch & celebrations',
+      startDate: '20261122T100000',
+      endDate: '20261122T150000',
     },
   ],
 
   // -------------------------------------------------------------
-  // 9. BACKGROUND MUSIC
+  // 9. FAMILY CONTACTS (FOR RSVP QUESTIONS)
+  // -------------------------------------------------------------
+  familyContacts: [
+    {
+      name: 'Ramesh Reddy',
+      relation: "Groom's Family",
+      phone: '+1 (469) 235-8910',
+    },
+    {
+      name: 'Manohar Reddy',
+      relation: "Bride's Family",
+      phone: '+1 (469) 587-4321',
+    },
+  ],
+
+  // -------------------------------------------------------------
+  // 10. BACKGROUND MUSIC
   // -------------------------------------------------------------
   music: {
     audioUrl: '/client-images/music.mp3',
   },
 
   // -------------------------------------------------------------
-  // 10. RSVP & DATABASE (SUPABASE & GOOGLE SHEETS)
+  // 11. RSVP & DATABASE (SUPABASE & GOOGLE SHEETS)
   // -------------------------------------------------------------
   rsvp: {
     enabled: true,

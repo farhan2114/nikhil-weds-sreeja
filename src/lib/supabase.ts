@@ -20,30 +20,54 @@ export const GOOGLE_SHEET_WEBHOOK_URL =
 
 export interface RsvpPayload {
   name: string;
-  email: string;
+  phone: string;
+  email?: string;
+  adults_count: number;
+  children_count: number;
   guest_count: number;
+  dietary?: string;
   attending_events: string;
   declined_events: string;
   sangeet?: "Yes" | "No";
-  haldi?: "Yes" | "No";
-  pellikoduku?: "Yes" | "No";
   wedding?: "Yes" | "No";
-  note: string;
+  note?: string;
 }
 
 export async function saveRsvpToSupabase(payload: RsvpPayload): Promise<{ success: boolean; error?: string }> {
   try {
-    const { error } = await supabase.from('rsvps').insert([{
+    // 1. Try full insert with dedicated phone, adults, children, dietary columns
+    const { error: fullError } = await supabase.from('rsvps').insert([{
       name: payload.name,
-      email: payload.email,
+      phone: payload.phone,
+      email: payload.email || null,
+      adults_count: payload.adults_count,
+      children_count: payload.children_count,
+      guest_count: payload.guest_count,
+      dietary: payload.dietary || null,
+      attending_events: payload.attending_events,
+      declined_events: payload.declined_events,
+      note: payload.note || '',
+    }]);
+
+    if (!fullError) {
+      return { success: true };
+    }
+
+    // 2. Graceful fallback if user's Supabase table doesn't have phone/dietary columns yet
+    const packedNote = `Phone: ${payload.phone} | Adults: ${payload.adults_count}, Children: ${payload.children_count} | Diet: ${payload.dietary || 'None'}${payload.note ? ` | Note: ${payload.note}` : ''}`;
+    
+    const { error: fallbackError } = await supabase.from('rsvps').insert([{
+      name: payload.name,
+      email: payload.email || payload.phone,
       guest_count: payload.guest_count,
       attending_events: payload.attending_events,
       declined_events: payload.declined_events,
-      note: payload.note,
+      note: packedNote,
     }]);
-    if (error) {
-      console.warn('Supabase RSVP insert error:', error);
-      return { success: false, error: error.message };
+
+    if (fallbackError) {
+      console.warn('Supabase RSVP insert error:', fallbackError);
+      return { success: false, error: fallbackError.message };
     }
     return { success: true };
   } catch (err: any) {
@@ -62,12 +86,16 @@ export async function saveRsvpToGoogleSheet(payload: RsvpPayload): Promise<void>
       },
       body: JSON.stringify({
         name: payload.name,
-        email: payload.email,
+        phone: payload.phone,
+        email: payload.email || '-',
+        adults: payload.adults_count,
+        children: payload.children_count,
         guest_count: payload.guest_count,
+        dietary: payload.dietary || 'None',
         sangeet: payload.sangeet || 'No',
-        haldi: payload.haldi || 'No',
-        pellikoduku: payload.pellikoduku || 'No',
         wedding: payload.wedding || 'No',
+        attending_events: payload.attending_events,
+        declined_events: payload.declined_events,
         note: payload.note || '-',
       }),
     });

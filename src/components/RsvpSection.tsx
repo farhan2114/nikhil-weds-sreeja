@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
+import { Phone, Mail, MessageCircle, Check, Users, Utensils, HeartHandshake } from "lucide-react";
 import { weddingConfig } from "../wedding.config";
 import { Ornament, SpinningMandala } from "./Ornaments";
 import { RevealOnScroll } from "./RevealOnScroll";
@@ -8,21 +9,38 @@ type AttendanceMap = Record<string, "attending" | "declining" | null>;
 
 interface RsvpData {
   name: string;
-  contact: string;
+  phone: string;
+  email: string;
+  adultsCount: number;
+  childrenCount: number;
   guestCount: number;
+  dietary: string;
+  dietaryNotes: string;
   attendance: AttendanceMap;
   note: string;
   submittedAt: string;
 }
 
-const STORAGE_KEY = "rsvp_submission";
+const STORAGE_KEY = "rsvp_submission_nikhil_sreeja";
+
+const DIETARY_OPTIONS = [
+  { id: "veg", label: "Vegetarian" },
+  { id: "non-veg", label: "Non-Vegetarian" },
+  { id: "jain", label: "Jain Vegetarian" },
+  { id: "vegan", label: "Vegan" },
+  { id: "none", label: "No Restrictions" },
+];
 
 export const RsvpSection: React.FC = () => {
-  const { couple, events } = weddingConfig;
+  const { couple, events, familyContacts } = weddingConfig;
 
   const [name, setName] = useState("");
-  const [contact, setContact] = useState("");
-  const [guestCount, setGuestCount] = useState(1);
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [adultsCount, setAdultsCount] = useState(1);
+  const [childrenCount, setChildrenCount] = useState(0);
+  const [dietary, setDietary] = useState("Vegetarian");
+  const [dietaryNotes, setDietaryNotes] = useState("");
   const [attendance, setAttendance] = useState<AttendanceMap>(
     Object.fromEntries(events.map((e) => [e.name, null]))
   );
@@ -37,6 +55,8 @@ export const RsvpSection: React.FC = () => {
     }
   });
   const [error, setError] = useState<string | null>(null);
+
+  const totalGuests = adultsCount + childrenCount;
 
   const toggleAttendance = (eventName: string, status: "attending" | "declining") => {
     setAttendance((prev) => ({
@@ -53,13 +73,13 @@ export const RsvpSection: React.FC = () => {
       setError("Please enter your name.");
       return;
     }
-    if (!contact.trim()) {
-      setError("Please enter your email so we can reach you.");
+    if (!phone.trim()) {
+      setError("Please enter your phone number so we can reach you.");
       return;
     }
     const anySelected = Object.values(attendance).some((v) => v !== null);
     if (!anySelected) {
-      setError("Please select your attendance for at least one event.");
+      setError("Please select your attendance for at least one celebration.");
       return;
     }
 
@@ -73,10 +93,19 @@ export const RsvpSection: React.FC = () => {
       .map((ev) => ev.name)
       .join(", ");
 
+    const fullDietary = dietaryNotes.trim()
+      ? `${dietary} (${dietaryNotes.trim()})`
+      : dietary;
+
     const data: RsvpData = {
       name: name.trim(),
-      contact: contact.trim(),
-      guestCount,
+      phone: phone.trim(),
+      email: email.trim(),
+      adultsCount,
+      childrenCount,
+      guestCount: totalGuests,
+      dietary,
+      dietaryNotes: dietaryNotes.trim(),
       attendance,
       note: note.trim(),
       submittedAt: new Date().toISOString(),
@@ -91,9 +120,6 @@ export const RsvpSection: React.FC = () => {
     };
 
     const sangeetStatus = checkStatus("sangeet");
-    const haldiStatus = checkStatus("haldi");
-    const pellikodukuStatus =
-      checkStatus("pelli") !== "No" ? checkStatus("pelli") : checkStatus("nichay");
     const weddingStatus =
       checkStatus("wedding") !== "No"
         ? checkStatus("wedding")
@@ -104,13 +130,15 @@ export const RsvpSection: React.FC = () => {
     setIsSubmitting(true);
     const result = await saveRsvp({
       name: data.name,
-      email: data.contact,
+      phone: data.phone,
+      email: data.email,
+      adults_count: data.adultsCount,
+      children_count: data.childrenCount,
       guest_count: data.guestCount,
+      dietary: fullDietary,
       attending_events: attendingList || "None",
       declined_events: declinedList || "None",
       sangeet: sangeetStatus,
-      haldi: haldiStatus,
-      pellikoduku: pellikodukuStatus,
       wedding: weddingStatus,
       note: data.note || "",
     });
@@ -133,209 +161,450 @@ export const RsvpSection: React.FC = () => {
   const handleEditRsvp = () => {
     if (!submitted) return;
     setName(submitted.name);
-    setContact(submitted.contact);
-    setGuestCount(submitted.guestCount);
+    setPhone(submitted.phone || "");
+    setEmail(submitted.email || "");
+    setAdultsCount(submitted.adultsCount || 1);
+    setChildrenCount(submitted.childrenCount || 0);
+    setDietary(submitted.dietary || "Vegetarian");
+    setDietaryNotes(submitted.dietaryNotes || "");
     setAttendance(submitted.attendance);
     setNote(submitted.note);
     setSubmitted(null);
-    localStorage.removeItem(STORAGE_KEY);
   };
-
-  const inputClass =
-    "w-full border-b border-gold/40 bg-transparent px-1 py-3 font-sans text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-gold";
-
-  const attendingEvents = submitted
-    ? events.filter((e) => submitted.attendance[e.name] === "attending")
-    : [];
 
   return (
     <section id="rsvp" className="relative overflow-hidden px-5 py-24 sm:py-32">
-      <SpinningMandala className="-right-20 top-1/2 w-48 sm:w-64" />
-      <Ornament variant="gold" className="-left-8 top-14 w-36 rotate-6 sm:w-48" />
-      <Ornament variant="leaf" className="-right-10 bottom-10 w-36 -rotate-6 sm:w-52" />
+      <SpinningMandala className="-left-24 bottom-10 w-56 sm:w-72" />
+      <Ornament className="-right-8 top-12 w-36 sm:w-48" />
 
-      <div className="relative mx-auto max-w-4xl">
+      <div className="relative mx-auto max-w-3xl">
         <RevealOnScroll className="text-center">
-          <p className="eyebrow">Join us in celebration</p>
+          <p className="eyebrow">You are warmly invited</p>
           <h2 className="mt-4 font-display text-4xl sm:text-6xl">RSVP</h2>
-          <p className="mx-auto mt-5 max-w-md text-sm leading-relaxed text-muted-foreground">
-            Let us know which celebrations you will be joining. We cannot wait to celebrate with you!
+          <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
+            Please let us know if you can join us in celebrating the wedding of{" "}
+            <span className="font-display font-medium text-foreground">
+              {couple.bride} &amp; {couple.groom}
+            </span>
+            .
           </p>
+          <div className="rule-gold mx-auto mt-7 w-28" />
         </RevealOnScroll>
 
-        <div className="mt-16">
-          {submitted ? (
-            <RevealOnScroll>
-              <div className="paper-card mx-auto max-w-xl px-7 py-10 text-center sm:px-12 sm:py-14">
-                <span className="text-4xl">🎉</span>
-                <p className="eyebrow mt-6">RSVP Confirmed</p>
-                <h3 className="mt-4 font-display text-3xl sm:text-4xl">
-                  Thank you, {submitted.name}!
-                </h3>
-                <div className="rule-gold mx-auto mt-6 w-24" />
+        {/* ── Confirmation Screen ── */}
+        {submitted ? (
+          <RevealOnScroll delay={0.1} className="mt-12">
+            <div className="paper-card relative overflow-hidden p-8 text-center sm:p-14 border border-gold/40 shadow-xl">
+              <span className="pointer-events-none absolute inset-3 border border-gold/25" />
 
-                {attendingEvents.length > 0 ? (
-                  <>
-                    <p className="mt-6 text-sm text-muted-foreground">
-                      We are so excited to celebrate with you at:
-                    </p>
-                    <ul className="mt-4 space-y-2">
-                      {attendingEvents.map((ev) => (
-                        <li key={ev.name} className="font-title text-sm tracking-wider">
-                          <span className="text-gold-deep font-semibold">{ev.name}</span>
-                          <span className="ml-2 text-muted-foreground text-xs">
-                            — {ev.day}, {ev.time}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="mt-4 text-sm text-muted-foreground">
-                      Guest count:{" "}
-                      <span className="font-title text-foreground">{submitted.guestCount}</span>
-                    </p>
-                  </>
-                ) : (
-                  <p className="mt-6 text-sm text-muted-foreground">
-                    We will miss you! Wishing you all the best from afar.
-                  </p>
-                )}
-
-                {submitted.note && (
-                  <p className="mx-auto mt-6 max-w-sm text-xs italic leading-relaxed text-muted-foreground">
-                    "{submitted.note}"
-                  </p>
-                )}
-
-                <button
-                  onClick={handleEditRsvp}
-                  className="mt-9 inline-block border border-gold/50 px-6 py-3 text-[0.7rem] uppercase tracking-[0.28em] text-gold-deep transition-colors hover:bg-gold/10"
-                >
-                  Edit my RSVP
-                </button>
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gold/15 text-gold-deep border border-gold/40">
+                <Check className="h-7 w-7" />
               </div>
-            </RevealOnScroll>
-          ) : (
-            <RevealOnScroll>
-              <form
-                onSubmit={handleSubmit}
-                className="paper-card mx-auto max-w-2xl px-7 py-10 sm:px-12 sm:py-14"
-              >
-                <div className="grid gap-6 sm:grid-cols-2">
-                  <input
-                    className={inputClass}
-                    placeholder="Your full name *"
-                    maxLength={80}
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                  <input
-                    type="email"
-                    className={inputClass}
-                    placeholder="Email *"
-                    maxLength={100}
-                    value={contact}
-                    onChange={(e) => setContact(e.target.value)}
-                  />
-                </div>
 
-                <div className="mt-6">
-                  <label className="block text-[0.68rem] uppercase tracking-[0.2em] text-muted-foreground mb-2">
-                    Number of guests attending (including yourself)
-                  </label>
-                  <div className="flex items-center gap-4">
-                    <button
-                      type="button"
-                      onClick={() => setGuestCount((g) => Math.max(1, g - 1))}
-                      className="h-9 w-9 border border-gold/50 text-lg text-gold-deep transition-colors hover:bg-gold/10"
-                    >
-                      −
-                    </button>
-                    <span className="font-title text-2xl w-8 text-center">{guestCount}</span>
-                    <button
-                      type="button"
-                      onClick={() => setGuestCount((g) => Math.min(20, g + 1))}
-                      className="h-9 w-9 border border-gold/50 text-lg text-gold-deep transition-colors hover:bg-gold/10"
-                    >
-                      +
-                    </button>
+              <h3 className="mt-6 font-display text-3xl sm:text-4xl text-foreground">
+                Thank You, {submitted.name}!
+              </h3>
+              <p className="mt-2 text-sm text-gold-deep font-title uppercase tracking-[0.2em]">
+                Your RSVP Has Been Confirmed
+              </p>
+
+              <div className="mx-auto mt-8 max-w-md divide-y divide-gold/20 rounded-lg border border-gold/30 bg-muted/30 p-5 text-left text-sm backdrop-blur-sm">
+                {/* Attending Events */}
+                <div className="pb-3.5">
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-title">
+                    Celebrations Attending
+                  </p>
+                  <div className="mt-2 space-y-1.5">
+                    {events.map((ev) => {
+                      const status = submitted.attendance[ev.name];
+                      return (
+                        <div key={ev.name} className="flex items-center justify-between text-xs sm:text-sm">
+                          <span className="text-foreground">{ev.name}</span>
+                          <span
+                            className={`rounded-full px-2.5 py-0.5 text-[0.68rem] uppercase tracking-wider font-semibold ${
+                              status === "attending"
+                                ? "bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30"
+                                : status === "declining"
+                                ? "bg-rose-900/15 text-rose-700 dark:text-rose-400 border border-rose-500/30"
+                                : "text-muted-foreground"
+                            }`}
+                          >
+                            {status === "attending"
+                              ? "Will Attend"
+                              : status === "declining"
+                              ? "Can't Attend"
+                              : "Not Specified"}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
-                <div className="mt-9">
-                  <p className="text-[0.68rem] uppercase tracking-[0.2em] text-muted-foreground mb-5">
-                    Which celebrations will you be joining? *
+                {/* Guest Breakdown */}
+                <div className="py-3.5 flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-title">
+                      Total Guests
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {submitted.adultsCount || 1} Adult{submitted.adultsCount !== 1 ? 's' : ''}
+                      {submitted.childrenCount > 0 ? `, ${submitted.childrenCount} Child${submitted.childrenCount > 1 ? 'ren' : ''}` : ''}
+                    </p>
+                  </div>
+                  <span className="font-display text-2xl text-foreground font-semibold">
+                    {submitted.guestCount}
+                  </span>
+                </div>
+
+                {/* Contact & Dietary */}
+                <div className="py-3.5 space-y-1.5 text-xs text-muted-foreground">
+                  <p>
+                    <span className="font-semibold text-foreground">Phone:</span> {submitted.phone}
+                    {submitted.email ? ` · ${submitted.email}` : ''}
                   </p>
-                  <div className="space-y-4">
-                    {events.map((ev) => (
-                      <div
-                        key={ev.name}
-                        className="border border-gold/20 px-5 py-4 sm:px-6"
-                      >
-                        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                          <div className="min-w-0">
-                            <p className="font-title text-sm font-semibold break-words leading-snug">
-                              {ev.name}
-                            </p>
-                            <p className="mt-0.5 text-xs text-muted-foreground">
-                              {ev.day} · {ev.time}
+                  <p>
+                    <span className="font-semibold text-foreground">Dietary:</span> {submitted.dietary}
+                    {submitted.dietaryNotes ? ` (${submitted.dietaryNotes})` : ''}
+                  </p>
+                  {submitted.note && (
+                    <p className="pt-1 italic text-foreground/80">
+                      &ldquo;{submitted.note}&rdquo;
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <p className="mx-auto mt-6 max-w-sm text-xs text-muted-foreground leading-relaxed">
+                We are overjoyed to celebrate these special moments with you. If your travel plans change, you can update your response anytime.
+              </p>
+
+              <button
+                type="button"
+                onClick={handleEditRsvp}
+                className="mt-6 inline-flex items-center gap-2 border border-gold/60 bg-transparent px-6 py-2.5 text-[0.68rem] uppercase tracking-[0.25em] text-gold-deep transition-all hover:bg-gold/10"
+              >
+                Change or Edit RSVP
+              </button>
+            </div>
+          </RevealOnScroll>
+        ) : (
+          /* ── RSVP Form ── */
+          <RevealOnScroll delay={0.1} className="mt-12">
+            <form
+              onSubmit={handleSubmit}
+              className="paper-card relative overflow-hidden p-6 sm:p-12 border border-gold/40 shadow-xl"
+            >
+              <span className="pointer-events-none absolute inset-3 border border-gold/20" />
+
+              <div className="relative space-y-7">
+                {/* Name */}
+                <div>
+                  <label htmlFor="rsvp-name" className="block text-xs font-title uppercase tracking-[0.22em] text-foreground">
+                    Full Name <span className="text-maroon">*</span>
+                  </label>
+                  <input
+                    id="rsvp-name"
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Enter your full name"
+                    className="mt-2 w-full rounded border border-gold/40 bg-background/70 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
+                  />
+                </div>
+
+                {/* Phone & Email (Side by Side on Desktop) */}
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="rsvp-phone" className="block text-xs font-title uppercase tracking-[0.22em] text-foreground">
+                      Phone Number <span className="text-maroon">*</span>
+                    </label>
+                    <div className="relative mt-2">
+                      <Phone className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                      <input
+                        id="rsvp-phone"
+                        type="tel"
+                        required
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="+1 (469) 000-0000"
+                        className="w-full rounded border border-gold/40 bg-background/70 pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="rsvp-email" className="block text-xs font-title uppercase tracking-[0.22em] text-foreground">
+                      Email Address <span className="text-[0.65rem] lowercase tracking-normal text-muted-foreground font-normal">(optional)</span>
+                    </label>
+                    <div className="relative mt-2">
+                      <Mail className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                      <input
+                        id="rsvp-email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="yourname@example.com"
+                        className="w-full rounded border border-gold/40 bg-background/70 pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Separate Adult & Child Guest Counts */}
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <label className="block text-xs font-title uppercase tracking-[0.22em] text-foreground">
+                      Guest Count
+                    </label>
+                    <span className="text-xs text-gold-deep font-title uppercase tracking-wider">
+                      Total: {totalGuests} {totalGuests === 1 ? 'Guest' : 'Guests'}
+                    </span>
+                  </div>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {/* Adults */}
+                    <div className="flex items-center justify-between rounded border border-gold/30 bg-background/60 px-4 py-3">
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Adults</p>
+                        <p className="text-[0.68rem] text-muted-foreground">Age 12 and above</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setAdultsCount(Math.max(1, adultsCount - 1))}
+                          disabled={adultsCount <= 1}
+                          className="flex h-8 w-8 items-center justify-center rounded border border-gold/50 text-foreground transition-colors hover:bg-gold/15 disabled:opacity-40"
+                          aria-label="Decrease adults"
+                        >
+                          -
+                        </button>
+                        <span className="w-5 text-center font-display text-base font-semibold">{adultsCount}</span>
+                        <button
+                          type="button"
+                          onClick={() => setAdultsCount(Math.min(10, adultsCount + 1))}
+                          className="flex h-8 w-8 items-center justify-center rounded border border-gold/50 text-foreground transition-colors hover:bg-gold/15"
+                          aria-label="Increase adults"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Children */}
+                    <div className="flex items-center justify-between rounded border border-gold/30 bg-background/60 px-4 py-3">
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Children</p>
+                        <p className="text-[0.68rem] text-muted-foreground">Under age 12</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setChildrenCount(Math.max(0, childrenCount - 1))}
+                          disabled={childrenCount <= 0}
+                          className="flex h-8 w-8 items-center justify-center rounded border border-gold/50 text-foreground transition-colors hover:bg-gold/15 disabled:opacity-40"
+                          aria-label="Decrease children"
+                        >
+                          -
+                        </button>
+                        <span className="w-5 text-center font-display text-base font-semibold">{childrenCount}</span>
+                        <button
+                          type="button"
+                          onClick={() => setChildrenCount(Math.min(10, childrenCount + 1))}
+                          className="flex h-8 w-8 items-center justify-center rounded border border-gold/50 text-foreground transition-colors hover:bg-gold/15"
+                          aria-label="Increase children"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Celebrations Attendance */}
+                <div>
+                  <p className="text-xs font-title uppercase tracking-[0.22em] text-foreground mb-1">
+                    Will You Attend? <span className="text-maroon">*</span>
+                  </p>
+                  <p className="text-[0.72rem] text-muted-foreground mb-4">
+                    Please mark your attendance for the celebrations:
+                  </p>
+
+                  <div className="grid gap-3.5">
+                    {events.map((ev) => {
+                      const current = attendance[ev.name];
+                      return (
+                        <div
+                          key={ev.name}
+                          className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg border border-gold/30 bg-background/50 p-4 transition-all"
+                        >
+                          <div>
+                            <p className="font-display text-base sm:text-lg text-foreground">{ev.name}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">
+                              {ev.day} · {ev.time} · {ev.place}
                             </p>
                           </div>
-                          <div className="flex gap-2 mt-3 sm:mt-0 sm:flex-shrink-0">
+
+                          <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
                             <button
                               type="button"
                               onClick={() => toggleAttendance(ev.name, "attending")}
-                              className={`px-4 py-1.5 text-[0.65rem] uppercase tracking-[0.2em] border transition-colors ${
-                                attendance[ev.name] === "attending"
-                                  ? "bg-gold/20 border-gold text-gold-deep font-semibold"
-                                  : "border-gold/30 text-muted-foreground hover:border-gold/60"
+                              className={`rounded-full px-4 py-1.5 text-xs uppercase tracking-wider font-semibold transition-all ${
+                                current === "attending"
+                                  ? "bg-emerald-700 text-white shadow-sm ring-2 ring-emerald-500/50"
+                                  : "border border-gold/40 text-foreground/80 hover:bg-gold/10"
                               }`}
                             >
-                              ✓ Attending
+                              Will Attend
                             </button>
                             <button
                               type="button"
                               onClick={() => toggleAttendance(ev.name, "declining")}
-                              className={`px-4 py-1.5 text-[0.65rem] uppercase tracking-[0.2em] border transition-colors ${
-                                attendance[ev.name] === "declining"
-                                  ? "bg-maroon/10 border-maroon/60 text-maroon font-semibold"
-                                  : "border-gold/30 text-muted-foreground hover:border-gold/60"
+                              className={`rounded-full px-4 py-1.5 text-xs uppercase tracking-wider font-semibold transition-all ${
+                                current === "declining"
+                                  ? "bg-rose-800 text-white shadow-sm ring-2 ring-rose-500/50"
+                                  : "border border-gold/40 text-foreground/80 hover:bg-gold/10"
                               }`}
                             >
-                              ✕ Decline
+                              Can&apos;t Attend
                             </button>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
 
-                <textarea
-                  className={`${inputClass} mt-8 resize-none`}
-                  placeholder={`A note for ${couple.bride} & ${couple.groom} (optional)`}
-                  rows={3}
-                  maxLength={400}
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                />
+                {/* Dietary Restrictions */}
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Utensils className="size-3.5 text-gold-deep" />
+                    <label className="text-xs font-title uppercase tracking-[0.22em] text-foreground">
+                      Dietary Preferences
+                    </label>
+                  </div>
 
+                  <div className="flex flex-wrap gap-2">
+                    {DIETARY_OPTIONS.map((opt) => (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => setDietary(opt.label)}
+                        className={`rounded-full px-3.5 py-1.5 text-xs transition-all ${
+                          dietary === opt.label
+                            ? "bg-gold text-maroon font-semibold shadow-sm"
+                            : "border border-gold/40 bg-background/60 text-foreground/80 hover:border-gold hover:bg-gold/10"
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <input
+                    type="text"
+                    value={dietaryNotes}
+                    onChange={(e) => setDietaryNotes(e.target.value)}
+                    placeholder="Any specific allergies or food preferences? (Optional)"
+                    className="mt-3 w-full rounded border border-gold/30 bg-background/60 px-4 py-2.5 text-xs text-foreground placeholder:text-muted-foreground/60 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
+                  />
+                </div>
+
+                {/* Special Wishes / Note */}
+                <div>
+                  <label htmlFor="rsvp-note" className="block text-xs font-title uppercase tracking-[0.22em] text-foreground">
+                    Warm Wishes / Message to the Couple
+                  </label>
+                  <textarea
+                    id="rsvp-note"
+                    rows={3}
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    placeholder="Leave a heartfelt message or note for Sreeja & Nikhil..."
+                    className="mt-2 w-full rounded border border-gold/40 bg-background/70 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
+                  />
+                </div>
+
+                {/* Error Banner */}
                 {error && (
-                  <p className="mt-4 text-center font-title text-xs tracking-wider text-maroon">
+                  <p className="rounded border border-rose-500/40 bg-rose-950/20 px-4 py-2.5 text-center text-xs text-rose-300">
                     {error}
                   </p>
                 )}
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="mt-9 w-full border border-gold/60 py-4 text-[0.7rem] uppercase tracking-[0.3em] text-gold-deep transition-colors hover:bg-gold/10 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? "Submitting RSVP..." : "Submit RSVP"}
-                </button>
-              </form>
-            </RevealOnScroll>
-          )}
-        </div>
+                {/* Submit Button */}
+                <div className="text-center pt-2">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="group relative overflow-hidden rounded-full border border-gold/80 bg-gradient-to-r from-gold/90 via-gold to-gold/90 px-10 py-3.5 text-xs font-title uppercase tracking-[0.3em] text-maroon font-bold shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl active:scale-95 disabled:opacity-60"
+                  >
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      {isSubmitting ? "Saving Your RSVP..." : "Confirm RSVP"}
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </RevealOnScroll>
+        )}
+
+        {/* ── Contact the Family Section ── */}
+        {familyContacts && familyContacts.length > 0 && (
+          <RevealOnScroll delay={0.15} className="mt-14">
+            <div className="rounded-xl border border-gold/30 bg-card/60 p-6 sm:p-8 backdrop-blur-sm text-center">
+              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-gold/15 text-gold-deep border border-gold/30">
+                <HeartHandshake className="size-5" />
+              </div>
+
+              <h4 className="mt-3 font-display text-xl sm:text-2xl text-foreground">
+                Questions About the Celebrations?
+              </h4>
+              <p className="mx-auto mt-1 max-w-md text-xs text-muted-foreground leading-relaxed">
+                If you have questions regarding RSVP, directions, or accommodations, please feel free to reach out to the family:
+              </p>
+
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {familyContacts.map((contact, idx) => {
+                  const cleanPhone = contact.phone.replace(/[^0-9+]/g, '');
+                  const waPhone = contact.phone.replace(/[^0-9]/g, '');
+                  return (
+                    <div
+                      key={idx}
+                      className="flex flex-col items-center justify-center rounded-lg border border-gold/25 bg-background/60 p-4 transition-all hover:border-gold/50"
+                    >
+                      <p className="font-title text-sm font-semibold text-foreground">{contact.name}</p>
+                      <p className="text-[0.68rem] uppercase tracking-wider text-gold-deep font-title mt-0.5">
+                        {contact.relation}
+                      </p>
+                      <p className="mt-2 text-xs font-mono text-muted-foreground">{contact.phone}</p>
+
+                      <div className="mt-3 flex items-center gap-2.5">
+                        <a
+                          href={`tel:${cleanPhone}`}
+                          className="inline-flex items-center gap-1.5 rounded-full border border-gold/50 bg-gold/10 px-3.5 py-1 text-[0.68rem] uppercase tracking-wider text-gold-deep hover:bg-gold/20 transition-colors"
+                        >
+                          <Phone className="size-3" />
+                          Call
+                        </a>
+                        <a
+                          href={`https://wa.me/${waPhone}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3.5 py-1 text-[0.68rem] uppercase tracking-wider text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+                        >
+                          <MessageCircle className="size-3" />
+                          WhatsApp
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </RevealOnScroll>
+        )}
       </div>
     </section>
   );
