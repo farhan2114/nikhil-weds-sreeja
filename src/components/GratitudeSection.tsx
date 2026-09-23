@@ -1,6 +1,6 @@
 import React from 'react';
 import { assets } from '../data/assets';
-import { weddingData } from '../data/weddingData';
+import { weddingData, weddingConfig } from '../data/weddingData';
 import { Ornament, SpinningMandala } from './Ornaments';
 import { RevealOnScroll } from './RevealOnScroll';
 
@@ -62,12 +62,12 @@ export const GratitudeSection: React.FC = () => {
             </p>
             <img
               src={assets.coupleNamaste}
-              alt="Illustration of Aarthi and Nikhil greeting guests with folded hands"
+              alt="Illustration of Sreeja and Nikhil greeting guests with folded hands"
               loading="lazy"
               className="mx-auto mt-10 w-48 sm:w-60"
             />
             <p className="whitespace-pre-line font-title text-[0.7rem] uppercase leading-[1.7] tracking-[0.22em] text-gold-deep sm:text-[0.8rem]">
-              {weddingData.familyLine}
+              {weddingConfig.invitation.romanticLine || "Two souls, one sacred journey, bound forever in love and devotion."}
             </p>
             <p className="mt-3 text-xs uppercase tracking-[0.22em] text-muted-foreground">
               {weddingData.hashtag}

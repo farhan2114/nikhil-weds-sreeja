@@ -55,6 +55,7 @@ export const weddingConfig = {
     familyLine: `The families of Sreeja & Nikhil
 warmly invite you to celebrate
 the union of two hearts`,
+    romanticLine: 'Two souls, one sacred journey, bound forever in love and devotion.',
     doorsButtonText: 'Tap to open the doors',
     doorsSubText: 'Music will play softly',
   },
@@ -215,6 +216,7 @@ export const weddingData = {
   cityName: weddingConfig.venue.cityName,
   invitationLine: weddingConfig.invitation.invitationLine,
   familyLine: weddingConfig.invitation.familyLine,
+  romanticLine: weddingConfig.invitation.romanticLine,
   events: weddingConfig.events,
   story: weddingConfig.story,
   banner: weddingConfig.banner,

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { weddingConfig } from '../wedding.config';
 import { RevealOnScroll } from './RevealOnScroll';
 
@@ -9,26 +9,85 @@ interface TimeLeft {
   seconds: number;
 }
 
-// Single flip card digit with realistic horizontal slit & notches
+// Single flip card digit with authentic 3D split-flap folding animation
 const FlipDigit: React.FC<{ digit: string }> = ({ digit }) => {
+  const [currentDigit, setCurrentDigit] = useState(digit);
+  const [previousDigit, setPreviousDigit] = useState(digit);
+  const [isFlipping, setIsFlipping] = useState(false);
+
+  useEffect(() => {
+    if (digit !== currentDigit) {
+      setPreviousDigit(currentDigit);
+      setCurrentDigit(digit);
+      setIsFlipping(true);
+      const timer = setTimeout(() => {
+        setIsFlipping(false);
+      }, 550);
+      return () => clearTimeout(timer);
+    }
+  }, [digit, currentDigit]);
+
   return (
-    <div className="relative flex h-11 w-8 sm:h-16 sm:w-11 items-center justify-center overflow-hidden rounded-md bg-[#181414] shadow-md border border-gold/25 select-none">
-      {/* Top half shadow overlay */}
-      <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
-      {/* Bottom half dark shade */}
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-black/20 pointer-events-none" />
+    <div
+      className="relative flex h-14 w-9 sm:h-20 sm:w-13 md:h-22 md:w-14 items-center justify-center rounded-lg bg-[#161313] shadow-lg shadow-black/40 border border-gold/30 select-none overflow-hidden"
+      style={{ perspective: '450px' }}
+    >
+      {/* ── 1. STATIC BACKGROUND TOP HALF (Revealed as top flap flips down) ── */}
+      <div className="absolute inset-x-0 top-0 h-1/2 overflow-hidden bg-[#1a1515] border-b border-black/90">
+        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-[200%] flex items-center justify-center font-mono sm:font-display text-2xl sm:text-4xl md:text-5xl font-bold text-paper">
+          {currentDigit}
+        </div>
+      </div>
 
-      {/* Central horizontal slit */}
-      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-black/80 border-b border-white/10 z-10" />
+      {/* ── 2. STATIC BACKGROUND BOTTOM HALF (Visible until bottom flap unfolds) ── */}
+      <div className="absolute inset-x-0 bottom-0 h-1/2 overflow-hidden bg-[#141010]">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-[200%] flex items-center justify-center font-mono sm:font-display text-2xl sm:text-4xl md:text-5xl font-bold text-paper">
+          {isFlipping ? previousDigit : currentDigit}
+        </div>
+      </div>
 
-      {/* Flap side notches */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-1.5 bg-background rounded-r-full z-20" />
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[2px] h-1.5 bg-background rounded-l-full z-20" />
+      {/* ── 3. ANIMATED FLIPPING TOP FLAP (Folds forward and down) ── */}
+      {isFlipping && (
+        <div
+          className="absolute inset-x-0 top-0 h-1/2 overflow-hidden bg-[#1a1515] border-b border-black/90 z-20"
+          style={{
+            transformOrigin: 'bottom center',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            animation: 'splitFlapTop 0.28s cubic-bezier(0.4, 0, 1, 1) forwards',
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-black/25 pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-[200%] flex items-center justify-center font-mono sm:font-display text-2xl sm:text-4xl md:text-5xl font-bold text-paper">
+            {previousDigit}
+          </div>
+        </div>
+      )}
 
-      {/* The number */}
-      <span className="font-mono text-xl sm:text-3xl font-bold tracking-tight text-paper transition-all duration-300">
-        {digit}
-      </span>
+      {/* ── 4. ANIMATED FLIPPING BOTTOM FLAP (Unfolds downward) ── */}
+      {isFlipping && (
+        <div
+          className="absolute inset-x-0 bottom-0 h-1/2 overflow-hidden bg-[#141010] z-20"
+          style={{
+            transformOrigin: 'top center',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            animation: 'splitFlapBottom 0.28s cubic-bezier(0, 0, 0.2, 1) 0.27s both',
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-[200%] flex items-center justify-center font-mono sm:font-display text-2xl sm:text-4xl md:text-5xl font-bold text-paper">
+            {currentDigit}
+          </div>
+        </div>
+      )}
+
+      {/* ── CENTRAL SPLIT LINE (Crisp divider, no side notches) ── */}
+      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-black/90 z-30 pointer-events-none" />
+      <div className="absolute inset-x-0 top-1/2 h-[1px] bg-white/[0.06] z-30 pointer-events-none" />
     </div>
   );
 };
@@ -44,12 +103,12 @@ const FlipGroup: React.FC<{ value: number; label: string; padLength?: number }> 
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center gap-1 sm:gap-1.5">
+      <div className="flex items-center gap-1.5 sm:gap-2">
         {digits.map((d, i) => (
           <FlipDigit key={i} digit={d} />
         ))}
       </div>
-      <span className="mt-2.5 text-[0.62rem] sm:text-[0.68rem] font-title uppercase tracking-[0.24em] text-muted-foreground font-medium">
+      <span className="mt-3 text-[0.62rem] sm:text-[0.72rem] font-title uppercase tracking-[0.26em] text-gold-deep font-semibold">
         {label}
       </span>
     </div>
@@ -88,6 +147,26 @@ export const CountdownSection: React.FC = () => {
 
   return (
     <section className="relative overflow-hidden py-14 sm:py-20 px-4">
+      {/* Split flap keyframes injection */}
+      <style>{`
+        @keyframes splitFlapTop {
+          0% {
+            transform: rotateX(0deg);
+          }
+          100% {
+            transform: rotateX(-90deg);
+          }
+        }
+        @keyframes splitFlapBottom {
+          0% {
+            transform: rotateX(90deg);
+          }
+          100% {
+            transform: rotateX(0deg);
+          }
+        }
+      `}</style>
+
       <RevealOnScroll className="mx-auto max-w-4xl text-center">
         {/* Title & Subtitle exactly matching screenshot */}
         <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-foreground font-normal tracking-wide">
@@ -98,7 +177,7 @@ export const CountdownSection: React.FC = () => {
         </p>
 
         {/* Flip Cards Container */}
-        <div className="mt-8 sm:mt-12 flex items-center justify-center gap-2.5 sm:gap-6 md:gap-8 flex-wrap">
+        <div className="mt-8 sm:mt-12 flex items-center justify-center gap-3 sm:gap-6 md:gap-8 flex-wrap">
           <FlipGroup value={timeLeft.days} label="Days" />
           <FlipGroup value={timeLeft.hours} label="Hours" />
           <FlipGroup value={timeLeft.minutes} label="Minutes" />
