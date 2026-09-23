@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Phone, Mail, MessageCircle, Check, Users, Utensils, HeartHandshake } from "lucide-react";
+import { Phone, Mail, Check, Users, Utensils } from "lucide-react";
 import { weddingConfig } from "../wedding.config";
 import { Ornament, SpinningMandala } from "./Ornaments";
 import { RevealOnScroll } from "./RevealOnScroll";
@@ -28,7 +28,7 @@ const DIETARY_OPTIONS = [
 ];
 
 export const RsvpSection: React.FC = () => {
-  const { couple, events, familyContacts } = weddingConfig;
+  const { couple, events } = weddingConfig;
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -527,66 +527,6 @@ export const RsvpSection: React.FC = () => {
                 </div>
               </div>
             </form>
-          </RevealOnScroll>
-        )}
-
-        {/* ── Contact the Family Section (Opaque card so spinning mandala is completely hidden behind) ── */}
-        {familyContacts && familyContacts.length > 0 && (
-          <RevealOnScroll delay={0.15} className="mt-14 relative z-10">
-            <div className="rounded-xl border border-gold/45 bg-[#FAF7F0] p-6 sm:p-8 shadow-2xl text-center relative z-10">
-              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-gold/15 text-gold-deep border border-gold/30">
-                <HeartHandshake className="size-5" />
-              </div>
-
-              <h4 className="mt-3 font-display text-xl sm:text-2xl text-foreground">
-                Questions About the Celebrations?
-              </h4>
-              <p className="mx-auto mt-1 max-w-md text-xs text-muted-foreground leading-relaxed">
-                If you have questions regarding RSVP, directions, or accommodations, please feel free to reach out to the family:
-              </p>
-
-              <div className="mt-8 flex flex-col gap-6 sm:grid sm:grid-cols-2 sm:gap-6">
-                {familyContacts.map((contact, idx) => {
-                  const cleanPhone = contact.phone.replace(/[^0-9+]/g, '');
-                  const waPhone = contact.phone.replace(/[^0-9]/g, '');
-                  return (
-                    <div
-                      key={idx}
-                      className="flex flex-col items-center justify-center rounded-2xl border border-gold/40 bg-[#FFFFFF] px-6 py-8 sm:px-8 sm:py-9 transition-all hover:border-gold/70 shadow-lg relative z-10 min-h-[210px]"
-                    >
-                      <p className="font-title text-lg sm:text-xl font-bold text-foreground tracking-wide">
-                        {contact.name}
-                      </p>
-                      <p className="text-xs uppercase tracking-[0.22em] text-gold-deep font-title font-medium mt-1.5">
-                        {contact.relation}
-                      </p>
-                      <p className="mt-3 text-sm sm:text-base font-mono text-muted-foreground tracking-wider">
-                        {contact.phone}
-                      </p>
-
-                      <div className="mt-6 flex items-center justify-center gap-3.5 sm:gap-4 w-full">
-                        <a
-                          href={`tel:${cleanPhone}`}
-                          className="inline-flex items-center justify-center gap-2 rounded-full border border-gold/60 bg-gold/15 px-5 py-2.5 text-xs font-title uppercase tracking-wider font-bold text-gold-deep hover:bg-gold/25 transition-all shadow-sm hover:scale-105 active:scale-95"
-                        >
-                          <Phone className="size-3.5" />
-                          <span>Call</span>
-                        </a>
-                        <a
-                          href={`https://wa.me/${waPhone}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center justify-center gap-2 rounded-full border border-emerald-500/50 bg-emerald-500/15 px-5 py-2.5 text-xs font-title uppercase tracking-wider font-bold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-500/25 transition-all shadow-sm hover:scale-105 active:scale-95"
-                        >
-                          <MessageCircle className="size-3.5" />
-                          <span>WhatsApp</span>
-                        </a>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
           </RevealOnScroll>
         )}
       </div>
