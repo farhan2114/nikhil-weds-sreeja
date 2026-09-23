@@ -183,6 +183,36 @@ the union of two hearts`,
     // Google Sheets Webhook URL (paste your deployed Google Apps Script URL here)
     googleSheetWebhookUrl: 'https://script.google.com/macros/s/AKfycbxF6ZEHGppc77on-yjnT3uhVpqcocentmtfip2L0ArM6Br47xAtRnB0DPH88DkdqJXo/exec',
   },
+
+  // -------------------------------------------------------------
+  // 12. THANK YOU & GRATITUDE CARD
+  // -------------------------------------------------------------
+  thankYou: {
+    // Header labels
+    eyebrow: 'With Love & Gratitude',
+    subtitle: 'Thank You For Blessing Us',
+
+    // Couple Names on Thank You card (edit here to override, or leave as-is)
+    brideName: 'Sreeja',
+    groomName: 'Nikhil',
+    ampersand: '&',
+
+    // Heartfelt quote
+    closingLine: '“We cannot imagine our celebration without you.”',
+
+    // Centerpiece couple illustration
+    coupleIllustration: '/client-images/couple-chibi-transparent.png',
+    coupleIllustrationAlt: 'Illustration of Sreeja and Nikhil greeting guests with folded hands',
+
+    // Ceremony date & time line
+    dateLine: 'Sunday, November 22, 2026 · 10:54 AM',
+
+    // Venue name displayed on card (leave empty to use venue.name)
+    venueLine: 'Frisco Hall Event Center',
+
+    // Bottom family note
+    familyNote: 'With love, the families of Sreeja & Nikhil',
+  },
 };
 
 // Backwards-compatible export for existing components

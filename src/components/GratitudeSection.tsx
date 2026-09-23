@@ -50,9 +50,35 @@ const LotusIcon: React.FC<{ className?: string }> = ({ className = '' }) => (
 );
 
 export const GratitudeSection: React.FC = () => {
+  const t = (weddingConfig as any).thankYou || {};
+
+  const brideName = t.brideName || weddingConfig.couple.bride;
+  const groomName = t.groomName || weddingConfig.couple.groom;
+  const ampersand = t.ampersand || '&';
+  const eyebrow = t.eyebrow || 'With Love & Gratitude';
+  const subtitle = t.subtitle || 'Thank You For Blessing Us';
+  const closingLine = t.closingLine || '“We cannot imagine our celebration without you.”';
+  const coupleIllustration = t.coupleIllustration || '/client-images/couple-chibi-transparent.png';
+  const coupleIllustrationAlt =
+    t.coupleIllustrationAlt ||
+    `Illustration of ${brideName} and ${groomName} greeting guests with folded hands`;
+  const dateLine = t.dateLine || 'Sunday, November 22, 2026 · 10:54 AM';
+  const venueLine = t.venueLine || weddingConfig.venue.name;
+  const venueCity = weddingConfig.venue.city;
+  const familyNote = t.familyNote || `With love, the families of ${brideName} & ${groomName}`;
+
   const mapsSearchUrl =
     weddingConfig.venue.mapsSearchUrl ||
     'https://maps.app.goo.gl/nurVigToR7DMZYpE7';
+
+  // Responsive font scaling for couple names (adapts dynamically whether names are short or long)
+  const totalLength = (brideName + groomName).length;
+  const nameSizeClass =
+    totalLength > 32
+      ? 'text-xl min-[360px]:text-2xl sm:text-3xl md:text-4xl'
+      : totalLength > 20
+      ? 'text-2xl min-[360px]:text-3xl sm:text-4xl lg:text-5xl'
+      : 'text-3xl min-[360px]:text-4xl sm:text-5xl lg:text-6xl';
 
   return (
     <section className="relative overflow-hidden px-4 py-12 sm:py-16">
@@ -105,19 +131,23 @@ export const GratitudeSection: React.FC = () => {
 
             {/* Eyebrow */}
             <p className="mt-3 font-title text-[0.68rem] sm:text-xs uppercase tracking-[0.28em] text-[#8C7A60] font-semibold">
-              With Love &amp; Gratitude
+              {eyebrow}
             </p>
 
-            {/* Couple Names */}
-            <h2 className="mt-4 font-display text-4xl sm:text-5xl lg:text-6xl text-[#8A6D3B] tracking-wide font-normal">
-              {weddingConfig.couple.bride}{' '}
-              <span className="font-title text-2xl sm:text-3xl text-maroon mx-1 align-baseline">&amp;</span>{' '}
-              {weddingConfig.couple.groom}
+            {/* Couple Names (Auto-responsive & naturally wrapping for any name length) */}
+            <h2
+              className={`mt-4 flex flex-wrap items-center justify-center gap-x-2 sm:gap-x-3 gap-y-1 font-display ${nameSizeClass} text-[#8A6D3B] tracking-wide font-normal max-w-full px-2 leading-tight text-center`}
+            >
+              <span className="break-words">{brideName}</span>
+              <span className="font-title text-xl sm:text-2xl lg:text-3xl text-maroon mx-0.5 align-baseline select-none">
+                {ampersand}
+              </span>
+              <span className="break-words">{groomName}</span>
             </h2>
 
             {/* Subtitle */}
             <p className="mt-3 font-title text-xs sm:text-sm uppercase tracking-[0.26em] text-maroon font-bold">
-              Thank You For Blessing Us
+              {subtitle}
             </p>
 
             {/* Center Lotus Divider */}
@@ -130,15 +160,15 @@ export const GratitudeSection: React.FC = () => {
             {/* Heartfelt Closing Statement */}
             <div className="mx-auto max-w-xl my-4 sm:my-5 px-3">
               <p className="font-display italic text-xl sm:text-3xl text-maroon font-normal tracking-wide leading-relaxed drop-shadow-sm">
-                “We cannot imagine our celebration without you.”
+                {closingLine}
               </p>
             </div>
 
             {/* ── Centerpiece Couple (Cute Chibi Namaste) ── */}
             <div className="relative mx-auto my-6 sm:my-8 flex items-center justify-center">
               <img
-                src="/client-images/couple-chibi-transparent.png"
-                alt="Illustration of Sreeja and Nikhil greeting guests with folded hands"
+                src={coupleIllustration}
+                alt={coupleIllustrationAlt}
                 loading="lazy"
                 width={430}
                 height={480}
@@ -155,13 +185,13 @@ export const GratitudeSection: React.FC = () => {
               </div>
 
               <p className="font-title text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-maroon">
-                Sunday, November 22, 2026 · 10:54 AM
+                {dateLine}
               </p>
               <p className="font-title text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-[#8C7A60]">
-                {weddingConfig.venue.name}
+                {venueLine}
               </p>
               <p className="text-[0.72rem] sm:text-xs text-[#7A7065] max-w-md mx-auto">
-                {weddingConfig.venue.city}
+                {venueCity}
               </p>
             </div>
 
@@ -195,7 +225,7 @@ export const GratitudeSection: React.FC = () => {
             {/* ── Footer Family Line & Hashtags ── */}
             <div className="mt-8 pt-5 border-t border-gold/30 space-y-2">
               <p className="font-serif italic text-xs sm:text-sm text-[#7A6D5E]">
-                With love, the families of Sreeja &amp; Nikhil
+                {familyNote}
               </p>
               <div className="mt-3 flex flex-col items-center gap-1">
                 <span className="font-title uppercase tracking-[0.26em] text-xs text-gold-deep font-semibold">
