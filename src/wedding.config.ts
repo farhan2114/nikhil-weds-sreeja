@@ -136,20 +136,12 @@ the union of two hearts`,
   // -------------------------------------------------------------
   events: [
     {
-      name: 'Sangeet & Cocktails',
-      day: 'Saturday, 21 Nov',
-      time: '6:30 PM CST',
-      place: 'Frisco Hall Event Center',
-      note: 'Henna, cocktails, dinner and a night of dancing',
-      startDate: '20261121T183000',
-      endDate: '20261121T233000',
-    },
-    {
       name: 'Wedding Ceremony',
       day: 'Sunday, 22 Nov',
       time: '10:54 AM CST',
       place: 'Frisco Hall Event Center',
       note: 'The sacred muhurtham ceremony followed by lunch & celebrations',
+      image: '/client-images/wedding-mandapam.jpg',
       startDate: '20261122T100000',
       endDate: '20261122T150000',
     },

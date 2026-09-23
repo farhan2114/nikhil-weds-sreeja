@@ -15,10 +15,13 @@ export const Footer: React.FC = () => {
       <p className="mx-auto mt-4 max-w-md font-serif italic text-sm sm:text-base text-maroon font-medium">
         “We cannot imagine our celebration without you.”
       </p>
-      <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3 text-xs font-title uppercase tracking-[0.25em] text-gold-deep font-semibold">
-        <span>{weddingData.hashtag}</span>
-        <span className="hidden sm:inline text-gold/40">·</span>
-        <span>{weddingData.secondaryHashtag || '#SREENI'}</span>
+      <div className="mt-4 flex flex-col items-center justify-center gap-1">
+        <span className="font-title uppercase tracking-[0.26em] text-xs text-gold-deep font-semibold">
+          {weddingData.hashtag}
+        </span>
+        <span className="font-display italic text-2xl text-maroon tracking-[0.18em] font-normal drop-shadow-sm">
+          {weddingData.secondaryHashtag || '#SREENI'}
+        </span>
       </div>
       <p className="mt-4 text-xs text-muted-foreground">
         {weddingData.dateLabel} · {weddingData.venue}, {weddingData.city}

@@ -16,11 +16,11 @@ export const IntroSection: React.FC = () => {
           {weddingData.familyLine}
         </p>
         <div className="rule-gold mx-auto mt-8 w-40" />
-        <div className="mt-5 space-y-1">
-          <p className="font-title tracking-[0.25em] uppercase text-xs sm:text-sm text-gold-deep font-semibold">
+        <div className="mt-6 flex flex-col items-center gap-1.5">
+          <p className="font-title tracking-[0.28em] uppercase text-xs sm:text-sm text-gold-deep font-semibold">
             {weddingData.hashtag}
           </p>
-          <p className="font-title tracking-[0.28em] uppercase text-[0.72rem] sm:text-xs text-gold-deep/80 font-medium">
+          <p className="font-display italic text-2xl sm:text-3xl text-maroon tracking-[0.16em] font-normal drop-shadow-sm">
             {weddingData.secondaryHashtag || '#SREENI'}
           </p>
         </div>

@@ -200,10 +200,13 @@ export const GratitudeSection: React.FC = () => {
               <p className="font-serif italic text-xs sm:text-sm text-[#7A6D5E]">
                 With love, the families of Sreeja &amp; Nikhil
               </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2.5 text-[0.68rem] sm:text-xs font-title uppercase tracking-[0.24em] text-gold-deep font-semibold">
-                <span>{weddingData.hashtag}</span>
-                <span className="hidden sm:inline text-gold/40">·</span>
-                <span>{weddingData.secondaryHashtag || '#SREENI'}</span>
+              <div className="mt-3 flex flex-col items-center gap-1">
+                <span className="font-title uppercase tracking-[0.26em] text-xs text-gold-deep font-semibold">
+                  {weddingData.hashtag}
+                </span>
+                <span className="font-display italic text-xl sm:text-2xl text-maroon tracking-[0.18em] font-normal drop-shadow-sm">
+                  {weddingData.secondaryHashtag || '#SREENI'}
+                </span>
               </div>
             </div>
           </div>

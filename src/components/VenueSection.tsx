@@ -65,16 +65,12 @@ export const VenueSection: React.FC = () => {
     document.body.removeChild(link);
   };
 
-  const sangeetEvent = weddingConfig.events[0];
-  const weddingEvent = weddingConfig.events[1] || weddingConfig.events[0];
-
-  const sangeetGCalUrl = createGoogleCalendarUrl(
-    sangeetEvent?.name || 'Sangeet & Cocktails',
-    sangeetEvent?.startDate || '20261121T183000',
-    sangeetEvent?.endDate || '20261121T233000',
-    sangeetEvent?.note || 'Henna, cocktails, dinner and a night of dancing',
-    `${weddingConfig.venue.name}, ${weddingConfig.venue.city}`
-  );
+  const weddingEvent = weddingConfig.events[0] || {
+    name: 'Wedding Ceremony',
+    startDate: '20261122T100000',
+    endDate: '20261122T150000',
+    note: 'The sacred wedding ceremony followed by celebrations',
+  };
 
   const weddingGCalUrl = createGoogleCalendarUrl(
     weddingEvent?.name || 'Wedding Ceremony',
@@ -121,7 +117,7 @@ export const VenueSection: React.FC = () => {
         {/* ── Side by Side Cards (Desktop) & Stacked (Mobile) ── */}
         <div className="mt-8 sm:mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch max-w-5xl mx-auto">
           
-          {/* ── 1. Real November 2026 Monthly Calendar Sheet ── */}
+          {/* ── 1. November 2026 Monthly Calendar Sheet (Wedding Day Highlighted) ── */}
           <RevealOnScroll delay={0.08} className="h-full">
             <div className="relative h-full flex flex-col justify-between border border-gold/35 bg-black/35 p-5 sm:p-7 backdrop-blur-sm shadow-2xl">
               <span className="pointer-events-none absolute inset-2.5 sm:inset-3 border border-gold/25" />
@@ -132,7 +128,7 @@ export const VenueSection: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <Calendar className="size-4 text-gold" />
                     <span className="font-title text-[0.68rem] uppercase tracking-[0.25em] text-gold font-semibold">
-                      Save The Dates
+                      Save The Date
                     </span>
                   </div>
                   <span className="font-title text-[0.68rem] tracking-widest text-paper/70 uppercase">
@@ -146,7 +142,7 @@ export const VenueSection: React.FC = () => {
                     NOVEMBER 2026
                   </h3>
                   <p className="text-[0.65rem] uppercase tracking-[0.25em] text-paper/60 font-title mt-0.5">
-                    Celebration Weekend
+                    Wedding Day
                   </p>
                 </div>
 
@@ -162,37 +158,21 @@ export const VenueSection: React.FC = () => {
                   ))}
                 </div>
 
-                {/* 30-Day Grid (Nov 1 is Sunday) */}
+                {/* 30-Day Grid (Only Day 22 is Highlighted) */}
                 <div className="grid grid-cols-7 gap-1 sm:gap-1.5 pt-2.5 pb-2 text-center">
                   {daysInMonth.map((day) => {
-                    const isSangeet = day === 21;
                     const isWedding = day === 22;
 
                     if (isWedding) {
                       return (
                         <div
                           key={day}
-                          className="relative flex flex-col items-center justify-center py-1 sm:py-1.5 rounded bg-gold text-maroon-dark font-bold shadow-[0_0_15px_rgba(218,165,32,0.65)] ring-2 ring-gold ring-offset-2 ring-offset-maroon z-10 scale-105"
+                          className="relative flex flex-col items-center justify-center py-1 sm:py-1.5 rounded bg-gold text-maroon-dark font-bold shadow-[0_0_16px_rgba(218,165,32,0.7)] ring-2 ring-gold ring-offset-2 ring-offset-maroon z-10 scale-105"
                           title="Wedding Muhurtham · Sunday, 22 Nov 2026"
                         >
                           <span className="text-xs sm:text-sm font-black leading-none">{day}</span>
                           <span className="text-[0.52rem] uppercase font-bold tracking-tight mt-0.5 leading-none">
                             Wedding
-                          </span>
-                        </div>
-                      );
-                    }
-
-                    if (isSangeet) {
-                      return (
-                        <div
-                          key={day}
-                          className="relative flex flex-col items-center justify-center py-1 sm:py-1.5 rounded border border-gold bg-gold/25 text-gold font-bold shadow-[0_0_10px_rgba(218,165,32,0.35)] z-10"
-                          title="Sangeet & Cocktails · Saturday, 21 Nov 2026"
-                        >
-                          <span className="text-xs sm:text-sm font-bold leading-none">{day}</span>
-                          <span className="text-[0.52rem] uppercase font-semibold tracking-tight mt-0.5 leading-none">
-                            Sangeet
                           </span>
                         </div>
                       );
@@ -218,99 +198,53 @@ export const VenueSection: React.FC = () => {
                   ))}
                 </div>
 
-                {/* Event Schedule Legend */}
-                <div className="mt-2 space-y-2 border-t border-gold/20 pt-3">
-                  {/* Sangeet Pill */}
-                  <div className="flex items-center justify-between text-xs rounded bg-paper/5 px-2.5 py-1.5 border border-gold/20">
+                {/* Single Event Schedule Legend: Wedding */}
+                <div className="mt-3 border-t border-gold/20 pt-3">
+                  <div className="flex items-center justify-between text-xs rounded bg-gold/15 px-3 py-2 border border-gold/40">
                     <div className="flex items-center gap-2">
-                      <span className="size-2 rounded-full bg-gold/60 inline-block" />
-                      <div>
-                        <span className="font-semibold text-paper">21 Nov (Sat):</span>{' '}
-                        <span className="text-paper/80">{sangeetEvent?.name || 'Sangeet & Cocktails'}</span>
-                      </div>
-                    </div>
-                    <span className="text-gold text-[0.68rem] font-title">{sangeetEvent?.time || '6:30 PM CST'}</span>
-                  </div>
-
-                  {/* Wedding Pill */}
-                  <div className="flex items-center justify-between text-xs rounded bg-gold/15 px-2.5 py-1.5 border border-gold/40">
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="size-3 text-gold" />
+                      <Sparkles className="size-3.5 text-gold" />
                       <div>
                         <span className="font-bold text-gold">22 Nov (Sun):</span>{' '}
                         <span className="text-paper font-medium">{weddingEvent?.name || 'Wedding Muhurtham'}</span>
                       </div>
                     </div>
-                    <span className="text-gold font-bold text-[0.68rem] font-title">{weddingEvent?.time || '10:54 AM CST'}</span>
+                    <span className="text-gold font-bold text-xs font-title">10:54 AM CST</span>
                   </div>
                 </div>
               </div>
 
-              {/* Add to Calendar Action Buttons */}
+              {/* Add to Calendar Action Button */}
               <div className="mt-4 pt-3 border-t border-gold/20 space-y-2">
                 <p className="text-[0.62rem] uppercase tracking-[0.2em] text-paper/60 font-title text-center">
-                  Add events to your calendar
+                  Add wedding to your calendar
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {/* Wedding Calendar Button */}
-                  <div className="flex items-center gap-1">
-                    <a
-                      href={weddingGCalUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-full border border-gold bg-gold text-maroon-dark px-3 py-1.5 text-[0.68rem] font-bold uppercase tracking-wider hover:bg-gold/90 transition-all shadow"
-                    >
-                      <CalendarPlus className="size-3" />
-                      Wedding (22 Nov)
-                    </a>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        downloadIcs(
-                          weddingEvent?.name || 'Wedding Ceremony',
-                          weddingEvent?.startDate || '20261122T100000',
-                          weddingEvent?.endDate || '20261122T150000',
-                          weddingEvent?.note || 'Wedding Ceremony and celebrations',
-                          `${weddingConfig.venue.name}, ${weddingConfig.venue.city}`
-                        )
-                      }
-                      title="Download Apple / Outlook iCal for Wedding"
-                      className="inline-flex items-center gap-1 rounded-full border border-gold/40 px-2 py-1.5 text-[0.65rem] uppercase tracking-wider text-gold hover:bg-gold/15 transition-all"
-                    >
-                      <Download className="size-2.5" />
-                      .ics
-                    </button>
-                  </div>
-
-                  {/* Sangeet Calendar Button */}
-                  <div className="flex items-center gap-1">
-                    <a
-                      href={sangeetGCalUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-full border border-gold/60 bg-gold/15 px-3 py-1.5 text-[0.68rem] uppercase tracking-wider text-gold hover:bg-gold/30 transition-all"
-                    >
-                      <CalendarPlus className="size-3" />
-                      Sangeet (21 Nov)
-                    </a>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        downloadIcs(
-                          sangeetEvent?.name || 'Sangeet & Cocktails',
-                          sangeetEvent?.startDate || '20261121T183000',
-                          sangeetEvent?.endDate || '20261121T233000',
-                          sangeetEvent?.note || 'Sangeet & Cocktails celebration',
-                          `${weddingConfig.venue.name}, ${weddingConfig.venue.city}`
-                        )
-                      }
-                      title="Download Apple / Outlook iCal for Sangeet"
-                      className="inline-flex items-center gap-1 rounded-full border border-paper/30 px-2 py-1.5 text-[0.65rem] uppercase tracking-wider text-paper/80 hover:bg-paper/10 transition-all"
-                    >
-                      <Download className="size-2.5" />
-                      .ics
-                    </button>
-                  </div>
+                <div className="flex items-center gap-2 max-w-sm mx-auto">
+                  <a
+                    href={weddingGCalUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-gold bg-gold text-maroon-dark px-4 py-2 text-xs font-bold uppercase tracking-wider hover:bg-gold/90 transition-all shadow-md hover:scale-105 active:scale-95"
+                  >
+                    <CalendarPlus className="size-3.5" />
+                    Google Calendar
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      downloadIcs(
+                        weddingEvent?.name || 'Wedding Ceremony',
+                        weddingEvent?.startDate || '20261122T100000',
+                        weddingEvent?.endDate || '20261122T150000',
+                        weddingEvent?.note || 'Wedding Ceremony and celebrations',
+                        `${weddingConfig.venue.name}, ${weddingConfig.venue.city}`
+                      )
+                    }
+                    title="Download Apple / Outlook iCal for Wedding"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-gold/50 bg-gold/10 px-3.5 py-2 text-xs uppercase tracking-wider text-gold hover:bg-gold/25 transition-all"
+                  >
+                    <Download className="size-3" />
+                    .ics
+                  </button>
                 </div>
               </div>
             </div>
