@@ -202,7 +202,7 @@ the union of two hearts`,
     closingLine: '“We cannot imagine our celebration without you.”',
 
     // Centerpiece couple illustration
-    coupleIllustration: '/client-images/couple-chibi-transparent.png',
+    coupleIllustration: '/client-images/couple-namaste-3d.png',
     coupleIllustrationAlt: 'Illustration of Sreeja and Nikhil greeting guests with folded hands',
 
     // Ceremony date & time line

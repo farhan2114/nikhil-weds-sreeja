@@ -164,15 +164,15 @@ export const GratitudeSection: React.FC = () => {
               </p>
             </div>
 
-            {/* ── Centerpiece Couple (Cute Chibi Namaste) ── */}
-            <div className="relative mx-auto my-6 sm:my-8 flex items-center justify-center">
+            {/* ── Centerpiece Couple (Cute Namaste) ── */}
+            <div className="relative mx-auto my-5 sm:my-7 flex items-center justify-center">
               <img
                 src={coupleIllustration}
                 alt={coupleIllustrationAlt}
                 loading="lazy"
-                width={430}
-                height={480}
-                className="relative z-10 w-48 sm:w-60 h-auto object-contain select-none drop-shadow-sm transition-transform duration-700 hover:scale-105"
+                width={706}
+                height={1024}
+                className="relative z-10 w-44 sm:w-56 md:w-64 max-h-[380px] h-auto object-contain select-none drop-shadow-md transition-transform duration-700 hover:scale-105"
               />
             </div>
 
