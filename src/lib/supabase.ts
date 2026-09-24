@@ -28,7 +28,6 @@ export interface RsvpPayload {
   dietary?: string;
   attending_events: string;
   declined_events: string;
-  sangeet?: "Yes" | "No";
   wedding?: "Yes" | "No";
   note?: string;
 }
@@ -54,7 +53,7 @@ export async function saveRsvpToSupabase(payload: RsvpPayload): Promise<{ succes
     }
 
     // 2. Graceful fallback if user's Supabase table doesn't have phone/dietary columns yet
-    const packedNote = `Phone: ${payload.phone} | Adults: ${payload.adults_count}, Children: ${payload.children_count} | Diet: ${payload.dietary || 'None'}${payload.note ? ` | Note: ${payload.note}` : ''}`;
+    const packedNote = `Phone: ${payload.phone} | Adults: ${payload.adults_count}, Children: ${payload.children_count} | Diet: ${payload.dietary || 'Vegetarian'} | Wedding: ${payload.wedding || 'Yes'}${payload.note ? ` | Note: ${payload.note}` : ''}`;
     
     const { error: fallbackError } = await supabase.from('rsvps').insert([{
       name: payload.name,
@@ -78,6 +77,12 @@ export async function saveRsvpToSupabase(payload: RsvpPayload): Promise<{ succes
 
 export async function saveRsvpToGoogleSheet(payload: RsvpPayload): Promise<void> {
   try {
+    const formattedTimestamp = new Date().toLocaleString('en-US', {
+      timeZone: 'America/Chicago',
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    });
+
     await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -85,18 +90,24 @@ export async function saveRsvpToGoogleSheet(payload: RsvpPayload): Promise<void>
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        timestamp: formattedTimestamp,
         name: payload.name,
         phone: payload.phone,
         email: payload.email || '-',
         adults: payload.adults_count,
+        adults_count: payload.adults_count,
         children: payload.children_count,
+        children_count: payload.children_count,
         guest_count: payload.guest_count,
-        dietary: payload.dietary || 'None',
-        sangeet: payload.sangeet || 'No',
-        wedding: payload.wedding || 'No',
+        total_guests: payload.guest_count,
+        dietary: payload.dietary || 'Vegetarian',
+        dietary_preference: payload.dietary || 'Vegetarian',
+        wedding: payload.wedding || 'Yes',
+        wedding_ceremony: payload.wedding || 'Yes',
         attending_events: payload.attending_events,
         declined_events: payload.declined_events,
         note: payload.note || '-',
+        warm_wishes: payload.note || '-',
       }),
     });
   } catch (err) {

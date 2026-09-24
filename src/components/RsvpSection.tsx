@@ -109,13 +109,13 @@ export const RsvpSection: React.FC = () => {
       return attendance[match] === "attending" ? "Yes" : "No";
     };
 
-    const sangeetStatus = checkStatus("sangeet");
-    const weddingStatus =
-      checkStatus("wedding") !== "No"
-        ? checkStatus("wedding")
-        : checkStatus("muhurtham") !== "No"
-        ? checkStatus("muhurtham")
-        : checkStatus("ceremony");
+    const isAttendingWedding =
+      attendance["Wedding Ceremony"] === "attending" ||
+      checkStatus("wedding") === "Yes" ||
+      checkStatus("ceremony") === "Yes" ||
+      checkStatus("muhurtham") === "Yes"
+        ? "Yes"
+        : "No";
 
     setIsSubmitting(true);
     const result = await saveRsvp({
@@ -128,8 +128,7 @@ export const RsvpSection: React.FC = () => {
       dietary: data.dietary,
       attending_events: attendingList || "None",
       declined_events: declinedList || "None",
-      sangeet: sangeetStatus,
-      wedding: weddingStatus,
+      wedding: isAttendingWedding,
       note: data.note || "",
     });
     setIsSubmitting(false);
