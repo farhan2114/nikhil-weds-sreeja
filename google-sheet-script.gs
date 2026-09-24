@@ -3,71 +3,113 @@
  * 💍 SREEJA & NIKHIL WEDDING — GOOGLE SHEETS RSVP WEBHOOK SCRIPT
  * =======================================================================
  * 
- * INSTRUCTIONS TO UPDATE YOUR GOOGLE SHEET:
- * -----------------------------------------
- * 1. Open your Google Sheet.
- * 2. Click "Extensions" in the top menu -> "Apps Script".
- * 3. Delete any existing code in the editor, and paste this entire code.
- * 4. Click "Save" (disk icon).
+ * 1. CLICK "RUN" IN APPS SCRIPT:
+ *    - Make sure "setupSheet" is selected in the dropdown next to "Debug".
+ *    - Click "Run".
+ *    - It will format Row 1 with Royal Maroon headers AND insert a sample 
+ *      test RSVP row so you can immediately see the change in your sheet!
  * 
- * TO TEST INSIDE APPS SCRIPT DIRECTLY:
- * ------------------------------------
- * - In the toolbar dropdown beside "Debug", select "testRsvpSubmission" or "setupHeaders".
- * - Click "Run". You will see "Execution completed" with no errors and a test row or header created!
- * 
- * TO DEPLOY / RE-DEPLOY AS WEBHOOK:
- * ---------------------------------
- * 1. Click "Deploy" (blue button at top right) -> "Manage deployments".
- * 2. Click the pencil icon (Edit) on the active deployment.
- * 3. Select Version: "New version".
- * 4. Ensure:
- *      * Execute as: "Me"
- *      * Who has access: "Anyone" (CRITICAL: Do NOT choose "Only myself")
- * 5. Click "Deploy".
- *    (If deploying for the very first time: Click "Deploy" -> "New deployment"
- *     -> Type: "Web app" -> Execute as: "Me" -> Access: "Anyone").
- * 6. Copy the Web App URL (ends with /exec).
- * 7. If the URL changed, paste it into `src/wedding.config.ts` under `googleSheetWebhookUrl`.
+ * 2. DEPLOY AS WEBHOOK:
+ *    - Click "Deploy" (blue button at top right) -> "Manage deployments".
+ *    - Click the pencil icon (Edit) on the active deployment.
+ *    - Select Version: "New version".
+ *    - Ensure:
+ *        * Execute as: "Me"
+ *        * Who has access: "Anyone" (CRITICAL: Do NOT choose "Only myself")
+ *    - Click "Deploy".
  * =======================================================================
  */
 
-// Set up sheet header styling if sheet is blank or headers need initialization
-function setupHeaders(sheet) {
-  // If invoked directly from the Apps Script "Run" button without parameters
-  if (!sheet) {
-    sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  }
+// RSVP Columns Definition (11 Columns)
+var HEADERS = [
+  "Timestamp",
+  "Guest Name",
+  "Phone Number",
+  "Email",
+  "Adults (12+)",
+  "Children (<12)",
+  "Total Guests",
+  "Dietary Preference",
+  "Wedding Ceremony",
+  "Attending Events",
+  "Warm Wishes / Notes"
+];
 
-  var headers = [
-    "Timestamp",
-    "Guest Name",
-    "Phone Number",
-    "Email",
-    "Adults (12+)",
-    "Children (<12)",
-    "Total Guests",
-    "Dietary Preference",
+/**
+ * MAIN SETUP FUNCTION
+ * Run this from the Apps Script editor to initialize headers and insert a sample test row!
+ */
+function setupSheet() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  
+  // 1. Write the 11 Column Headers to Row 1 (overwrites any old headers)
+  sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+  
+  // 2. Format Header Row with Royal Maroon & White text
+  var headerRange = sheet.getRange(1, 1, 1, HEADERS.length);
+  headerRange.setFontWeight("bold");
+  headerRange.setBackground("#7D0A0A"); // Royal Maroon
+  headerRange.setFontColor("#FFFFFF");  // Crisp White
+  headerRange.setHorizontalAlignment("center");
+  sheet.setFrozenRows(1);
+  
+  // 3. Set column widths for clean readability
+  sheet.setColumnWidth(1, 160); // Timestamp
+  sheet.setColumnWidth(2, 180); // Guest Name
+  sheet.setColumnWidth(3, 150); // Phone Number
+  sheet.setColumnWidth(4, 180); // Email
+  sheet.setColumnWidth(5, 110); // Adults
+  sheet.setColumnWidth(6, 110); // Children
+  sheet.setColumnWidth(7, 110); // Total
+  sheet.setColumnWidth(8, 160); // Dietary
+  sheet.setColumnWidth(9, 150); // Wedding
+  sheet.setColumnWidth(10, 160); // Attending
+  sheet.setColumnWidth(11, 260); // Warm Wishes
+
+  // 4. Add a Sample Test RSVP row so you immediately see the sheet update!
+  var testRow = [
+    new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }),
+    "Test Guest (Sample RSVP)",
+    "'+1 (469) 555-0199",
+    "guest@example.com",
+    2,
+    1,
+    3,
+    "Vegetarian",
+    "Yes",
     "Wedding Ceremony",
-    "Attending Events",
-    "Warm Wishes / Notes"
+    "Heartiest congratulations to Sreeja & Nikhil! Looking forward to celebrating!"
   ];
+  
+  sheet.appendRow(testRow);
+  var lastRow = sheet.getLastRow();
+  sheet.getRange(lastRow, 1, 1, testRow.length).setVerticalAlignment("middle");
+  sheet.getRange(lastRow, 5, 1, 3).setHorizontalAlignment("center");
+  sheet.getRange(lastRow, 9, 1, 1).setHorizontalAlignment("center");
 
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(headers);
-    var headerRange = sheet.getRange(1, 1, 1, headers.length);
+  Logger.log("🎉 SUCCESS! Row 1 headers updated and sample test row added at row " + lastRow);
+  return "SUCCESS: Row 1 headers updated and sample test row added at row " + lastRow;
+}
+
+// Aliases so clicking "Run" on any selected function works seamlessly
+function setupHeaders(sheet) {
+  return setupSheet();
+}
+
+function testRsvpSubmission() {
+  return setupSheet();
+}
+
+// Ensures headers exist when webhooks arrive from the live website
+function ensureHeaders(sheet) {
+  if (sheet.getLastRow() === 0 || sheet.getRange(1, 1).getValue() === "") {
+    sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+    var headerRange = sheet.getRange(1, 1, 1, HEADERS.length);
     headerRange.setFontWeight("bold");
-    headerRange.setBackground("#7D0A0A"); // Royal Maroon
-    headerRange.setFontColor("#FFFFFF");  // White text
+    headerRange.setBackground("#7D0A0A");
+    headerRange.setFontColor("#FFFFFF");
     headerRange.setHorizontalAlignment("center");
     sheet.setFrozenRows(1);
-    
-    // Auto-fit column widths
-    for (var i = 1; i <= headers.length; i++) {
-      sheet.setColumnWidth(i, 150);
-    }
-    sheet.setColumnWidth(2, 180); // Guest Name
-    sheet.setColumnWidth(8, 170); // Dietary
-    sheet.setColumnWidth(11, 260); // Warm Wishes
   }
 }
 
@@ -75,11 +117,10 @@ function setupHeaders(sheet) {
 function doPost(e) {
   var lock = LockService.getScriptLock();
   try {
-    // Wait up to 10 seconds for concurrent write safety
     lock.waitLock(10000);
     
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    setupHeaders(sheet);
+    ensureHeaders(sheet);
     
     var data = {};
     if (e && e.postData && e.postData.contents) {
@@ -95,7 +136,7 @@ function doPost(e) {
     // Extract fields matching the website RSVP form
     var timestamp = data.timestamp || new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
     var name = data.name || "-";
-    var phone = data.phone ? "'" + data.phone : "-"; // Prefix with ' so Google Sheets formats as text
+    var phone = data.phone ? "'" + data.phone : "-";
     var email = data.email && data.email !== "-" ? data.email : "-";
     
     var adults = data.adults !== undefined ? data.adults : (data.adults_count !== undefined ? data.adults_count : 1);
@@ -124,11 +165,10 @@ function doPost(e) {
     
     sheet.appendRow(row);
     
-    // Format the new row nicely
     var lastRow = sheet.getLastRow();
     sheet.getRange(lastRow, 1, 1, row.length).setVerticalAlignment("middle");
-    sheet.getRange(lastRow, 5, 1, 3).setHorizontalAlignment("center"); // Numbers centered
-    sheet.getRange(lastRow, 9, 1, 1).setHorizontalAlignment("center"); // Wedding Yes/No centered
+    sheet.getRange(lastRow, 5, 1, 3).setHorizontalAlignment("center");
+    sheet.getRange(lastRow, 9, 1, 1).setHorizontalAlignment("center");
 
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
@@ -152,31 +192,4 @@ function doPost(e) {
 function doGet(e) {
   return ContentService.createTextOutput("💍 Sreeja & Nikhil RSVP Google Sheets Webhook is ACTIVE and connected! Ready to receive RSVPs.")
     .setMimeType(ContentService.MimeType.TEXT);
-}
-
-// Test function to run directly from Google Apps Script editor
-function testRsvpSubmission() {
-  var dummyPayload = {
-    timestamp: new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }),
-    name: "Test Guest (Sample RSVP)",
-    phone: "+1 (469) 555-0199",
-    email: "guest@example.com",
-    adults: 2,
-    children: 1,
-    guest_count: 3,
-    dietary: "Vegetarian",
-    wedding: "Yes",
-    attending_events: "Wedding Ceremony",
-    note: "Heartiest congratulations to Sreeja & Nikhil!"
-  };
-  
-  var dummyEvent = {
-    postData: {
-      contents: JSON.stringify(dummyPayload)
-    }
-  };
-  
-  var result = doPost(dummyEvent);
-  Logger.log("Result: " + result.getContent());
-  return result.getContent();
 }
