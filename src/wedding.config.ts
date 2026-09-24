@@ -84,7 +84,7 @@ the union of two hearts`,
   // -------------------------------------------------------------
   banner: {
     image: '/client-images/banner.jpg',
-    alt: 'The couple exchanging jasmine flowers',
+    alt: 'Traditional wedding ceremony mandap with sacred fire and garlands',
     quote: 'Two families, one thread, and a morning we’ll remember for the rest of our lives.',
   },
 
