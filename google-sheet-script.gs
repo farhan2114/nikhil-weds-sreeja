@@ -9,14 +9,23 @@
  * 2. Click "Extensions" in the top menu -> "Apps Script".
  * 3. Delete any existing code in the editor, and paste this entire code.
  * 4. Click "Save" (disk icon).
- * 5. Click "Deploy" (blue button at top right) -> "Manage deployments".
- *    - Click the pencil icon to edit the active deployment.
- *    - Select Version: "New version".
- *    - Ensure:
- *        * Execute as: "Me"
- *        * Who has access: "Anyone" (CRITICAL: Do NOT choose "Only myself")
- *    - Click "Deploy".
- *    (Alternatively: Click "Deploy" -> "New deployment" -> type: "Web app" -> Execute as: "Me" -> Access: "Anyone").
+ * 
+ * TO TEST INSIDE APPS SCRIPT DIRECTLY:
+ * ------------------------------------
+ * - In the toolbar dropdown beside "Debug", select "testRsvpSubmission" or "setupHeaders".
+ * - Click "Run". You will see "Execution completed" with no errors and a test row or header created!
+ * 
+ * TO DEPLOY / RE-DEPLOY AS WEBHOOK:
+ * ---------------------------------
+ * 1. Click "Deploy" (blue button at top right) -> "Manage deployments".
+ * 2. Click the pencil icon (Edit) on the active deployment.
+ * 3. Select Version: "New version".
+ * 4. Ensure:
+ *      * Execute as: "Me"
+ *      * Who has access: "Anyone" (CRITICAL: Do NOT choose "Only myself")
+ * 5. Click "Deploy".
+ *    (If deploying for the very first time: Click "Deploy" -> "New deployment"
+ *     -> Type: "Web app" -> Execute as: "Me" -> Access: "Anyone").
  * 6. Copy the Web App URL (ends with /exec).
  * 7. If the URL changed, paste it into `src/wedding.config.ts` under `googleSheetWebhookUrl`.
  * =======================================================================
@@ -24,6 +33,11 @@
 
 // Set up sheet header styling if sheet is blank or headers need initialization
 function setupHeaders(sheet) {
+  // If invoked directly from the Apps Script "Run" button without parameters
+  if (!sheet) {
+    sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  }
+
   var headers = [
     "Timestamp",
     "Guest Name",
@@ -138,4 +152,31 @@ function doPost(e) {
 function doGet(e) {
   return ContentService.createTextOutput("💍 Sreeja & Nikhil RSVP Google Sheets Webhook is ACTIVE and connected! Ready to receive RSVPs.")
     .setMimeType(ContentService.MimeType.TEXT);
+}
+
+// Test function to run directly from Google Apps Script editor
+function testRsvpSubmission() {
+  var dummyPayload = {
+    timestamp: new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }),
+    name: "Test Guest (Sample RSVP)",
+    phone: "+1 (469) 555-0199",
+    email: "guest@example.com",
+    adults: 2,
+    children: 1,
+    guest_count: 3,
+    dietary: "Vegetarian",
+    wedding: "Yes",
+    attending_events: "Wedding Ceremony",
+    note: "Heartiest congratulations to Sreeja & Nikhil!"
+  };
+  
+  var dummyEvent = {
+    postData: {
+      contents: JSON.stringify(dummyPayload)
+    }
+  };
+  
+  var result = doPost(dummyEvent);
+  Logger.log("Result: " + result.getContent());
+  return result.getContent();
 }

@@ -31,6 +31,13 @@ The script records the exact fields from the website:
 3. Open the file [`google-sheet-script.gs`](./google-sheet-script.gs) in this repository.
 4. Copy the entire code and paste it into the Google Apps Script editor, replacing any old code.
 5. Click **Save** (💾 icon).
+
+### Quick Test inside Apps Script (Optional):
+- In the toolbar dropdown (next to the "Debug" button), select **`testRsvpSubmission`** or **`setupHeaders`**.
+- Click **Run**.
+- Apps Script will grant permissions and insert a sample test row into your sheet without any errors!
+
+### Deploy as Webhook:
 6. Click the blue **Deploy** button at top right:
    - Select **Manage deployments**.
    - Click the **pencil icon** (Edit) on your existing deployment.
@@ -49,7 +56,7 @@ The script records the exact fields from the website:
 
 ---
 
-## 3. How to Test It
+## 3. How to Test From the Website
 
 1. Visit your website, scroll to the **RSVP** section.
 2. Fill in:
@@ -58,6 +65,6 @@ The script records the exact fields from the website:
    - Adults: `2`, Children: `1`
    - Dietary: `Vegetarian`
    - Wedding Ceremony: `Will Attend`
-   - Note: `Hearty congratulations!`
-3. Click **Confirm RSVP**.
-4. Check your Google Sheet — the new row will appear immediately!
+   - Note: `Congratulations!`
+3. Click **Submit RSVP**.
+4. Check your Google Sheet: the new row will appear within 2 seconds!
