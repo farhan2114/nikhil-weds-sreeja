@@ -164,13 +164,15 @@ export const HeroSection: React.FC = () => {
             <p className="invite-line mx-auto mt-6 max-w-sm text-sm leading-relaxed text-muted-foreground">
               {weddingData.invitationLine}
             </p>
-            <p className="invite-line mt-8 font-title text-lg tracking-wide">{weddingData.dateLabel}</p>
-            <p className="invite-line mt-1 text-sm text-muted-foreground">
-              {weddingData.muhurtham} · {weddingData.venue}, {weddingData.city}
-            </p>
+            <p className="invite-line mt-6 sm:mt-8 font-title text-base sm:text-lg tracking-wide">{weddingData.dateLabel}</p>
+            <div className="invite-line mt-2 flex flex-col items-center gap-0.5 sm:gap-1 text-xs sm:text-sm text-muted-foreground">
+              <p className="font-medium text-foreground/90">{weddingData.muhurtham}</p>
+              <p className="font-medium text-foreground/85">{weddingData.venue}</p>
+              <p className="text-muted-foreground px-2">{weddingData.city}</p>
+            </div>
             <a
               href="#rsvp"
-              className="invite-line mt-9 inline-flex items-center gap-2 border border-gold/60 bg-transparent px-6 py-3 text-[0.7rem] uppercase tracking-[0.3em] text-gold-deep transition-colors hover:bg-gold/10"
+              className="invite-line mt-7 sm:mt-8 inline-flex items-center gap-2 border border-gold/60 bg-transparent px-6 py-3 text-[0.7rem] uppercase tracking-[0.3em] text-gold-deep transition-colors hover:bg-gold/10"
             >
               RSVP Now
             </a>

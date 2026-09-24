@@ -44,14 +44,15 @@ export const ParallaxSection: React.FC = () => {
         loading="lazy"
         width={1200}
         height={1500}
-        className="parallax-img absolute -top-[15%] left-0 h-[130%] w-full object-cover object-center will-change-transform opacity-45 sm:opacity-50"
+        className="parallax-img absolute -top-[15%] left-0 h-[130%] w-full object-cover object-center will-change-transform opacity-85 sm:opacity-90"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1a0509] via-[#24080e]/45 to-[#1a0509]/80" />
-      <div className="absolute inset-0 bg-black/25" />
-      <div className="absolute inset-0 flex items-center justify-center px-6">
-        <p className="max-w-3xl text-center font-display text-2xl leading-relaxed text-[#FFFBF5] drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] sm:text-4xl md:text-5xl">
-          {banner.quote}
-        </p>
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1a0509]/60 via-transparent to-[#1a0509]/50" />
+      <div className="absolute inset-0 flex items-center justify-center px-4 sm:px-6">
+        <div className="max-w-3xl rounded-2xl bg-black/40 px-6 py-4 backdrop-blur-sm sm:px-10 sm:py-6">
+          <p className="text-center font-display text-2xl leading-relaxed text-[#FFFBF5] drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] sm:text-4xl md:text-5xl">
+            {banner.quote}
+          </p>
+        </div>
       </div>
     </div>
   );
