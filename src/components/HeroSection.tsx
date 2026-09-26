@@ -156,13 +156,13 @@ export const HeroSection: React.FC = () => {
             />
             <p className="invite-line eyebrow mt-3 sm:mt-4">{weddingData.dateShort}</p>
             <h1 className="invite-line mt-4 sm:mt-5 flex flex-col items-center justify-center font-display leading-[1.12]">
-              <span className="font-bold text-3xl min-[360px]:text-4xl sm:text-5xl md:text-6xl text-gold-foil animate-foil tracking-wide drop-shadow-[0_2px_12px_rgba(200,150,62,0.45)]">
+              <span className="font-medium text-3xl min-[360px]:text-4xl sm:text-5xl md:text-6xl text-gold-foil animate-foil tracking-wide drop-shadow-[0_2px_10px_rgba(200,150,62,0.35)]">
                 {weddingData.bride}
               </span>
-              <span className="my-1 sm:my-1.5 font-title text-xl sm:text-2xl md:text-3xl text-maroon font-bold select-none">
+              <span className="my-1 sm:my-1.5 font-title text-xl sm:text-2xl md:text-3xl text-maroon font-semibold select-none">
                 &amp;
               </span>
-              <span className="font-bold text-3xl min-[360px]:text-4xl sm:text-5xl md:text-6xl text-gold-foil animate-foil tracking-wide drop-shadow-[0_2px_12px_rgba(200,150,62,0.45)]">
+              <span className="font-medium text-3xl min-[360px]:text-4xl sm:text-5xl md:text-6xl text-gold-foil animate-foil tracking-wide drop-shadow-[0_2px_10px_rgba(200,150,62,0.35)]">
                 {weddingData.groom}
               </span>
             </h1>

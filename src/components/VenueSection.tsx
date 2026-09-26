@@ -73,7 +73,9 @@ export const VenueSection: React.FC = () => {
       <div className="relative mx-auto max-w-6xl">
         {/* Intro Heading & Address */}
         <RevealOnScroll className="text-center max-w-2xl mx-auto">
-          <p className="eyebrow text-gold">The way to the wedding</p>
+          <p className="font-title text-sm sm:text-base md:text-lg uppercase tracking-[0.28em] text-gold font-semibold">
+            The way to the wedding
+          </p>
           <h2 className="mt-4 font-display text-4xl sm:text-6xl">Join us in {cityName}</h2>
           <p className="mt-5 text-sm sm:text-base leading-relaxed text-paper/80">
             {weddingConfig.venue.description ||

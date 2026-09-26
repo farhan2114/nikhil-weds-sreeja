@@ -8,7 +8,7 @@ export const Footer: React.FC = () => {
     `https://www.google.com/maps/search/${encodeURIComponent(query)}`;
 
   return (
-    <footer className="relative overflow-hidden bg-maroon border-t border-gold/30 px-5 py-16 text-center text-paper">
+    <footer className="relative overflow-hidden bg-maroon px-5 py-16 text-center text-paper">
       <p className="flex flex-wrap items-center justify-center gap-x-2 font-display text-2xl min-[360px]:text-3xl sm:text-4xl text-gold-foil animate-foil break-words">
         <span>{weddingData.bride}</span>
         <span className="font-title text-base sm:text-2xl text-gold/90">&amp;</span>
