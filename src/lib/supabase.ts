@@ -30,10 +30,46 @@ export interface RsvpPayload {
   declined_events: string;
   wedding?: "Yes" | "No";
   note?: string;
+  is_update?: boolean;
+  original_phone?: string;
+  original_name?: string;
+  original_email?: string;
 }
 
 export async function saveRsvpToSupabase(payload: RsvpPayload): Promise<{ success: boolean; error?: string }> {
   try {
+    // If updating existing submission, attempt to update row matching original phone/email
+    if (payload.is_update && (payload.original_phone || payload.phone)) {
+      const searchPhone = payload.original_phone || payload.phone;
+      const { data: existingRows } = await supabase
+        .from('rsvps')
+        .select('id')
+        .eq('phone', searchPhone)
+        .limit(1);
+
+      if (existingRows && existingRows.length > 0) {
+        const { error: updateError } = await supabase
+          .from('rsvps')
+          .update({
+            name: payload.name,
+            phone: payload.phone,
+            email: payload.email || null,
+            adults_count: payload.adults_count,
+            children_count: payload.children_count,
+            guest_count: payload.guest_count,
+            dietary: payload.dietary || null,
+            attending_events: payload.attending_events,
+            declined_events: payload.declined_events,
+            note: payload.note || '',
+          })
+          .eq('id', existingRows[0].id);
+
+        if (!updateError) {
+          return { success: true };
+        }
+      }
+    }
+
     // 1. Try full insert with dedicated phone, adults, children, dietary columns
     const { error: fullError } = await supabase.from('rsvps').insert([{
       name: payload.name,
@@ -91,6 +127,10 @@ export async function saveRsvpToGoogleSheet(payload: RsvpPayload): Promise<void>
       },
       body: JSON.stringify({
         timestamp: formattedTimestamp,
+        is_update: !!payload.is_update,
+        original_phone: payload.original_phone || payload.phone,
+        original_name: payload.original_name || payload.name,
+        original_email: payload.original_email || payload.email || '',
         name: payload.name,
         phone: payload.phone,
         email: payload.email || '-',

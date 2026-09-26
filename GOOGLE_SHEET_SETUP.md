@@ -24,47 +24,48 @@ The script records the exact fields from the website:
 
 ---
 
-## 2. How to Update Your Google Sheet Script (30 Seconds)
+## 2. In-Place Row Updates (No Duplicate Lines!)
+
+When a guest edits their RSVP on the website:
+- The website passes `is_update: true` along with the original phone/name/email.
+- Google Apps Script searches for their row using their **phone number** (normalized 10-digit matching), **email**, or **name**.
+- **Instead of appending a new row**, it updates their existing row directly in-place!
+- The timestamp is updated to `[Date, Time] (Edited)`.
+- If no previous entry exists, it safely falls back to creating a new row.
+
+---
+
+## 3. How to Update Your Google Sheet Script (30 Seconds)
 
 1. Open your **Google Sheet**.
 2. Click **Extensions** in the top navigation bar → **Apps Script**.
 3. Open the file [`google-sheet-script.gs`](./google-sheet-script.gs) in this repository.
-4. Copy the entire code and paste it into the Google Apps Script editor, replacing any old code.
+4. Copy the entire code and paste it into the Google Apps Script editor, replacing the existing code.
 5. Click **Save** (💾 icon).
 
 ### Quick Test inside Apps Script (Optional):
-- In the toolbar dropdown (next to the "Debug" button), select **`testRsvpSubmission`** or **`setupHeaders`**.
+- In the toolbar dropdown (next to the "Debug" button), select **`testRsvpSubmission`**.
 - Click **Run**.
-- Apps Script will grant permissions and insert a sample test row into your sheet without any errors!
+- It will verify both inserting a row and updating the same row in-place. Check the execution log!
 
-### Deploy as Webhook:
+### Deploy the New Version:
 6. Click the blue **Deploy** button at top right:
    - Select **Manage deployments**.
-   - Click the **pencil icon** (Edit) on your existing deployment.
-   - Under **Version**, select **New version**.
+   - Click the **pencil icon** (✏️ Edit) on your existing active deployment.
+   - Under **Version**, click the dropdown and choose **New version**.
    - Ensure:
      - **Execute as**: `Me`
      - **Who has access**: `Anyone` *(Crucial: do not choose "Only myself")*
    - Click **Deploy**.
-7. Copy the **Web app URL** (ends in `/exec`).
-8. If the URL changed from the previous one, paste it into [`src/wedding.config.ts`](./src/wedding.config.ts) under:
-   ```ts
-   rsvp: {
-     googleSheetWebhookUrl: 'YOUR_COPIED_URL_HERE',
-   }
-   ```
+7. If your Web app URL changed, update [`src/wedding.config.ts`](./src/wedding.config.ts) under `rsvp.googleSheetWebhookUrl`. (Usually the URL stays the same when editing an existing deployment).
 
 ---
 
-## 3. How to Test From the Website
+## 4. How to Test From the Website
 
 1. Visit your website, scroll to the **RSVP** section.
-2. Fill in:
-   - Name: `Test Guest`
-   - Phone: `+1 (469) 555-0199`
-   - Adults: `2`, Children: `1`
-   - Dietary: `Vegetarian`
-   - Wedding Ceremony: `Will Attend`
-   - Note: `Congratulations!`
-3. Click **Submit RSVP**.
-4. Check your Google Sheet: the new row will appear within 2 seconds!
+2. Submit an initial RSVP (e.g. `2 Adults`, `Vegetarian`).
+3. Notice your Google Sheet adds row 2.
+4. On the website confirmation card, click **"Change or Edit RSVP"**.
+5. Change Adults to `3` or Dietary to `Non-Vegetarian` and click **"Update RSVP"**.
+6. Refresh your Google Sheet: **Row 2 will be updated directly** with the new numbers and the timestamp will show `(Edited)` — **no new row is added!**

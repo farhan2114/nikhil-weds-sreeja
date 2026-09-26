@@ -49,6 +49,11 @@ export const RsvpSection: React.FC = () => {
       return null;
     }
   });
+  const [editingData, setEditingData] = useState<{
+    originalPhone: string;
+    originalName: string;
+    originalEmail?: string;
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const totalGuests = adultsCount + childrenCount;
@@ -117,6 +122,11 @@ export const RsvpSection: React.FC = () => {
         ? "Yes"
         : "No";
 
+    const isUpdate = Boolean(editingData || submitted);
+    const originalPhone = editingData?.originalPhone || submitted?.phone || phone.trim();
+    const originalName = editingData?.originalName || submitted?.name || name.trim();
+    const originalEmail = editingData?.originalEmail || submitted?.email || email.trim();
+
     setIsSubmitting(true);
     const result = await saveRsvp({
       name: data.name,
@@ -130,6 +140,10 @@ export const RsvpSection: React.FC = () => {
       declined_events: declinedList || "None",
       wedding: isAttendingWedding,
       note: data.note || "",
+      is_update: isUpdate,
+      original_phone: originalPhone,
+      original_name: originalName,
+      original_email: originalEmail,
     });
     setIsSubmitting(false);
 
@@ -144,11 +158,17 @@ export const RsvpSection: React.FC = () => {
       // ignore storage errors
     }
 
+    setEditingData(null);
     setSubmitted(data);
   };
 
   const handleEditRsvp = () => {
     if (!submitted) return;
+    setEditingData({
+      originalPhone: submitted.phone || "",
+      originalName: submitted.name || "",
+      originalEmail: submitted.email || "",
+    });
     setName(submitted.name);
     setPhone(submitted.phone || "");
     setEmail(submitted.email || "");
@@ -285,6 +305,30 @@ export const RsvpSection: React.FC = () => {
               <span className="pointer-events-none absolute inset-3 border border-gold/20" />
 
               <div className="relative space-y-7">
+                {/* Editing Notification Banner */}
+                {editingData && (
+                  <div className="flex items-center justify-between rounded border border-gold/40 bg-gold/10 px-4 py-2.5 text-xs text-gold-deep">
+                    <span>
+                      Editing existing RSVP for <strong className="font-semibold text-foreground">{editingData.originalName || "Guest"}</strong>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        try {
+                          const saved = localStorage.getItem(STORAGE_KEY);
+                          if (saved) setSubmitted(JSON.parse(saved));
+                        } catch {
+                          // ignore storage errors
+                        }
+                        setEditingData(null);
+                      }}
+                      className="underline hover:text-foreground font-medium ml-2 cursor-pointer"
+                    >
+                      Cancel &amp; Keep RSVP
+                    </button>
+                  </div>
+                )}
+
                 {/* Name */}
                 <div>
                   <label htmlFor="rsvp-name" className="block text-xs font-title uppercase tracking-[0.22em] text-foreground">
@@ -520,7 +564,9 @@ export const RsvpSection: React.FC = () => {
                     className="group relative overflow-hidden rounded-full border border-gold/80 bg-gradient-to-r from-gold/90 via-gold to-gold/90 px-10 py-3.5 text-xs font-title uppercase tracking-[0.3em] text-maroon font-bold shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl active:scale-95 disabled:opacity-60"
                   >
                     <span className="relative z-10 flex items-center justify-center gap-2">
-                      {isSubmitting ? "Saving Your RSVP..." : "Confirm RSVP"}
+                      {isSubmitting
+                        ? (editingData ? "Updating Your RSVP..." : "Saving Your RSVP...")
+                        : (editingData ? "Update RSVP" : "Confirm RSVP")}
                     </span>
                   </button>
                 </div>
