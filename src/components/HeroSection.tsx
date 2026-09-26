@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
+import { ChevronDown } from 'lucide-react';
 import { assets } from '../data/assets';
 import { weddingConfig, weddingData } from '../wedding.config';
 import { playAudio } from '../lib/audio';
@@ -216,6 +217,17 @@ export const HeroSection: React.FC = () => {
 
       {/* Door Shadow Overlay */}
       <div className="door-shadow pointer-events-none absolute inset-0 z-40 bg-black/25" />
+
+      {/* Scroll Down Arrow Indicator (Only arrow mark) */}
+      {opened && (
+        <a
+          href="#intro"
+          aria-label="Scroll to next section"
+          className="absolute bottom-2 sm:bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center text-gold/85 hover:text-gold transition-colors animate-bounce p-2 cursor-pointer"
+        >
+          <ChevronDown className="size-7 sm:size-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]" />
+        </a>
+      )}
     </section>
   );
 };

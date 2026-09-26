@@ -9,7 +9,6 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'The Couple', href: 'couple' },
-  { label: 'Portrait', href: 'gallery' },
   { label: 'Events', href: 'events' },
   { label: 'Calendar', href: 'venue' },
 ];
@@ -33,7 +32,7 @@ export const Navbar: React.FC = () => {
       }
 
       // Track active section for indicator
-      const sectionIds = ['couple', 'gallery', 'events', 'rsvp', 'venue'];
+      const sectionIds = ['couple', 'events', 'rsvp', 'venue'];
       const scrollPos = window.scrollY + 200;
 
       for (const id of sectionIds) {
