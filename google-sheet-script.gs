@@ -207,8 +207,8 @@ function doPost(e) {
     // Extract fields matching the website RSVP form
     var baseTimestamp = data.timestamp || new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
     var name = data.name || "-";
-    var phone = data.phone ? "'" + data.phone : "-";
-    var email = data.email && data.email !== "-" ? data.email : "-";
+    var phone = (data.phone && String(data.phone).trim() !== "" && data.phone !== "-") ? ("'" + String(data.phone).trim()) : "-";
+    var email = (data.email && String(data.email).trim() !== "" && data.email !== "-") ? String(data.email).trim() : "-";
     
     var adults = data.adults !== undefined ? data.adults : (data.adults_count !== undefined ? data.adults_count : 1);
     var children = data.children !== undefined ? data.children : (data.children_count !== undefined ? data.children_count : 0);

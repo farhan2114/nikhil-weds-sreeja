@@ -73,8 +73,13 @@ export const RsvpSection: React.FC = () => {
       setError("Please enter your name.");
       return;
     }
-    if (!phone.trim()) {
-      setError("Please enter your phone number so we can reach you.");
+    if (!email.trim()) {
+      setError("Please enter your email address so we can confirm your RSVP.");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      setError("Please enter a valid email address (e.g. yourname@example.com).");
       return;
     }
     const anySelected = Object.values(attendance).some((v) => v !== null);
@@ -268,8 +273,13 @@ export const RsvpSection: React.FC = () => {
                 {/* Contact & Dietary */}
                 <div className="py-3.5 space-y-1.5 text-xs text-muted-foreground">
                   <p>
-                    <span className="font-semibold text-foreground">Phone:</span> {submitted.phone}
-                    {submitted.email ? ` · ${submitted.email}` : ''}
+                    <span className="font-semibold text-foreground">Email:</span> {submitted.email}
+                    {submitted.phone && (
+                      <>
+                        {" · "}
+                        <span className="font-semibold text-foreground">Phone:</span> {submitted.phone}
+                      </>
+                    )}
                   </p>
                   <p>
                     <span className="font-semibold text-foreground">Dietary:</span> {submitted.dietary}
@@ -349,14 +359,13 @@ export const RsvpSection: React.FC = () => {
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
                     <label htmlFor="rsvp-phone" className="block text-xs font-title uppercase tracking-[0.22em] text-foreground">
-                      Phone Number <span className="text-maroon">*</span>
+                      Phone Number <span className="text-[0.65rem] lowercase tracking-normal text-muted-foreground font-normal">(optional)</span>
                     </label>
                     <div className="relative mt-2">
                       <Phone className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                       <input
                         id="rsvp-phone"
                         type="tel"
-                        required
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="+1 (469) 000-0000"
@@ -367,13 +376,14 @@ export const RsvpSection: React.FC = () => {
 
                   <div>
                     <label htmlFor="rsvp-email" className="block text-xs font-title uppercase tracking-[0.22em] text-foreground">
-                      Email Address <span className="text-[0.65rem] lowercase tracking-normal text-muted-foreground font-normal">(optional)</span>
+                      Email Address <span className="text-maroon">*</span>
                     </label>
                     <div className="relative mt-2">
                       <Mail className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                       <input
                         id="rsvp-email"
                         type="email"
+                        required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="yourname@example.com"

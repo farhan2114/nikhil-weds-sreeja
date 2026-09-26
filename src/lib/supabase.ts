@@ -20,8 +20,8 @@ export const GOOGLE_SHEET_WEBHOOK_URL =
 
 export interface RsvpPayload {
   name: string;
-  phone: string;
-  email?: string;
+  phone?: string;
+  email: string;
   adults_count: number;
   children_count: number;
   guest_count: number;
@@ -39,21 +39,39 @@ export interface RsvpPayload {
 export async function saveRsvpToSupabase(payload: RsvpPayload): Promise<{ success: boolean; error?: string }> {
   try {
     // If updating existing submission, attempt to update row matching original phone/email
-    if (payload.is_update && (payload.original_phone || payload.phone)) {
+    if (payload.is_update) {
+      let existingId: string | null = null;
       const searchPhone = payload.original_phone || payload.phone;
-      const { data: existingRows } = await supabase
-        .from('rsvps')
-        .select('id')
-        .eq('phone', searchPhone)
-        .limit(1);
+      if (searchPhone) {
+        const { data: phoneRows } = await supabase
+          .from('rsvps')
+          .select('id')
+          .eq('phone', searchPhone)
+          .limit(1);
+        if (phoneRows && phoneRows.length > 0) {
+          existingId = phoneRows[0].id;
+        }
+      }
 
-      if (existingRows && existingRows.length > 0) {
+      if (!existingId && (payload.original_email || payload.email)) {
+        const searchEmail = payload.original_email || payload.email;
+        const { data: emailRows } = await supabase
+          .from('rsvps')
+          .select('id')
+          .eq('email', searchEmail)
+          .limit(1);
+        if (emailRows && emailRows.length > 0) {
+          existingId = emailRows[0].id;
+        }
+      }
+
+      if (existingId) {
         const { error: updateError } = await supabase
           .from('rsvps')
           .update({
             name: payload.name,
-            phone: payload.phone,
-            email: payload.email || null,
+            phone: payload.phone || null,
+            email: payload.email,
             adults_count: payload.adults_count,
             children_count: payload.children_count,
             guest_count: payload.guest_count,
@@ -62,7 +80,7 @@ export async function saveRsvpToSupabase(payload: RsvpPayload): Promise<{ succes
             declined_events: payload.declined_events,
             note: payload.note || '',
           })
-          .eq('id', existingRows[0].id);
+          .eq('id', existingId);
 
         if (!updateError) {
           return { success: true };
@@ -73,8 +91,8 @@ export async function saveRsvpToSupabase(payload: RsvpPayload): Promise<{ succes
     // 1. Try full insert with dedicated phone, adults, children, dietary columns
     const { error: fullError } = await supabase.from('rsvps').insert([{
       name: payload.name,
-      phone: payload.phone,
-      email: payload.email || null,
+      phone: payload.phone || null,
+      email: payload.email,
       adults_count: payload.adults_count,
       children_count: payload.children_count,
       guest_count: payload.guest_count,
@@ -89,11 +107,11 @@ export async function saveRsvpToSupabase(payload: RsvpPayload): Promise<{ succes
     }
 
     // 2. Graceful fallback if user's Supabase table doesn't have phone/dietary columns yet
-    const packedNote = `Phone: ${payload.phone} | Adults: ${payload.adults_count}, Children: ${payload.children_count} | Diet: ${payload.dietary || 'Vegetarian'} | Wedding: ${payload.wedding || 'Yes'}${payload.note ? ` | Note: ${payload.note}` : ''}`;
+    const packedNote = `${payload.phone ? `Phone: ${payload.phone} | ` : ''}Adults: ${payload.adults_count}, Children: ${payload.children_count} | Diet: ${payload.dietary || 'Vegetarian'} | Wedding: ${payload.wedding || 'Yes'}${payload.note ? ` | Note: ${payload.note}` : ''}`;
     
     const { error: fallbackError } = await supabase.from('rsvps').insert([{
       name: payload.name,
-      email: payload.email || payload.phone,
+      email: payload.email || payload.phone || '',
       guest_count: payload.guest_count,
       attending_events: payload.attending_events,
       declined_events: payload.declined_events,
@@ -128,11 +146,11 @@ export async function saveRsvpToGoogleSheet(payload: RsvpPayload): Promise<void>
       body: JSON.stringify({
         timestamp: formattedTimestamp,
         is_update: !!payload.is_update,
-        original_phone: payload.original_phone || payload.phone,
+        original_phone: payload.original_phone || payload.phone || '',
         original_name: payload.original_name || payload.name,
         original_email: payload.original_email || payload.email || '',
         name: payload.name,
-        phone: payload.phone,
+        phone: payload.phone || '-',
         email: payload.email || '-',
         adults: payload.adults_count,
         adults_count: payload.adults_count,
