@@ -218,7 +218,7 @@ export const HeroSection: React.FC = () => {
       {/* Door Shadow Overlay */}
       <div className="door-shadow pointer-events-none absolute inset-0 z-40 bg-black/25" />
 
-      {/* Scroll Down Indicator */}
+      {/* Scroll Down Indicator (Clean floating text & arrow, no card) */}
       {opened && (
         <a
           href="#intro"
@@ -227,15 +227,13 @@ export const HeroSection: React.FC = () => {
             document.getElementById('intro')?.scrollIntoView({ behavior: 'smooth' });
           }}
           aria-label="Scroll down to invitation details"
-          className="group absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center cursor-pointer focus:outline-none transition-transform duration-300 hover:scale-105"
+          className="group absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1 cursor-pointer focus:outline-none transition-opacity duration-300 hover:opacity-80"
         >
-          <div className="flex flex-col items-center justify-center rounded-full border border-gold/80 bg-black/80 backdrop-blur-md px-6 py-2 sm:px-7 sm:py-2.5 shadow-[0_4px_24px_rgba(0,0,0,0.7),0_0_12px_rgba(212,175,55,0.4)] transition-colors group-hover:border-gold group-hover:bg-black/90">
-            <span className="font-title text-[0.7rem] sm:text-xs uppercase tracking-[0.28em] text-white font-bold drop-shadow-sm -mr-[0.28em] select-none text-center">
-              Scroll Down
-            </span>
-            <div className="animate-bounce mt-1 flex items-center justify-center">
-              <ChevronDown className="size-4 sm:size-5 text-[#FFD700] stroke-[2.75] drop-shadow-sm" />
-            </div>
+          <span className="font-title text-[0.65rem] sm:text-xs uppercase tracking-[0.28em] text-[#4A1521] font-semibold -mr-[0.28em] select-none text-center drop-shadow-[0_1px_2px_rgba(255,255,255,0.7)]">
+            Scroll Down
+          </span>
+          <div className="animate-bounce flex items-center justify-center">
+            <ChevronDown className="size-4 sm:size-5 text-[#8A6D3B] stroke-[2.5] drop-shadow-[0_1px_2px_rgba(255,255,255,0.7)] group-hover:text-[#4A1521] transition-colors" />
           </div>
         </a>
       )}
