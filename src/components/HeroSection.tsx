@@ -124,6 +124,7 @@ export const HeroSection: React.FC = () => {
         src={assets.temple}
         alt="Temple gopuram archway"
         className="temple pointer-events-none absolute inset-0 h-full w-full scale-105 object-cover opacity-0 blur-[1px]"
+        style={{ objectPosition: '51.8% center' }}
       />
       <div className="pointer-events-none absolute inset-0 bg-background/54" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-[var(--gradient-veil)]" />
