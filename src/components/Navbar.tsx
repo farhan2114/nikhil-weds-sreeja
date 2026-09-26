@@ -33,7 +33,7 @@ export const Navbar: React.FC = () => {
       }
 
       // Track active section for indicator
-      const sectionIds = ['couple', 'gallery', 'events', 'venue', 'rsvp'];
+      const sectionIds = ['couple', 'gallery', 'events', 'rsvp', 'venue'];
       const scrollPos = window.scrollY + 200;
 
       for (const id of sectionIds) {

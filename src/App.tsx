@@ -50,8 +50,8 @@ export const App: React.FC = () => {
       <GallerySection />
       <ParallaxSection />
       <EventsSection />
-      <VenueSection />
       <RsvpSection />
+      <VenueSection />
       <Footer />
       <MusicButton />
     </main>
