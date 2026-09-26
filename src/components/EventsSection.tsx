@@ -144,12 +144,14 @@ export const EventsSection: React.FC = () => {
             className="paper-card relative mx-auto max-w-4xl overflow-hidden rounded-2xl border-2 border-gold/45 bg-[#FAF7F0] p-0 shadow-2xl transition-colors duration-500 hover:border-gold/75 group will-change-transform"
           >
             {/* 1. Outdoor Wedding Mandapam Header Image with Parallax */}
-            <div className="relative aspect-[16/10] sm:aspect-[21/9] w-full overflow-hidden border-b-2 border-gold/35">
+            <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden border-b-2 border-gold/35">
               <img
                 ref={imgRef}
                 src={event.image || '/client-images/wedding-mandapam.jpg'}
                 alt="Sacred Wedding Mandapam decorated with flowers and bells"
                 loading="lazy"
+                width={1200}
+                height={800}
                 className="h-[120%] -top-[10%] w-full object-cover object-center will-change-transform relative"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent pointer-events-none" />
