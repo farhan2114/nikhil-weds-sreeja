@@ -218,14 +218,22 @@ export const HeroSection: React.FC = () => {
       {/* Door Shadow Overlay */}
       <div className="door-shadow pointer-events-none absolute inset-0 z-40 bg-black/25" />
 
-      {/* Scroll Down Arrow Indicator (Only arrow mark) */}
+      {/* Scroll Down Arrow Indicator (Only arrow mark - Prominent Gold Medallion) */}
       {opened && (
         <a
           href="#intro"
-          aria-label="Scroll to next section"
-          className="absolute bottom-2 sm:bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center text-gold/85 hover:text-gold transition-colors animate-bounce p-2 cursor-pointer"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById('intro')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          aria-label="Scroll down to invitation details"
+          className="group absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center animate-bounce cursor-pointer focus:outline-none"
         >
-          <ChevronDown className="size-7 sm:size-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]" />
+          <div className="relative flex items-center justify-center size-12 sm:size-14 rounded-full bg-[#1A0B05]/90 border-2 border-gold shadow-[0_4px_20px_rgba(212,175,55,0.6),0_0_16px_rgba(0,0,0,0.85)] backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-[#FFF1B0] group-hover:shadow-[0_4px_28px_rgba(212,175,55,0.85)]">
+            {/* Subtle pulsing outer ring */}
+            <span className="absolute inset-0 rounded-full border-2 border-gold/70 animate-ping opacity-40 pointer-events-none" />
+            <ChevronDown className="size-7 sm:size-8 text-[#FFDF78] stroke-[2.75] transition-transform duration-300 group-hover:translate-y-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]" />
+          </div>
         </a>
       )}
     </section>

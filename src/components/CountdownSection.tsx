@@ -117,8 +117,8 @@ export const CountdownSection: React.FC = () => {
         <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl text-foreground font-normal tracking-wide">
           Counting the days
         </h2>
-        <p className="mt-1.5 sm:mt-2 text-[0.65rem] sm:text-xs uppercase tracking-[0.32em] text-gold-deep font-title font-medium">
-          Until We Say Yes
+        <p className="mt-1 sm:mt-2 font-display text-2xl sm:text-4xl lg:text-5xl text-gold-deep font-normal tracking-wide">
+          Until we tie the knot
         </p>
 
         {/* ── Recessed Soft-Shadow Pill Tray ── */}
