@@ -18,7 +18,7 @@ export const GallerySection: React.FC = () => {
       <div className="relative mx-auto max-w-4xl">
         <RevealOnScroll className="text-center">
           <p className="eyebrow">A Sacred Bond</p>
-          <h2 className="mt-4 font-display text-4xl sm:text-6xl">A moment of forever</h2>
+          <h2 className="mt-4 font-display text-4xl sm:text-6xl">A moment that begins forever</h2>
           <div className="rule-gold mx-auto mt-6 w-32" />
           <p className="mx-auto mt-4 max-w-lg text-sm sm:text-base leading-relaxed text-muted-foreground">
             A fleeting glance, an eternal promise — celebrating the love and togetherness that will guide our lives forward.

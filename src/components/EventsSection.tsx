@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { CalendarCheck, CalendarPlus, Clock } from 'lucide-react';
+import { CalendarCheck, Clock } from 'lucide-react';
 import { assets } from '../data/assets';
 import { weddingConfig } from '../wedding.config';
 import { SpinningMandala } from './Ornaments';
@@ -21,19 +21,6 @@ export const EventsSection: React.FC = () => {
     place: 'Frisco Hall Event Center',
     note: 'The sacred muhurtham ceremony followed by lunch & celebrations',
     image: '/client-images/wedding-mandapam.jpg',
-  };
-
-  const createGoogleCalendarUrl = () => {
-    const url = new URL('https://calendar.google.com/calendar/render');
-    url.searchParams.set('action', 'TEMPLATE');
-    url.searchParams.set('text', `Sreeja & Nikhil — ${event.name}`);
-    url.searchParams.set('dates', '20261122T100000/20261122T150000');
-    url.searchParams.set(
-      'details',
-      `${event.note}\n\nVenue: ${weddingConfig.venue.name}, ${weddingConfig.venue.city}\n\nWarmly invited by the families of Sreeja & Nikhil.`
-    );
-    url.searchParams.set('location', `${weddingConfig.venue.name}, ${weddingConfig.venue.city}`);
-    return url.toString();
   };
 
   useEffect(() => {
@@ -207,29 +194,17 @@ export const EventsSection: React.FC = () => {
                 {event.note}
               </p>
 
-              {/* Action Buttons: Add to Calendar, RSVP */}
-              <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md mx-auto">
-                {/* Add to Calendar */}
-                <a
-                  href={createGoogleCalendarUrl()}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-gold bg-gold text-maroon-dark px-6 py-2.5 text-xs font-title font-bold uppercase tracking-wider hover:bg-gold/90 transition-all shadow-md hover:scale-105 active:scale-95"
-                >
-                  <CalendarPlus className="size-4" />
-                  Add to Calendar
-                </a>
-
-                {/* RSVP to Attend */}
+              {/* Action Button: RSVP to Attend */}
+              <div className="mt-8 flex items-center justify-center">
                 <button
                   type="button"
                   onClick={() => {
                     const el = document.getElementById('rsvp');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-gold/70 bg-white/70 hover:bg-gold/15 px-6 py-2.5 text-xs font-title font-bold uppercase tracking-wider text-maroon shadow-sm transition-all hover:scale-105 active:scale-95"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-gold bg-gold text-maroon-dark px-8 py-3 text-xs font-title font-bold uppercase tracking-wider hover:bg-gold/90 transition-all shadow-md hover:scale-105 active:scale-95"
                 >
-                  <CalendarCheck className="size-4 text-gold-deep" />
+                  <CalendarCheck className="size-4" />
                   RSVP to Attend
                 </button>
               </div>

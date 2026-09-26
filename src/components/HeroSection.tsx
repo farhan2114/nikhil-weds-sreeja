@@ -144,38 +144,38 @@ export const HeroSection: React.FC = () => {
 
       {/* Main Invitation Card */}
       <div className="relative z-20 w-full px-5 [perspective:1400px]">
-        <div className="invite-card mx-auto max-w-xl opacity-0">
-          <div className="paper-card arch-top relative px-4 py-10 text-center sm:px-12 sm:py-16">
+        <div className="invite-card mx-auto max-w-lg opacity-0">
+          <div className="paper-card arch-top relative px-5 py-8 text-center sm:px-10 sm:py-10 shadow-2xl">
             <img
               src={assets.mandalaGold}
               alt=""
               aria-hidden="true"
               width="1024"
               height="1024"
-              className="pointer-events-none absolute -top-16 left-1/2 w-28 -translate-x-1/2 opacity-60 sm:-top-20 sm:w-36"
+              className="pointer-events-none absolute -top-14 left-1/2 w-24 -translate-x-1/2 opacity-65 sm:-top-16 sm:w-28"
             />
-            <p className="invite-line eyebrow mt-6">{weddingData.dateShort}</p>
-            <h1 className="invite-line mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-display text-2xl min-[360px]:text-3xl min-[480px]:text-5xl sm:text-6xl md:text-7xl leading-[1.08] break-words">
-              <span className="text-gold-foil animate-foil">{weddingData.bride}</span>
-              <span className="mx-1.5 font-title text-base sm:text-2xl md:text-3xl align-middle text-maroon">&amp;</span>
-              <span className="text-gold-foil animate-foil">{weddingData.groom}</span>
+            <p className="invite-line eyebrow mt-3 sm:mt-4">{weddingData.dateShort}</p>
+            <h1 className="invite-line mt-4 sm:mt-5 flex flex-col items-center justify-center font-display leading-[1.12]">
+              <span className="font-bold text-3xl min-[360px]:text-4xl sm:text-5xl md:text-6xl text-gold-foil animate-foil tracking-wide drop-shadow-[0_2px_12px_rgba(200,150,62,0.45)]">
+                {weddingData.bride}
+              </span>
+              <span className="my-1 sm:my-1.5 font-title text-xl sm:text-2xl md:text-3xl text-maroon font-bold select-none">
+                &amp;
+              </span>
+              <span className="font-bold text-3xl min-[360px]:text-4xl sm:text-5xl md:text-6xl text-gold-foil animate-foil tracking-wide drop-shadow-[0_2px_12px_rgba(200,150,62,0.45)]">
+                {weddingData.groom}
+              </span>
             </h1>
-            <div className="invite-line rule-gold mx-auto mt-8 w-2/3" />
-            <p className="invite-line mx-auto mt-6 max-w-sm text-sm leading-relaxed text-muted-foreground">
+            <div className="invite-line rule-gold mx-auto mt-4 sm:mt-5 w-1/2" />
+            <p className="invite-line mx-auto mt-3.5 sm:mt-4 max-w-sm text-xs sm:text-sm leading-relaxed text-muted-foreground">
               {weddingData.invitationLine}
             </p>
-            <p className="invite-line mt-6 sm:mt-8 font-title text-base sm:text-lg tracking-wide">{weddingData.dateLabel}</p>
-            <div className="invite-line mt-2 flex flex-col items-center gap-0.5 sm:gap-1 text-xs sm:text-sm text-muted-foreground">
-              <p className="font-medium text-foreground/90">{weddingData.muhurtham}</p>
+            <p className="invite-line mt-4 sm:mt-5 font-title text-base sm:text-lg tracking-wide">{weddingData.dateLabel}</p>
+            <div className="invite-line mt-1.5 flex flex-col items-center gap-0.5 sm:gap-1 text-xs sm:text-sm text-muted-foreground">
+              <p className="font-semibold text-foreground/95">{weddingData.muhurtham}</p>
               <p className="font-medium text-foreground/85">{weddingData.venue}</p>
               <p className="text-muted-foreground px-2">{weddingData.city}</p>
             </div>
-            <a
-              href="#rsvp"
-              className="invite-line mt-7 sm:mt-8 inline-flex items-center gap-2 border border-gold/60 bg-transparent px-6 py-3 text-[0.7rem] uppercase tracking-[0.3em] text-gold-deep transition-colors hover:bg-gold/10"
-            >
-              RSVP Now
-            </a>
           </div>
         </div>
       </div>
