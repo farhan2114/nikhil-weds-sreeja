@@ -11,7 +11,7 @@ const navItems: NavItem[] = [
   { label: 'The Couple', href: 'couple' },
   { label: 'Portrait', href: 'gallery' },
   { label: 'Events', href: 'events' },
-  { label: 'Venue & Map', href: 'venue' },
+  { label: 'Calendar', href: 'venue' },
 ];
 
 export const Navbar: React.FC = () => {

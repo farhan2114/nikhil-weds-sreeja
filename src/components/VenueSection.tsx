@@ -9,13 +9,7 @@ export const VenueSection: React.FC = () => {
   const mapsSearchUrl =
     weddingConfig.venue.mapsSearchUrl ||
     `https://www.google.com/maps/search/${encodeURIComponent(query)}`;
-  const mapsEmbedUrl =
-    weddingConfig.venue.mapsEmbedUrl ||
-    `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
   const cityName = weddingConfig.venue.cityName || weddingConfig.venue.city;
-  const locationUnderMap =
-    weddingConfig.venue.locationUnderMap ||
-    `${cityName} · ${weddingConfig.date.short || weddingData.dateShort}`;
 
   // Helper to construct Google Calendar URLs
   const createGoogleCalendarUrl = (
@@ -82,109 +76,117 @@ export const VenueSection: React.FC = () => {
               `Follow the golden path to ${weddingData.venue}, where our families will be waiting to welcome you.`}
           </p>
 
-          <div className="mt-6 inline-flex flex-col items-center border-y border-gold/30 py-4 px-6">
-            <p className="font-title text-base sm:text-lg text-gold font-medium">{weddingData.venue}</p>
+          <a
+            href={mapsSearchUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="group mt-6 inline-flex flex-col items-center border-y border-gold/30 py-4 px-6 transition-all hover:border-gold/60"
+            title="Open venue in Google Maps"
+          >
+            <p className="font-title text-base sm:text-lg text-gold font-medium group-hover:underline flex items-center justify-center gap-1.5">
+              <MapPin className="size-4 text-gold shrink-0" />
+              <span>{weddingData.venue}</span>
+            </p>
             <p className="mt-1 text-xs sm:text-sm text-paper/75">{weddingData.city}</p>
-          </div>
+            <span className="mt-2 text-[0.68rem] uppercase tracking-wider text-gold/80 font-title group-hover:text-gold flex items-center gap-1">
+              Open directions in Maps &rarr;
+            </span>
+          </a>
         </RevealOnScroll>
 
-        {/* ── Side by Side Cards (Desktop) & Stacked (Mobile) ── */}
-        <div className="mt-8 sm:mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch max-w-5xl mx-auto">
-          
-          {/* ── 1. November 2026 Monthly Calendar Sheet (Wedding Day Highlighted) ── */}
-          <RevealOnScroll delay={0.08} className="h-full">
-            <div className="relative h-full min-h-[460px] flex flex-col justify-between rounded-xl border border-gold/40 bg-black/40 p-5 sm:p-7 pb-6 sm:pb-7 backdrop-blur-sm shadow-2xl">
-              <div>
-                {/* Header bar */}
-                <div className="flex items-center justify-between pb-3 border-b border-gold/30">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="size-4 text-gold" />
-                    <span className="font-title text-[0.68rem] uppercase tracking-[0.25em] text-gold font-semibold">
-                      Save The Date
-                    </span>
-                  </div>
-                  <span className="font-title text-[0.68rem] tracking-widest text-paper/70 uppercase">
-                    Frisco, Texas
+        {/* ── November 2026 Monthly Calendar Sheet (Centered) ── */}
+        <div className="mt-8 sm:mt-12 max-w-lg mx-auto">
+          <RevealOnScroll delay={0.08}>
+            <div className="relative rounded-2xl border border-gold/40 bg-black/40 p-6 sm:p-8 backdrop-blur-sm shadow-2xl">
+              {/* Header bar */}
+              <div className="flex items-center justify-between pb-3.5 border-b border-gold/30">
+                <div className="flex items-center gap-2">
+                  <Calendar className="size-4 text-gold" />
+                  <span className="font-title text-[0.7rem] uppercase tracking-[0.25em] text-gold font-semibold">
+                    Save The Date
                   </span>
                 </div>
+                <span className="font-title text-[0.7rem] tracking-widest text-paper/70 uppercase">
+                  Frisco, Texas
+                </span>
+              </div>
 
-                {/* Calendar Title */}
-                <div className="text-center my-3">
-                  <h3 className="font-display text-2xl sm:text-3xl text-gold tracking-wider">
-                    NOVEMBER 2026
-                  </h3>
-                  <p className="text-[0.65rem] uppercase tracking-[0.25em] text-paper/60 font-title mt-0.5">
-                    Wedding Day
-                  </p>
-                </div>
+              {/* Calendar Title */}
+              <div className="text-center my-4">
+                <h3 className="font-display text-2xl sm:text-3xl text-gold tracking-wider">
+                  NOVEMBER 2026
+                </h3>
+                <p className="text-[0.65rem] uppercase tracking-[0.25em] text-paper/60 font-title mt-0.5">
+                  Wedding Day
+                </p>
+              </div>
 
-                {/* Weekday Row */}
-                <div className="grid grid-cols-7 gap-1 text-center py-2 border-y border-gold/20">
-                  {weekDays.map((day) => (
-                    <div
-                      key={day}
-                      className="font-title text-[0.62rem] sm:text-[0.68rem] font-semibold tracking-wider text-gold/85"
-                    >
-                      {day}
-                    </div>
-                  ))}
-                </div>
+              {/* Weekday Row */}
+              <div className="grid grid-cols-7 gap-1 text-center py-2.5 border-y border-gold/20">
+                {weekDays.map((day) => (
+                  <div
+                    key={day}
+                    className="font-title text-[0.65rem] sm:text-[0.72rem] font-semibold tracking-wider text-gold/85"
+                  >
+                    {day}
+                  </div>
+                ))}
+              </div>
 
-                {/* 30-Day Grid (Only Day 22 is Highlighted) */}
-                <div className="grid grid-cols-7 gap-1 sm:gap-1.5 pt-2.5 pb-2 text-center">
-                  {daysInMonth.map((day) => {
-                    const isWedding = day === 22;
+              {/* 30-Day Grid (Only Day 22 is Highlighted) */}
+              <div className="grid grid-cols-7 gap-1 sm:gap-2 pt-3 pb-2 text-center">
+                {daysInMonth.map((day) => {
+                  const isWedding = day === 22;
 
-                    if (isWedding) {
-                      return (
-                        <div
-                          key={day}
-                          className="relative flex flex-col items-center justify-center py-1 sm:py-1.5 rounded bg-gold text-maroon-dark font-bold shadow-[0_0_16px_rgba(218,165,32,0.7)] ring-2 ring-gold ring-offset-2 ring-offset-maroon z-10 scale-105"
-                          title="Wedding Muhurtham · Sunday, 22 Nov 2026"
-                        >
-                          <span className="text-xs sm:text-sm font-black leading-none">{day}</span>
-                          <span className="text-[0.52rem] uppercase font-bold tracking-tight mt-0.5 leading-none">
-                            Wedding
-                          </span>
-                        </div>
-                      );
-                    }
-
+                  if (isWedding) {
                     return (
                       <div
                         key={day}
-                        className="flex items-center justify-center py-1.5 sm:py-2 text-xs sm:text-sm text-paper/70 font-sans hover:text-paper hover:bg-white/5 rounded transition-colors"
+                        className="relative flex flex-col items-center justify-center py-1 sm:py-1.5 rounded-lg bg-gold text-maroon-dark font-bold shadow-[0_0_20px_rgba(218,165,32,0.7)] ring-2 ring-gold ring-offset-2 ring-offset-maroon z-10 scale-105"
+                        title="Wedding Muhurtham · Sunday, 22 Nov 2026"
                       >
-                        {day}
+                        <span className="text-xs sm:text-sm font-black leading-none">{day}</span>
+                        <span className="text-[0.52rem] uppercase font-bold tracking-tight mt-0.5 leading-none">
+                          Wedding
+                        </span>
                       </div>
                     );
-                  })}
-                  {/* Trailing 5 empty cells to complete 35-cell grid */}
-                  {[1, 2, 3, 4, 5].map((trailingDay) => (
-                    <div
-                      key={`next-${trailingDay}`}
-                      className="flex items-center justify-center py-1.5 text-xs text-paper/20 select-none font-sans"
-                    >
-                      {trailingDay}
-                    </div>
-                  ))}
-                </div>
+                  }
 
-                {/* Single Event Schedule Legend: Wedding (Star icon removed) */}
-                <div className="mt-3 border-t border-gold/20 pt-3">
-                  <div className="flex items-center justify-between text-xs rounded bg-gold/15 px-3.5 py-2 border border-gold/40">
-                    <div>
-                      <span className="font-bold text-gold">22 Nov (Sun):</span>{' '}
-                      <span className="text-paper font-medium">{weddingEvent?.name || 'Wedding Ceremony'}</span>
+                  return (
+                    <div
+                      key={day}
+                      className="flex items-center justify-center py-1.5 sm:py-2 text-xs sm:text-sm text-paper/70 font-sans hover:text-paper hover:bg-white/5 rounded transition-colors"
+                    >
+                      {day}
                     </div>
-                    <span className="text-gold font-bold text-xs font-title">10:54 AM CST</span>
+                  );
+                })}
+                {/* Trailing 5 empty cells to complete 35-cell grid */}
+                {[1, 2, 3, 4, 5].map((trailingDay) => (
+                  <div
+                    key={`next-${trailingDay}`}
+                    className="flex items-center justify-center py-1.5 text-xs text-paper/20 select-none font-sans"
+                  >
+                    {trailingDay}
                   </div>
+                ))}
+              </div>
+
+              {/* Single Event Schedule Legend: Wedding */}
+              <div className="mt-4 border-t border-gold/20 pt-3.5">
+                <div className="flex items-center justify-between text-xs sm:text-sm rounded-lg bg-gold/15 px-4 py-2.5 border border-gold/40">
+                  <div>
+                    <span className="font-bold text-gold">22 Nov (Sun):</span>{' '}
+                    <span className="text-paper font-medium">{weddingEvent?.name || 'Wedding Ceremony'}</span>
+                  </div>
+                  <span className="text-gold font-bold text-xs sm:text-sm font-title">10:54 AM CST</span>
                 </div>
               </div>
 
-              {/* Add to Calendar Action Button (Full width matching calendar card square) */}
+              {/* Add to Calendar Action Button (Full width) */}
               <div className="mt-5 pt-3.5 border-t border-gold/20 space-y-2.5">
-                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-paper/70 font-title text-center">
+                <p className="text-[0.68rem] uppercase tracking-[0.2em] text-paper/70 font-title text-center">
                   Add wedding to your calendar
                 </p>
                 <div className="w-full">
@@ -198,37 +200,6 @@ export const VenueSection: React.FC = () => {
                     <span>Add to Google Calendar</span>
                   </a>
                 </div>
-              </div>
-            </div>
-          </RevealOnScroll>
-
-          {/* ── 2. Google Maps Card (No inner border, enlarged Open Maps button, no clipping) ── */}
-          <RevealOnScroll delay={0.16} className="h-full flex flex-col">
-            <div className="relative min-h-[460px] h-full overflow-hidden rounded-xl border border-gold/40 bg-paper/5 shadow-2xl flex flex-col">
-              <iframe
-                title={`Map to ${query}`}
-                src={mapsEmbedUrl}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="w-full flex-1 min-h-[320px] sm:min-h-[360px]"
-                style={{ border: 0 }}
-                allowFullScreen
-              />
-
-              {/* Floating Open in Maps action bar with enlarged button */}
-              <div className="relative z-10 bg-black/70 border-t border-gold/30 px-4 py-3.5 sm:px-5 sm:py-4 flex items-center justify-between gap-3 backdrop-blur-md">
-                <span className="text-[0.72rem] sm:text-xs uppercase tracking-[0.2em] text-paper/85 font-title font-medium truncate pr-2">
-                  {locationUnderMap}
-                </span>
-                <a
-                  href={mapsSearchUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-gold bg-gold/25 hover:bg-gold/40 text-gold font-title font-bold text-xs uppercase tracking-wider px-5 py-2.5 shadow-md transition-all hover:scale-105 active:scale-95"
-                >
-                  <MapPin className="size-3.5 text-gold" />
-                  <span>Open in Maps</span>
-                </a>
               </div>
             </div>
           </RevealOnScroll>
