@@ -228,13 +228,13 @@ export const HeroSection: React.FC = () => {
             document.getElementById('intro')?.scrollIntoView({ behavior: 'smooth' });
           }}
           aria-label="Scroll down to invitation details"
-          className="group absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 md:translate-x-[calc(-50%+14px)] lg:translate-x-[calc(-50%+18px)] z-30 flex flex-col items-center gap-1 cursor-pointer focus:outline-none transition-opacity duration-300 hover:opacity-80"
+          className="group absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 md:translate-x-[calc(-50%+14px)] lg:translate-x-[calc(-50%+18px)] z-30 flex flex-col items-center gap-1.5 cursor-pointer focus:outline-none transition-transform duration-300 hover:scale-105"
         >
-          <span className="font-title text-[0.65rem] sm:text-xs uppercase tracking-[0.28em] text-[#4A1521] font-semibold -mr-[0.28em] select-none text-center drop-shadow-[0_1px_2px_rgba(255,255,255,0.7)]">
+          <span className="font-title text-sm sm:text-base md:text-[1.05rem] uppercase tracking-[0.25em] text-[#4A1521] font-bold -mr-[0.25em] select-none text-center animate-scroll-blink">
             Scroll Down
           </span>
           <div className="animate-bounce flex items-center justify-center">
-            <ChevronDown className="size-4 sm:size-5 text-[#8A6D3B] stroke-[2.5] drop-shadow-[0_1px_2px_rgba(255,255,255,0.7)] group-hover:text-[#4A1521] transition-colors" />
+            <ChevronDown className="size-5 sm:size-6 text-[#8A6D3B] stroke-[2.75] drop-shadow-[0_1px_3px_rgba(255,255,255,0.9)] drop-shadow-[0_0_8px_rgba(218,165,32,0.5)] group-hover:text-[#4A1521] transition-colors" />
           </div>
         </a>
       )}
