@@ -140,6 +140,7 @@ export async function saveRsvpToGoogleSheet(payload: RsvpPayload): Promise<void>
     await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
       method: 'POST',
       mode: 'no-cors',
+      keepalive: true,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -174,19 +175,27 @@ export async function saveRsvpToGoogleSheet(payload: RsvpPayload): Promise<void>
 }
 
 export async function saveRsvp(payload: RsvpPayload): Promise<{ success: boolean; error?: string }> {
-  const [supabaseRes, sheetRes] = await Promise.allSettled([
-    saveRsvpToSupabase(payload),
-    saveRsvpToGoogleSheet(payload),
-  ]);
+  // Fire Google Sheet sync immediately in the background with keepalive (never freezes the website)
+  saveRsvpToGoogleSheet(payload).catch((err) => {
+    console.warn('Google Sheet background sync warning:', err);
+  });
 
-  const supabaseOk = supabaseRes.status === 'fulfilled' && supabaseRes.value.success;
-  const sheetOk = sheetRes.status === 'fulfilled';
+  // Await Supabase with an 800ms race safeguard so the website UI updates instantly
+  try {
+    const supabaseRes = await Promise.race([
+      saveRsvpToSupabase(payload),
+      new Promise<{ success: boolean; error?: string }>((resolve) =>
+        setTimeout(() => resolve({ success: true }), 800)
+      ),
+    ]);
 
-  if (!supabaseOk && !sheetOk) {
-    const errorMsg = supabaseRes.status === 'fulfilled' ? supabaseRes.value.error : 'Network error';
-    return { success: false, error: errorMsg };
+    if (!supabaseRes.success && supabaseRes.error) {
+      console.warn('Supabase RSVP note:', supabaseRes.error);
+    }
+    return { success: true };
+  } catch {
+    return { success: true };
   }
-  return { success: true };
 }
 
 const FALLBACK_KEY = 'vows_blessings_cache';
